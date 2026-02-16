@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-50%);
+        }
+    }
+
+    @keyframes blink-gold {
+
+        0%,
+        100% {
+            opacity: 1;
+            filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.6));
+        }
+
+        50% {
+            opacity: 0.8;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.9));
+        }
+    }
+}
+
+.animate-nominate {
+    animation: blink-gold 1.5s ease-in-out infinite;
+    color: #d4af37 !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-slow {
+    display: flex;
+    width: max-content;
+    animation: marquee 120s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-slow:hover {
+    animation-play-state: paused;
+}
