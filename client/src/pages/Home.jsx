@@ -60,16 +60,32 @@ export default function Home() {
 
   const events = [
     {
+      title: "Global Icon Business and Leadership Summit – USA 2026",
+      desc: "A premier summit recognising visionary business leaders and entrepreneurs.",
+      date: "31 March 2026",
+      place: "USA",
+      time: "TBA", // Or specific time if known
+    },
+    {
+      title: "Global Icon Business and Leadership Summit – Dubai 2026",
+      desc: "Recognising excellence and innovation in global leadership.",
+      date: "26 April 2026",
+      place: "Dubai",
+      time: "TBA",
+    },
+    {
+      title: "Global Icon Investment India Summit – UK 2026",
+      desc: "Fostering investment and celebrating leadership across industries.",
+      date: "9 June 2026",
+      place: "UK",
+      time: "TBA",
+    },
+    {
       title: "Global Icon Awards – New Delhi Edition 2026",
       desc: "Recognising excellence and innovation in global leadership.",
       date: "14 March 2026",
       place: "New Delhi",
-    },
-    {
-      title: "Global Icon Awards – Dubai Edition 2026",
-      desc: "Recognising excellence and innovation in global leadership.",
-      date: "26 April 2026",
-      place: "Dubai",
+      time: "TBA",
     },
   ];
 
@@ -209,45 +225,81 @@ export default function Home() {
   ];
   const nomineeCategories = [
     {
-      title: "Healthcare Excellence",
-      desc: "Recognising excellence, innovation, and leadership in the global healthcare industry.",
+      title: "Healthcare & Lifesciences",
+      desc: "Honouring excellence in medical care, pharmaceuticals, biotechnology, and healthcare innovation.",
       icon: "🏥",
       color: "from-[#ffecd2] to-[#fcb69f]"
     },
     {
-      title: "Education & Leadership",
-      desc: "Honouring schools, colleges, and universities for academic excellence and innovation.",
+      title: "Education & Learning",
+      desc: "Recognising academic excellence, innovative teaching, and leadership in educational institutions globally.",
       icon: "🎓",
       color: "from-[#ffeec3] to-[#d4af37]"
     },
     {
-      title: "Business & Entrepreneurship",
-      desc: "Celebrating visionary business leaders and entrepreneurs across multiple industries.",
-      icon: "💼",
+      title: "Real Estate & Infrastructure",
+      desc: "Celebrating landmark developments, architectural brilliance, and infrastructure transformation.",
+      icon: "🏗️",
       color: "from-[#ffd966] to-[#b6932f]"
     },
     {
-      title: "Dental Care Innovation",
-      desc: "Recognising outstanding contributions and clinical excellence in the dental sector.",
-      icon: "🦷",
+      title: "Hospitality & Tourism",
+      desc: "Celebrating excellence in hotels, resorts, travel agencies, and global tourism platforms.",
+      icon: "🏨",
       color: "from-[#fff5d2] to-[#a28533]"
     },
     {
-      title: "Lifestyle & Wellness",
-      desc: "Honouring luxury, wellness, and lifestyle brands setting global benchmarks.",
-      icon: "✨",
+      title: "Manufacturing & Industrial",
+      desc: "Honouring manufacturing giants and MSMEs for operational excellence and industrial growth.",
+      icon: "🏭",
       color: "from-[#ffeec3] to-[#d4af37]"
     },
+    {
+      title: "Beauty & Wellness",
+      desc: "Recognising top brands in cosmetics, salon chains, fitness centers, and holistic well-being.",
+      icon: "✨",
+      color: "from-[#ffecd2] to-[#fcb69f]"
+    },
+    {
+      title: "Technology & Digital Transformation",
+      desc: "Celebrating AI, Cloud, Cybersecurity, FinTech, and innovative tech startups driving global change.",
+      icon: "💻",
+      color: "from-[#ffeec3] to-[#d4af37]"
+    },
+    {
+      title: "Finance & Banking",
+      desc: "Honouring leadership in banking, investment, insurance, and the rapidly growing FinTech sector.",
+      icon: "💰",
+      color: "from-[#ffd966] to-[#b6932f]"
+    },
+    {
+      title: "Sustainability & Environment",
+      desc: "Recognising corporate CSR, renewable energy initiatives, and commitment to environmental conservation.",
+      icon: "🌱",
+      color: "from-[#fff5d2] to-[#a28533]"
+    },
+    {
+      title: "Public & Government Sector",
+      desc: "Honouring excellence in public administration, e-governance, and smart city initiatives.",
+      icon: "🏛️",
+      color: "from-[#ffeec3] to-[#d4af37]"
+    },
+    {
+      title: "Media, Culture & Sports",
+      desc: "Celebrating outstanding achievements in journalism, cinema, arts, advertising, and sports.",
+      icon: "🎬",
+      color: "from-[#ffecd2] to-[#fcb69f]"
+    }
   ];
 
   const homeFaqs = [
     {
       q: "What is Global Icon Awards 2026?",
-      a: "Global Icon Awards 2026 is an international recognition platform that honours excellence, innovation, and quality across Healthcare, Education, Business, Dental, and Lifestyle sectors.",
+      a: "Global Icon Awards 2026 is an international recognition platform that honours excellence, innovation, and quality across 11 key sectors including Healthcare, Education, Real Estate, Technology, Finance, and more.",
     },
     {
       q: "Who can apply for nomination?",
-      a: "Hospitals, doctors, educators, business leaders, entrepreneurs, dental clinics, and lifestyle brands from across the globe are invited to nominate themselves.",
+      a: "Healthcare institutions, educators, real estate developers, tech innovators, finance professionals, and visionaries from across all 11 award sectors are invited to nominate themselves.",
     },
     {
       q: "What is the nomination process and deadline?",
@@ -273,7 +325,7 @@ export default function Home() {
   // Responsive and premium utility variables
   const getGridCols = (len) => {
     if (len >= 4) {
-      return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+      return "grid-cols-1 sm:grid-cols-2";
     }
     if (len === 3) {
       return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
@@ -363,13 +415,12 @@ export default function Home() {
             {/* space-y-4/sm:space-y-7 pehle space-y-5 sm:space-y-8 tha => kam kia taki text elements paas aaye aur upar dikhें */}
             <h1 className="text-2xl xs:text-3xl md:text-5xl lg:text-6xl font-extrabold font-heading tracking-tight leading-tight drop-shadow-lg">
               <span className="inline-block whitespace-nowrap text-center">
-                Global{" "}
+                Become{" "}
                 <span className="bg-gradient-to-r from-[#d4af37] via-[#f1d46b] to-[#b6932f] bg-clip-text text-transparent inline-block font-semibold">
-                  Icon
-                </span>{" "}
-                Awards
+                  Local to Vocal
+                </span>
                 <span className="align-middle text-[#ffeec3] drop-shadow px-1">
-                  , 2026
+                  2026
                 </span>
               </span>
             </h1>
@@ -387,122 +438,131 @@ export default function Home() {
             {/* Yaha ka text & divider ab aur upar hai. pt/space-y aur margin-top kam karke, see comments above */}
           </div>
           {/* ===== EVENTS SECTION ===== */}
-          <div className="mt-0 sm:mt-2 w-full max-w-5xl mx-auto flex flex-col items-center">
+          <div className="mt-[-2rem] sm:mt-[-4rem] w-full max-w-full mx-auto flex flex-col items-center relative z-30">
             {/* Section headline hidden, using the golden dot only as separator for ultra-premium touch */}
             <h2 className="mb-6 sm:mb-10 text-0.5xl md:text-0.5xl font-heading font-bold text-center bg-gradient-to-r from-white via-[#d4af37] to-white bg-clip-text text-transparent drop-shadow">
               .
             </h2>
-            <div
-              className={`
-                grid gap-7 sm:gap-8 ${getGridCols(events.length)} mx-auto
-                relative
-              `}
-              style={{
-                marginTop: '-2.5rem',
-                zIndex: 40,
-              }}
-            >
-              {events.map((event, index) => (
-                <div
-                  key={event.title + index}
-                  ref={(el) => (sectionRefs.current[index] = el)}
-                  className={`
-                    group relative opacity-0 translate-y-8 transition-all duration-700 flex justify-center
-                  `}
-                  style={{
-                    top: '-2.5rem'
-                  }}
-                >
-                  <div className="
-                    relative w-full bg-gradient-to-br
-                    from-[#1e1e2136] via-[#000000c5] to-[#332108bb]
-                    rounded-2xl sm:rounded-3xl p-4 xs:p-5 sm:p-7 md:p-9
-                    border border-[#e1c26c]/25 hover:border-[#ffeb98] hover:shadow-[#d4af37]/40
-                    transition-all duration-500 hover:-translate-y-2 hover:scale-[1.033] 
-                    hover:shadow-[0_16px_60px_-14px_#ffd966cc]
-                    backdrop-blur-lg
-                    before:absolute before:inset-0 before:z-[-2] before:rounded-inherit before:bg-gradient-to-br before:from-[#d4af37]/10 before:via-transparent before:to-[#c69823]/10
-                  "
-                    style={{
-                      background: "rgba(34, 17, 9, 0.48)",
-                      boxShadow: "0 4px 36px -8px #d4af3744, 0 0px 0 #fde68a09 inset",
-                    }}
-                  >
-                    {/* PREMIUM CORNER ORNAMENTS */}
-                    <div className="absolute top-0 left-0 w-10 md:w-12 h-10 md:h-12 border-t-2 border-l-2 border-[#ffe7a1]/30 rounded-tl-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
-                    <div className="absolute top-0 right-0 w-10 md:w-12 h-10 md:h-12 border-t-2 border-r-2 border-[#ffe7a1]/30 rounded-tr-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
-                    <div className="absolute bottom-0 left-0 w-10 md:w-12 h-10 md:h-12 border-b-2 border-l-2 border-[#ffe7a1]/30 rounded-bl-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
-                    <div className="absolute bottom-0 right-0 w-10 md:w-12 h-10 md:h-12 border-b-2 border-r-2 border-[#ffe7a1]/30 rounded-br-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
-
-                    {/* CROWN & PREMIUM TITLE */}
-                    <div className="flex items-center gap-2 mb-3 md:mb-5">
-                      <span className="inline-block align-middle scale-125 drop-shadow-lg">
-                        <svg width="26" height="20" viewBox="0 0 26 20" fill="none" className="text-[#d4af37]">
-                          <path d="M2 17L7 2L13 10L19 2L24 17H2Z" stroke="currentColor" strokeWidth="2.1" strokeLinejoin="round" fill="#d4af37" className="opacity-70 group-hover:opacity-100 transition" />
-                        </svg>
-                      </span>
-                      <h3 className="text-xl md:text-2xl font-black font-heading tracking-tight bg-gradient-to-r from-[#fbf6df] via-[#d4af37] to-[#ffeec3] bg-clip-text text-transparent drop-shadow group-hover:from-[#fffbe7] group-hover:to-[#d4af37] transition duration-300">
-                        {event.title}
-                      </h3>
-                    </div>
-
-                    <p className="mb-6 sm:mb-7 text-[#f4ecd8] text-[1.09rem] leading-relaxed font-medium group-hover:text-[#fffbe7] transition-colors text-justify drop-shadow-lg">
-                      <span className="inline-block bg-gradient-to-br from-[#d4af37]/90 via-[#ffeec3]/70 to-[#fff5d2]/80 bg-clip-text text-transparent font-semibold tracking-wide">
-                        {event.desc}
-                      </span>
-                    </p>
-
-                    <div className="mb-6 space-y-2 text-sm text-left sm:text-base font-semibold">
-                      <div className="flex items-center gap-3 text-[#ffe7a1] group-hover:text-[#feca57] tracking-wide transition-all duration-200">
-                        <span className="text-lg sm:text-xl">
-                          <svg className="w-6 h-6 inline-block" viewBox="0 0 20 20" fill="none">
-                            <circle cx="10" cy="10" r="8" stroke="#ffd966" strokeWidth="1.6" fill="none" />
-                            <rect x="8.5" y="5" width="3" height="6.5" rx="1.2" fill="#ffd966" />
-                            <circle cx="10" cy="14.1" r="1.1" fill="#d4af37" />
-                          </svg>
-                        </span>
-                        <span className="font-bold text-md">{event.date}</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[#ffe7a1] group-hover:text-[#feca57] tracking-wide transition-all duration-200">
-                        <span className="text-lg sm:text-xl">
-                          {/* <svg className="w-6 h-6 inline-block" viewBox="0 0 20 20" fill="none">
-                            <circle cx="10" cy="10" r="8" stroke="#ffd966" strokeWidth="1.1" fill="none" />
-                            <circle cx="10" cy="12.1" r="3" fill="#d4af37" />
-                            <rect x="9.2" y="6" width="1.6" height="5" rx="0.7" fill="#ffd966" />
-                          </svg> */}
-                        </span>
-                        <span className="font-bold text-md">{event.time}</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[#ffe7a1] group-hover:text-[#feca57] tracking-wide transition-all duration-200">
-                        <span className="text-lg sm:text-xl">
-                          <svg className="w-6 h-6 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
-                          </svg>
-                        </span>
-                        <span className="font-bold text-md">{event.place}</span>
-                      </div>
-                    </div>
-                    {/* Royal Button */}
-                    <button
-                      onClick={handleNominateClick}
-                      className="relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-7 sm:px-10 py-2.5 sm:py-3.5 text-md sm:text-lg font-black uppercase tracking-wider text-[#644b0d] shadow-[#d4af3733] shadow-md hover:shadow-xl transition-all duration-400 hover:scale-105 focus:scale-100 focus:outline-none focus:ring-2 focus:ring-[#ffeec3] group"
+            <div className="w-full relative z-10 px-0 sm:px-4 md:px-8 max-w-[1600px] mx-auto">
+              <Swiper
+                modules={[Autoplay, Pagination]}
+                spaceBetween={24}
+                slidesPerView={1}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 1,
+                    spaceBetween: 20
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    spaceBetween: 24
+                  },
+                  1024: {
+                    slidesPerView: 2,
+                    spaceBetween: 30
+                  },
+                }}
+                autoplay={{
+                  delay: 3500,
+                  disableOnInteraction: false,
+                }}
+                pagination={{
+                  clickable: true,
+                  dynamicBullets: true,
+                }}
+                className="w-full pb-16 !px-4 pt-10"
+              >
+                {events.map((event, index) => (
+                  <SwiperSlide key={index} className="h-auto flex justify-center py-4 px-2">
+                    <div className="
+                      w-full h-full flex flex-col justify-between
+                      relative bg-gradient-to-br
+                      from-[#1e1e2136] via-[#000000c5] to-[#332108bb]
+                      rounded-2xl sm:rounded-3xl p-4 xs:p-5 sm:p-7 md:p-9
+                      border border-[#e1c26c]/25 hover:border-[#ffeb98] hover:shadow-[#d4af37]/40
+                      transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] 
+                      hover:shadow-[0_16px_60px_-14px_#ffd966cc]
+                      backdrop-blur-lg
+                      before:absolute before:inset-0 before:z-[-2] before:rounded-inherit before:bg-gradient-to-br before:from-[#d4af37]/10 before:via-transparent before:to-[#c69823]/10
+                      group
+                    "
                       style={{
-                        letterSpacing: '0.065em',
-                        boxShadow: '0 6px 34px -8px #fddc8a44, 0 0.5px 0 #ffeec398 inset',
+                        background: "rgba(34, 17, 9, 0.48)",
+                        boxShadow: "0 4px 36px -8px #d4af3744, 0 0px 0 #fde68a09 inset",
                       }}
                     >
-                      <span className="relative z-10 flex items-center gap-2 font-extrabold">
-                        <svg className="w-5 h-5 text-[#d4af37] drop-shadow" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M4 10h12M10 4l6 6-6 6" stroke="#b79024" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                        </svg>
-                        <span>Nominate Now</span>
-                      </span>
-                      <span className="absolute inset-0 bg-gradient-to-r from-[#fbf7e1]/30 to-[#ffd966]/10 -translate-x-full group-hover:translate-x-0 transition-transform duration-700 pointer-events-none rounded-full"></span>
-                    </button>
-                  </div>
-                </div>
-              ))}
+                      <div>
+                        {/* PREMIUM CORNER ORNAMENTS */}
+                        <div className="absolute top-0 left-0 w-10 md:w-12 h-10 md:h-12 border-t-2 border-l-2 border-[#ffe7a1]/30 rounded-tl-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
+                        <div className="absolute top-0 right-0 w-10 md:w-12 h-10 md:h-12 border-t-2 border-r-2 border-[#ffe7a1]/30 rounded-tr-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
+                        <div className="absolute bottom-0 left-0 w-10 md:w-12 h-10 md:h-12 border-b-2 border-l-2 border-[#ffe7a1]/30 rounded-bl-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
+                        <div className="absolute bottom-0 right-0 w-10 md:w-12 h-10 md:h-12 border-b-2 border-r-2 border-[#ffe7a1]/30 rounded-br-2xl group-hover:border-[#d4af37] transition-all duration-300"></div>
+
+                        {/* CROWN & PREMIUM TITLE */}
+                        <div className="flex items-center gap-2 mb-3 md:mb-5">
+                          <span className="inline-block align-middle scale-125 drop-shadow-lg">
+                            <svg width="26" height="20" viewBox="0 0 26 20" fill="none" className="text-[#d4af37]">
+                              <path d="M2 17L7 2L13 10L19 2L24 17H2Z" stroke="currentColor" strokeWidth="2.1" strokeLinejoin="round" fill="#d4af37" className="opacity-70 group-hover:opacity-100 transition" />
+                            </svg>
+                          </span>
+                          <h3 className="text-xl md:text-2xl font-black font-heading tracking-tight bg-gradient-to-r from-[#fbf6df] via-[#d4af37] to-[#ffeec3] bg-clip-text text-transparent drop-shadow group-hover:from-[#fffbe7] group-hover:to-[#d4af37] transition duration-300 min-h-[3.5rem] flex items-center">
+                            {event.title}
+                          </h3>
+                        </div>
+
+                        <p className="mb-6 sm:mb-7 text-[#f4ecd8] text-[1.09rem] leading-relaxed font-medium group-hover:text-[#fffbe7] transition-colors text-justify drop-shadow-lg min-h-[4.5rem]">
+                          <span className="inline-block bg-gradient-to-br from-[#d4af37]/90 via-[#ffeec3]/70 to-[#fff5d2]/80 bg-clip-text text-transparent font-semibold tracking-wide">
+                            {event.desc}
+                          </span>
+                        </p>
+
+                        <div className="mb-6 space-y-2 text-sm text-left sm:text-base font-semibold">
+                          <div className="flex items-center gap-3 text-[#ffe7a1] group-hover:text-[#feca57] tracking-wide transition-all duration-200">
+                            <span className="text-lg sm:text-xl">
+                              <svg className="w-6 h-6 inline-block" viewBox="0 0 20 20" fill="none">
+                                <circle cx="10" cy="10" r="8" stroke="#ffd966" strokeWidth="1.6" fill="none" />
+                                <rect x="8.5" y="5" width="3" height="6.5" rx="1.2" fill="#ffd966" />
+                                <circle cx="10" cy="14.1" r="1.1" fill="#d4af37" />
+                              </svg>
+                            </span>
+                            <span className="font-bold text-md">{event.date}</span>
+                          </div>
+
+                          <div className="flex items-center gap-3 text-[#ffe7a1] group-hover:text-[#feca57] tracking-wide transition-all duration-200">
+                            <span className="text-lg sm:text-xl">
+                              <svg className="w-6 h-6 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                              </svg>
+                            </span>
+                            <span className="font-bold text-md">{event.place}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Royal Button (bottom aligned) */}
+                      <div className="mt-auto pt-4">
+                        <button
+                          onClick={handleNominateClick}
+                          className="w-full relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-7 sm:px-10 py-2.5 sm:py-3.5 text-md sm:text-lg font-black uppercase tracking-wider text-[#644b0d] shadow-[#d4af3733] shadow-md hover:shadow-xl transition-all duration-400 hover:scale-105 focus:scale-100 focus:outline-none focus:ring-2 focus:ring-[#ffeec3] group"
+                          style={{
+                            letterSpacing: '0.065em',
+                            boxShadow: '0 6px 34px -8px #fddc8a44, 0 0.5px 0 #ffeec398 inset',
+                          }}
+                        >
+                          <span className="relative z-10 flex items-center justify-center gap-2">
+                            Nominate Now
+                            <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer" />
+                        </button>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
           </div>
         </div>
@@ -632,21 +692,41 @@ export default function Home() {
                   //   border: 'from-[#ffeb98] to-[#ffeec3]',
                   // },
                   {
-                    title: 'Award Ceremony – New Delhi',
-                    date: '14 March 2026',
+                    title: 'Global Icon Business and Leadership Summit – USA',
+                    date: '31 March 2026',
                     icon: (
                       <span className="block w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-lg">
-                        <span className="text-xl">🇮🇳</span>
+                        <span className="text-xl">🇺🇸</span>
                       </span>
                     ),
                     border: 'from-[#d4af37] to-[#ead481]',
                   },
                   {
-                    title: 'Award Ceremony – Dubai',
+                    title: 'Global Icon Business and Leadership Summit – Dubai',
                     date: '26 April 2026',
                     icon: (
                       <span className="block w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-lg">
                         <span className="text-xl">🇦🇪</span>
+                      </span>
+                    ),
+                    border: 'from-[#d4af37] to-[#ead481]',
+                  },
+                  {
+                    title: 'Global Icon Investment India Summit – UK',
+                    date: '9 June 2026',
+                    icon: (
+                      <span className="block w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-lg">
+                        <span className="text-xl">🇬🇧</span>
+                      </span>
+                    ),
+                    border: 'from-[#d4af37] to-[#ead481]',
+                  },
+                  {
+                    title: 'Global Icon Awards – New Delhi',
+                    date: '14 March 2026',
+                    icon: (
+                      <span className="block w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-lg">
+                        <span className="text-xl">🇮🇳</span>
                       </span>
                     ),
                     border: 'from-[#d4af37] to-[#ead481]',
@@ -740,7 +820,7 @@ export default function Home() {
             {[
               {
                 title: "National & Global Recognition",
-                desc: "Gain prestigious recognition across the education sector and position your institution among the most trusted and respected academic leaders.",
+                desc: "Gain prestigious recognition across all major sectors and position your organisation among the most trusted and respected industry leaders.",
                 icon: "🌟",
               },
               {
@@ -1386,47 +1466,85 @@ export default function Home() {
             <p className="mt-8 text-[#dbc6ad] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
               We invite visionaries and institutions that are shaping the future of their respective industries to join our prestigious circle of excellence.
             </p>
+
+            {/* Premium Sector Tags */}
+            <div className="mt-10 mb-12 flex flex-wrap justify-center gap-3 sm:gap-4 max-w-5xl mx-auto">
+              {[
+                "Healthcare", "Education", "Real Estate & Infrastructure", "Hospitality & Tourism",
+                "Manufacturing & Industrial", "Beauty & Wellness", "Technology & Digital Transformation",
+                "Finance & Banking", "Sustainability & Environment", "Public & Government Sector",
+                "Media, Culture & Sports"
+              ].map((sector, idx) => (
+                <div key={idx} className="px-4 py-2 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 text-[#ffeec3] text-xs sm:text-sm font-bold tracking-wide hover:bg-[#d4af37]/30 hover:border-[#d4af37] transition-all duration-300">
+                  {sector}
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {nomineeCategories.map((item, index) => (
-              <div
-                key={index}
-                ref={(el) => (sectionRefs.current[25 + index] = el)}
-                className="group relative h-full opacity-0 translate-y-8 transition-all duration-700"
-              >
-                {/* Main Card */}
-                <div className="relative h-full flex flex-col p-8 sm:p-10 bg-gradient-to-br from-[#2a1b12]/90 via-[#1a110a]/95 to-[#2a1b12]/90 backdrop-blur-xl rounded-[2rem] border border-[#d4af37]/20 hover:border-[#d4af37]/80 transition-all duration-500 hover:shadow-[0_20px_60px_-15px_#d4af3744] hover:-translate-y-3">
+          <div className="w-full">
+            <Swiper
+              modules={[Autoplay, Pagination]}
+              spaceBetween={30}
+              slidesPerView={1}
+              loop={true}
+              speed={1500}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              pagination={{
+                clickable: true,
+                dynamicBullets: true,
+              }}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                },
+                1280: {
+                  slidesPerView: 4,
+                },
+              }}
+              className="pb-16"
+            >
+              {nomineeCategories.map((item, index) => (
+                <SwiperSlide key={index} className="!h-auto flex flex-col">
+                  <div
+                    className="group relative flex flex-col p-8 sm:p-10 bg-gradient-to-br from-[#2a1b12]/90 via-[#1a110a]/95 to-[#2a1b12]/90 backdrop-blur-xl rounded-[2rem] border border-[#d4af37]/20 hover:border-[#d4af37]/80 transition-all duration-500 hover:shadow-[0_20px_60px_-15px_#d4af3744] hover:-translate-y-3 mx-auto max-w-sm w-full flex-grow"
+                  >
+                    {/* Main Card Content */}
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#d4af37]/10 to-transparent rounded-tr-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                  {/* Decorative corner accent */}
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#d4af37]/10 to-transparent rounded-tr-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                  {/* Icon with Glow */}
-                  <div className="relative mb-8 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
-                    <div className="absolute inset-0 bg-[#d4af37]/20 blur-2xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="relative text-5xl md:text-6xl filter drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
-                      {item.icon}
+                    {/* Icon with Glow */}
+                    <div className="relative mb-8 transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                      <div className="absolute inset-0 bg-[#d4af37]/20 blur-2xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="relative text-5xl md:text-6xl filter drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+                        {item.icon}
+                      </div>
                     </div>
+
+                    {/* Text Content */}
+                    <div className="relative z-10 flex flex-col flex-grow">
+                      <h3 className="text-xl sm:text-2xl font-black mb-4 bg-gradient-to-r from-[#ffeec3] to-[#d4af37] bg-clip-text text-transparent group-hover:from-white group-hover:to-[#ffeec3] transition-all duration-300 leading-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm sm:text-base text-[#dbc6ad] leading-relaxed group-hover:text-white/90 transition-colors flex-grow">
+                        {item.desc}
+                      </p>
+                    </div>
+
+                    {/* Bottom Accent Loader */}
+                    <div className="mt-8 h-1 w-12 bg-gradient-to-r from-[#d4af37] to-transparent rounded-full group-hover:w-full transition-all duration-700 opacity-40 group-hover:opacity-100"></div>
+
+                    {/* Outer Card Glow Overlay */}
+                    <div className="absolute -inset-[1px] bg-gradient-to-br from-[#d4af37]/40 via-transparent to-[#d4af37]/40 rounded-[2rem] opacity-0 group-hover:opacity-100 blur-[2px] -z-10 transition-opacity duration-500"></div>
                   </div>
-
-                  {/* Text Content */}
-                  <div className="relative z-10 flex flex-col flex-grow">
-                    <h3 className="text-xl sm:text-2xl font-black mb-4 bg-gradient-to-r from-[#ffeec3] to-[#d4af37] bg-clip-text text-transparent group-hover:from-white group-hover:to-[#ffeec3] transition-all duration-300 leading-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm sm:text-base text-[#dbc6ad] leading-relaxed group-hover:text-white/90 transition-colors flex-grow">
-                      {item.desc}
-                    </p>
-                  </div>
-
-                  {/* Bottom Accent Loader */}
-                  <div className="mt-8 h-1 w-12 bg-gradient-to-r from-[#d4af37] to-transparent rounded-full group-hover:w-full transition-all duration-700 opacity-40 group-hover:opacity-100"></div>
-                </div>
-
-                {/* Outer Card Glow Overlay - Appears on Hover */}
-                <div className="absolute -inset-[1px] bg-gradient-to-br from-[#d4af37]/40 via-transparent to-[#d4af37]/40 rounded-[2rem] opacity-0 group-hover:opacity-100 blur-[2px] -z-10 transition-opacity duration-500"></div>
-              </div>
-            ))}
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </section>

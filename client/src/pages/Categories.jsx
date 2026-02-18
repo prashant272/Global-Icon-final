@@ -1,169 +1,1690 @@
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronDown, Trophy, Star, Award, Zap, Building, GraduationCap, Plane, Factory, Sparkles, Cpu, Wallet, Leaf, Shield, Clapperboard } from "lucide-react";
 
-// =============================
+const fieldMap = {
+  "Healthcare": {
+    "Hospitals & Healthcare Institutions": {
+      "Overall Excellence": [
+        "Hospital of the Year",
+        "Multi-Specialty Hospital of the Year",
+        "Super Specialty Hospital of the Year",
+        "Emerging Hospital of the Year",
+        "Most Trusted Hospital Brand",
+        "Excellence in Patient Care Award",
+        "Healthcare Excellence Institution Award"
+      ],
+      "Government & Public Healthcare": [
+        "Best Government Hospital",
+        "Best District Hospital",
+        "Excellence in Public Healthcare Services",
+        "Rural Healthcare Excellence Award",
+        "Best Medical College Hospital"
+      ],
+      "Private Healthcare": [
+        "Best Private Hospital",
+        "Best Corporate Hospital Chain",
+        "Excellence in Affordable Healthcare",
+        "Best NABH Accredited Hospital",
+        "Excellence in International Patient Care"
+      ],
+      "Specialty-Based Excellence": [
+        "Best Cardiology Hospital",
+        "Best Oncology Hospital",
+        "Best Orthopedic Hospital",
+        "Best Neurology & Neurosurgery Hospital",
+        "Best Pediatric Hospital",
+        "Best Women & Maternity Hospital",
+        "Best IVF & Fertility Center",
+        "Best Gastroenterology Hospital",
+        "Best Urology & Nephrology Center",
+        "Best Dermatology & Cosmetic Center"
+      ],
+      "Digital & Smart Healthcare": [
+        "Excellence in Digital Healthcare",
+        "Best Telemedicine Initiative",
+        "Best AI in Healthcare Implementation",
+        "Smart Hospital of the Year",
+        "Innovation in Health IT Award",
+        "Best Hospital Management System Implementation"
+      ],
+      "Global & Medical Tourism": [
+        "Best Medical Tourism Hospital",
+        "Excellence in International Patient Services",
+        "Global Healthcare Brand Award",
+        "Best Cross-Border Healthcare Initiative"
+      ],
+      "Sustainability & Social Impact": [
+        "Green & Sustainable Hospital Award",
+        "Community Healthcare Initiative Award",
+        "Excellence in Rural Health Outreach",
+        "Women & Child Healthcare Impact Award",
+        "Healthcare for Underserved Communities Award"
+      ]
+    },
+    "Clinics & Specialized Centers": {
+      "Specialty Clinics": [
+        "Best Dental Clinic",
+        "Best Eye Care Clinic",
+        "Best Physiotherapy Center",
+        "Best Skin & Cosmetic Clinic",
+        "Best Fertility Clinic",
+        "Best Dialysis Center",
+        "Best Diagnostic & Imaging Center"
+      ],
+      "Diagnostic & Pathology": [
+        "Best Pathology Lab",
+        "Best Radiology & Imaging Center",
+        "Best Molecular Diagnostic Lab",
+        "Excellence in Preventive Healthcare"
+      ]
+    },
+    "Healthcare Education & Training Institutes": {
+      "Medical Education": [
+        "Best Medical College",
+        "Best Nursing College",
+        "Best Paramedical Institute",
+        "Excellence in Medical Research Institute",
+        "Best Healthcare Skill Development Institute"
+      ],
+      "Research & Innovation": [
+        "Excellence in Clinical Research",
+        "Best Medical Innovation Award",
+        "Breakthrough Healthcare Research Award",
+        "Excellence in Public Health Research"
+      ]
+    },
+    "Pharma & Medical Devices": {
+      "Pharmaceutical Excellence": [
+        "Best Pharma Company of the Year",
+        "Most Innovative Pharmaceutical Brand",
+        "Excellence in Generic Medicines",
+        "Excellence in Vaccine Development",
+        "Excellence in Biotechnology Innovation"
+      ],
+      "Medical Devices & Equipment": [
+        "Best Medical Device Manufacturer",
+        "Excellence in Surgical Equipment Innovation",
+        "Best Diagnostic Equipment Company",
+        "Innovation in Health Technology Award"
+      ]
+    },
+    "Individual Healthcare Awards": {
+      "Doctors & Surgeons": [
+        "Doctor of the Year",
+        "Surgeon of the Year",
+        "Young Doctor of the Year",
+        "Lifetime Achievement in Healthcare",
+        "Excellence in Patient Care Award"
+      ],
+      "Nursing & Allied Health": [
+        "Nurse of the Year",
+        "Paramedic of the Year",
+        "Healthcare Hero Award",
+        "Community Health Worker of the Year"
+      ],
+      "Research & Innovation Leaders": [
+        "Healthcare Innovator of the Year",
+        "Medical Researcher of the Year",
+        "Public Health Leader Award"
+      ]
+    },
+    "Digital Health & HealthTech": {
+      "HealthTech Companies": [
+        "Best HealthTech Startup",
+        "Most Innovative HealthTech Platform",
+        "Best AI-Based Diagnostic Platform",
+        "Best Health App of the Year",
+        "Excellence in Remote Patient Monitoring"
+      ],
+      "Data & Analytics": [
+        "Excellence in Healthcare Data Analytics",
+        "Best Predictive Healthcare Platform",
+        "Innovation in Electronic Health Records"
+      ]
+    },
+    "Special Recognition Awards": {
+      "General": [
+        "Healthcare Icon of the Year",
+        "Global Healthcare Excellence Award",
+        "Women Leader in Healthcare Award",
+        "Emerging Healthcare Leader Award",
+        "Excellence in Humanitarian Healthcare",
+        "Pandemic Response Excellence Award"
+      ]
+    }
+  },
+  "Education": {
+    "University Categories": {
+      "Overall Excellence": [
+        "University of the Year",
+        "Emerging University of the Year",
+        "Best Private University",
+        "Best Government / Public University",
+        "Best Deemed-to-be University",
+        "Best International University",
+        "Excellence in Higher Education Award",
+        "University of the Year (India)",
+        "Excellence in Higher Education – India",
+        "Most Trusted University Brand (India)",
+        "Outstanding Vice-Chancellor Leadership Award"
+      ],
+      "Internationalization": [
+        "Excellence in Global Education",
+        "Best International Collaboration",
+        "Best Student Exchange Program",
+        "Excellence in Study Abroad Programs",
+        "Best Foreign University Collaboration",
+        "Global Collaboration Excellence (India)",
+        "Best International Student Support University",
+        "Study in India Excellence Award",
+        "International Research Partnerships Award"
+      ],
+      "Research & Innovation": [
+        "Excellence in Research & Development",
+        "Best Research University",
+        "Innovation & Technology Excellence Award",
+        "Best Patent & IP Initiative",
+        "Best Incubation & Startup Support University",
+        "Excellence in Industry-Academia Collaboration",
+        "Research & Innovation Excellence Award",
+        "Best Doctoral & Research University",
+        "Faculty Excellence Award",
+        "Interdisciplinary Education Excellence"
+      ],
+      "Digital & Online Education": [
+        "Excellence in Digital Learning",
+        "Best Online University / Program",
+        "Excellence in EdTech Integration",
+        "Best Learning Management System (LMS)",
+        "Digital University of the Year",
+        "Best Online & Blended Learning University",
+        "Innovation in EdTech Integration",
+        "Innovation in Blended Learning",
+        "AI & Technology-Enabled Campus",
+        "Smart & Digital Campus Excellence"
+      ]
+    },
+    "College Categories": {
+      "By Type of Institution": [
+        "Best Government College",
+        "Best Private College",
+        "Best Autonomous College",
+        "Best Deemed-to-be University College",
+        "Best International College",
+        "Best Emerging College"
+      ],
+      "Science & Technology": [
+        "Best Science College",
+        "Best Engineering College",
+        "Best Polytechnic College",
+        "Best Research-Oriented College",
+        "Best Innovation & R&D College"
+      ],
+      "Management & Commerce": [
+        "Best Management / MBA College",
+        "Best Commerce College",
+        "Best Business School",
+        "Best Entrepreneurship-Focused College"
+      ],
+      "Law & Public Policy": [
+        "Best Law College",
+        "Best Legal Education Institution",
+        "Best Moot Court & Legal Training College"
+      ],
+      "Medical & Healthcare": [
+        "Best Medical College",
+        "Best Dental College",
+        "Best Nursing College",
+        "Best Pharmacy College",
+        "Best Allied Health Sciences College",
+        "Best Paramedical College"
+      ]
+    },
+    "Vocational Institute": {
+      "Healthcare & Paramedical": [
+        "Paramedical Training Institutes",
+        "Nursing Assistant & GNM Training Centers",
+        "Medical Lab Technician (MLT) Institutes",
+        "Radiology & Imaging Technician Institutes",
+        "Emergency & Trauma Care Training Institutes",
+        "Physiotherapy Assistant Training Centers",
+        "Hospital Administration Vocational Institutes",
+        "Pharmacy Technician Training Institutes",
+        "Healthcare Skill Development Institutes"
+      ],
+      "Construction & Trades": [
+        "Civil Construction Skill Training Institutes",
+        "Plumbing & Sanitation Training Institutes",
+        "Masonry & Tiling Training Centers",
+        "Interior Design & Drafting Institutes",
+        "Surveying & Land Measurement Institutes",
+        "Heavy Equipment & Crane Operator Institutes",
+        "Road & Infrastructure Skill Training Centers"
+      ]
+    },
+    "School Categories": {
+      "Early Years": [
+        "Best Preschool / Kindergarten",
+        "Excellence in Early Childhood Education",
+        "Best Montessori School",
+        "Best Play-Based Learning School"
+      ],
+      "Primary Education": [
+        "Best Primary School",
+        "Excellence in Foundational Literacy & Numeracy",
+        "Best Value-Based Primary School",
+        "Innovation in Primary Education"
+      ],
+      "Secondary & Senior Secondary": [
+        "Best Secondary School",
+        "Best Senior Secondary School",
+        "Academic Excellence Award",
+        "Best CBSE / ICSE / IB / IGCSE / State Board School",
+        "Excellence in Board Results"
+      ]
+    },
+    "EdTech Categories": {
+      "Overall Excellence": [
+        "Best EdTech Company of the Year – Global",
+        "Most Innovative EdTech Brand",
+        "Fastest Growing EdTech Company",
+        "Excellence in Digital Learning Solutions",
+        "Outstanding Contribution to Global Education"
+      ],
+      "Technology & Innovation": [
+        "Best AI-Powered Learning Platform",
+        "Best Adaptive / Personalized Learning Solution",
+        "Best LMS (Learning Management System)",
+        "Best AR/VR Learning Technology",
+        "Best Gamified Learning Platform"
+      ]
+    },
+    "Individual Categories": {
+      "Academic Leadership": [
+        "Global Education Leader of the Year",
+        "Visionary Academic Director of the Year",
+        "International School Principal of the Year",
+        "University Chancellor / Vice Chancellor of the Year",
+        "Education Administrator of the Year"
+      ],
+      "Teaching Excellence": [
+        "Global Teacher of the Year",
+        "Innovative Educator of the Year",
+        "Outstanding Professor / Lecturer of the Year",
+        "Early Childhood Educator of the Year",
+        "STEM Educator of the Year"
+      ]
+    }
+  },
+  "Real Estate & Infrastructure": {
+    "Overall Excellence": {
+      "General": [
+        "Real Estate Company of the Year",
+        "Infrastructure Company of the Year",
+        "Emerging Real Estate Brand",
+        "Most Trusted Real Estate Developer",
+        "Excellence in Urban Development",
+        "Outstanding Contribution to Infrastructure Growth"
+      ]
+    },
+    "Residential Projects": {
+      "General": [
+        "Best Luxury Residential Project",
+        "Best Affordable Housing Project",
+        "Best Gated Community Project",
+        "Best Smart Residential Project",
+        "Excellence in Sustainable Housing"
+      ]
+    },
+    "Commercial & Mixed Use": {
+      "General": [
+        "Best Commercial Project of the Year",
+        "Best IT Park / Business Park",
+        "Best Retail & Shopping Mall Project",
+        "Best Mixed-Use Development",
+        "Excellence in Corporate Infrastructure"
+      ]
+    },
+    "Sustainable & Green Development": {
+      "General": [
+        "Green Building Project of the Year",
+        "Sustainable Infrastructure Excellence Award",
+        "Net-Zero Energy Building Award",
+        "Eco-Friendly Real Estate Project",
+        "Excellence in Environmental Sustainability"
+      ]
+    },
+    "Innovation & Technology": {
+      "General": [
+        "Smart City Project of the Year",
+        "Innovation in Construction Technology",
+        "Best Use of AI & Automation in Real Estate",
+        "PropTech Innovation Award",
+        "Digital Transformation in Infrastructure Award"
+      ]
+    },
+    "Construction & Engineering": {
+      "General": [
+        "Construction Company of the Year",
+        "Best Civil Engineering Project",
+        "Excellence in Structural Engineering",
+        "Outstanding EPC Project Award",
+        "Infrastructure Excellence in Transportation"
+      ]
+    },
+    "Luxury & Premium Segment": {
+      "General": [
+        "Luxury Developer of the Year",
+        "Ultra Luxury Project Award",
+        "Premium Villa Project of the Year",
+        "High-Rise Excellence Award"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "General": [
+        "Real Estate Leader of the Year",
+        "Young Developer of the Year",
+        "Lifetime Achievement in Real Estate",
+        "Women Leader in Infrastructure Award"
+      ]
+    },
+    "Special Recognition": {
+      "General": [
+        "Iconic Real Estate Brand of the Decade",
+        "Fastest Growing Real Estate Company",
+        "Excellence in Customer Satisfaction",
+        "Innovation in Affordable Housing Award"
+      ]
+    }
+  },
+  "Hospitality & Tourism": {
+    "Overall Excellence": {
+      "General": [
+        "Hospitality Brand of the Year",
+        "Tourism Company of the Year",
+        "Best Hospitality Group",
+        "Emerging Hospitality Brand",
+        "Most Trusted Travel & Tourism Company",
+        "Outstanding Contribution to Tourism Development"
+      ]
+    },
+    "Hotels & Resorts": {
+      "General": [
+        "Best Luxury Hotel",
+        "Best Boutique Hotel",
+        "Best Business Hotel",
+        "Best Resort Destination",
+        "Best Eco Resort",
+        "Best Heritage Hotel",
+        "Best Budget Hotel Chain"
+      ]
+    },
+    "Travel & Tour Operators": {
+      "General": [
+        "Best Travel Agency of the Year",
+        "Best International Tour Operator",
+        "Best Domestic Tour Operator",
+        "Best Customized Travel Experience",
+        "Excellence in Adventure Tourism",
+        "Best Pilgrimage Tourism Company"
+      ]
+    },
+    "Aviation & Cruise": {
+      "General": [
+        "Best Airline Service Provider",
+        "Best Aviation Hospitality Service",
+        "Best Cruise Line Experience",
+        "Excellence in Airport Hospitality"
+      ]
+    },
+    "Food & Beverage Excellence": {
+      "General": [
+        "Best Fine Dining Restaurant",
+        "Best Multi-Cuisine Restaurant",
+        "Best Hospitality F&B Brand",
+        "Excellence in Culinary Innovation",
+        "Chef of the Year"
+      ]
+    },
+    "Sustainable & Responsible Tourism": {
+      "General": [
+        "Green Hospitality Award",
+        "Sustainable Tourism Initiative of the Year",
+        "Eco-Friendly Travel Brand",
+        "Community-Based Tourism Excellence",
+        "Responsible Tourism Leadership Award"
+      ]
+    },
+    "Innovation & Digital Excellence": {
+      "General": [
+        "Digital Innovation in Hospitality Award",
+        "Best Online Booking Platform",
+        "AI-Powered Travel Experience Award",
+        "Best Use of Technology in Tourism",
+        "Smart Hospitality Initiative Award"
+      ]
+    },
+    "Destination & Tourism Promotion": {
+      "General": [
+        "Best Tourism Board Initiative",
+        "Best Destination Marketing Campaign",
+        "Emerging Travel Destination Award",
+        "Cultural Tourism Excellence Award",
+        "Heritage Tourism Promotion Award"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "General": [
+        "Hospitality Leader of the Year",
+        "Young Hotelier of the Year",
+        "Tourism Entrepreneur of the Year",
+        "Lifetime Achievement in Hospitality",
+        "Women Leader in Tourism Award"
+      ]
+    },
+    "Special Recognition": {
+      "General": [
+        "Iconic Hospitality Brand of the Decade",
+        "Fastest Growing Travel Company",
+        "Excellence in Customer Experience",
+        "Global Tourism Excellence Award"
+      ]
+    }
+  },
+  "Manufacturing & Industrial": {
+    "Large Manufacturing Enterprises": {
+      "Overall Excellence": [
+        "Manufacturing Company of the Year",
+        "Industrial Excellence Award",
+        "Global Manufacturing Leader Award",
+        "Excellence in Production Efficiency",
+        "Outstanding Contribution to Industrial Growth"
+      ],
+      "Innovation & Technology": [
+        "Smart Manufacturing Award",
+        "Industry 4.0 Excellence Award",
+        "Automation & Robotics Innovation Award",
+        "AI in Manufacturing Excellence",
+        "Digital Transformation in Industry Award"
+      ],
+      "Operational Excellence": [
+        "Best Lean Manufacturing Initiative",
+        "Six Sigma Excellence Award",
+        "Supply Chain Excellence Award",
+        "Quality Control Excellence Award",
+        "Best Production Optimization Strategy"
+      ]
+    },
+    "MSME & Emerging Manufacturers": {
+      "Emerging Excellence": [
+        "Emerging Manufacturing Company of the Year",
+        "Fastest Growing Industrial Startup",
+        "Innovation in MSME Manufacturing",
+        "Best Make in India Initiative"
+      ],
+      "Sustainability & Impact": [
+        "Green Manufacturing Award",
+        "Energy Efficient Manufacturing Unit",
+        "Waste Reduction & Circular Economy Award",
+        "Sustainable Industrial Practices Award"
+      ]
+    },
+    "Sector-Specific Manufacturing": {
+      "Automobile & EV": [
+        "Automobile Manufacturer of the Year",
+        "EV Manufacturing Excellence Award",
+        "Auto Component Manufacturer Award"
+      ],
+      "Pharmaceutical & Healthcare": [
+        "Pharma Manufacturing Company of the Year",
+        "Excellence in Medical Device Manufacturing",
+        "Best API Manufacturing Unit"
+      ],
+      "Textile & Apparel": [
+        "Textile Manufacturer of the Year",
+        "Sustainable Fashion Production Award",
+        "Garment Export Excellence Award"
+      ],
+      "Electronics & Semiconductor": [
+        "Electronics Manufacturing Excellence Award",
+        "Best Semiconductor Production Unit",
+        "Innovation in Consumer Electronics Manufacturing"
+      ],
+      "Food & FMCG": [
+        "Food Processing Excellence Award",
+        "FMCG Manufacturing Brand of the Year",
+        "Excellence in Quality & Safety Standards"
+      ]
+    },
+    "Infrastructure & Heavy Industry": {
+      "Construction & Engineering": [
+        "Industrial Infrastructure Company of the Year",
+        "Heavy Engineering Excellence Award",
+        "Outstanding EPC Project Award",
+        "Excellence in Civil & Structural Engineering"
+      ],
+      "Energy & Utilities": [
+        "Renewable Energy Manufacturing Award",
+        "Power Equipment Manufacturing Excellence",
+        "Oil & Gas Industrial Excellence Award"
+      ]
+    },
+    "Technology & Industrial Innovation": {
+      "Research & Development": [
+        "Industrial R&D Excellence Award",
+        "Patent & Innovation Excellence Award",
+        "Best Product Development Initiative"
+      ],
+      "Digital & Smart Solutions": [
+        "IoT in Manufacturing Award",
+        "Smart Factory of the Year",
+        "Industrial Data Analytics Excellence Award"
+      ]
+    },
+    "Workforce & Leadership": {
+      "Leadership Awards": [
+        "Industrial Leader of the Year",
+        "Manufacturing CEO of the Year",
+        "Young Industrial Entrepreneur Award",
+        "Women Leader in Manufacturing Award"
+      ],
+      "Workforce Excellence": [
+        "Best Workforce Development Program",
+        "Excellence in Industrial Safety Standards",
+        "Skill Development Excellence Award"
+      ]
+    },
+    "Special Recognition": {
+      "Brand & Legacy": [
+        "Iconic Manufacturing Brand of the Decade",
+        "Lifetime Achievement in Industrial Sector",
+        "Global Industrial Excellence Award",
+        "Make in India Champion Award"
+      ]
+    }
+  },
+  "Beauty & Wellness": {
+    "Beauty Brands & Product Manufacturing": {
+      "Overall Excellence": [
+        "Beauty Brand of the Year",
+        "Cosmetics Company of the Year",
+        "Luxury Beauty Brand Award",
+        "Emerging Beauty Startup Award",
+        "Global Skincare Excellence Award",
+        "Premium Makeup Brand of the Year",
+        "Haircare Brand Excellence Award",
+        "Personal Care Brand of the Year"
+      ],
+      "Product Innovation": [
+        "Best Skincare Product",
+        "Best Anti-Aging Innovation",
+        "Best Organic Beauty Product",
+        "Best Herbal Cosmetics Brand",
+        "Clean Beauty Innovation Award",
+        "Vegan Beauty Brand Award",
+        "Dermatologically Tested Product Award",
+        "Beauty Technology Innovation Award"
+      ],
+      "Sustainable & Ethical Beauty": [
+        "Cruelty-Free Brand of the Year",
+        "Eco-Friendly Packaging Innovation",
+        "Sustainable Beauty Initiative Award",
+        "Zero Waste Beauty Brand",
+        "Green Cosmetic Manufacturing Award"
+      ]
+    },
+    "Salons & Professional Beauty Services": {
+      "Salon Excellence": [
+        "Best Luxury Salon",
+        "Best Unisex Salon",
+        "Best Bridal Makeup Studio",
+        "Best Hair Styling Studio",
+        "Best Nail Art Studio",
+        "Best Skin Treatment Salon",
+        "Best Franchise Salon Chain",
+        "Best Boutique Beauty Studio"
+      ],
+      "Professional Services": [
+        "Best Makeup Artist of the Year",
+        "Best Hair Stylist Award",
+        "Best Bridal Artist Award",
+        "Best Celebrity Makeup Artist",
+        "Beauty Educator of the Year",
+        "Salon Trainer Excellence Award"
+      ]
+    },
+    "Aesthetic Clinics & Dermatology": {
+      "Clinical Excellence": [
+        "Best Cosmetic Clinic",
+        "Best Dermatology Clinic",
+        "Excellence in Laser Treatment",
+        "Best Non-Surgical Aesthetic Clinic",
+        "Plastic Surgery Excellence Award",
+        "Best Skin Rejuvenation Clinic",
+        "Advanced Facial Treatment Award"
+      ],
+      "Medical Innovation": [
+        "Aesthetic Technology Innovation Award",
+        "Best Anti-Aging Treatment Clinic",
+        "Hair Transplant Excellence Award",
+        "Best Cosmetic Dermatologist Award"
+      ]
+    },
+    "Wellness & Holistic Health": {
+      "Spa & Therapy": [
+        "Best Luxury Spa",
+        "Ayurveda Wellness Excellence Award",
+        "Holistic Therapy Center of the Year",
+        "Best Aromatherapy Spa",
+        "Traditional Healing Excellence Award",
+        "Best Destination Spa Award"
+      ],
+      "Fitness & Nutrition": [
+        "Fitness Brand of the Year",
+        "Best Gym Chain",
+        "Best Yoga Institute",
+        "Best Wellness Retreat",
+        "Nutrition Brand Excellence Award",
+        "Weight Management Program Award",
+        "Personal Trainer of the Year"
+      ],
+      "Mental Wellness": [
+        "Mental Wellness Initiative Award",
+        "Wellness Coaching Excellence Award",
+        "Corporate Wellness Program Award"
+      ]
+    },
+    "Beauty Education & Training Institutes": {
+      "Academy Excellence": [
+        "Beauty Academy of the Year",
+        "Best Cosmetology Institute",
+        "Makeup Training Institute Excellence Award",
+        "Hair Styling Training Excellence Award",
+        "International Beauty Training Award",
+        "Emerging Beauty Academy Award"
+      ],
+      "Skill Development": [
+        "Skill Development Excellence in Beauty",
+        "Best Online Beauty Training Platform",
+        "Vocational Beauty Education Award"
+      ]
+    },
+    "Luxury & Premium Segment": {
+      "High-End Brands": [
+        "Luxury Skincare Brand Award",
+        "Premium Salon Chain of the Year",
+        "Luxury Spa Destination Award",
+        "Exclusive Beauty Experience Award"
+      ]
+    },
+    "Digital & Influencer Impact": {
+      "Online Presence": [
+        "Best Beauty Influencer Award",
+        "Beauty Content Creator of the Year",
+        "Best Beauty YouTube Channel",
+        "Best Beauty Instagram Brand",
+        "Digital Beauty Campaign of the Year"
+      ],
+      "E-Commerce & Tech": [
+        "Best Beauty E-Commerce Platform",
+        "Beauty App Innovation Award",
+        "AI-Based Beauty Solution Award"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "Entrepreneurship": [
+        "Beauty Entrepreneur of the Year",
+        "Wellness Startup Founder Award",
+        "Young Beauty Innovator Award",
+        "Women Leader in Beauty Award",
+        "Global Wellness Leader Award"
+      ],
+      "Lifetime Honors": [
+        "Lifetime Achievement in Beauty Industry",
+        "Iconic Beauty Personality Award"
+      ]
+    },
+    "Special Recognition": {
+      "Brand & Legacy": [
+        "Iconic Beauty Brand of the Decade",
+        "Most Trusted Beauty Brand",
+        "Fastest Growing Wellness Brand",
+        "Customer Satisfaction Excellence Award"
+      ]
+    }
+  },
+  "Technology & Digital Transformation": {
+    "IT & Software Companies": {
+      "Overall Excellence": [
+        "IT Company of the Year",
+        "Software Company of the Year",
+        "Global Tech Brand Award",
+        "Fastest Growing IT Firm",
+        "Enterprise Software Excellence Award",
+        "Best SaaS Company of the Year",
+        "Product-Based Tech Company Award",
+        "Service-Based IT Company Award"
+      ],
+      "Custom & Enterprise Solutions": [
+        "Best ERP Solution Provider",
+        "Best CRM Solution Provider",
+        "Best HR Tech Solution",
+        "Best FinTech Software Provider",
+        "Best HealthTech Platform",
+        "Best EdTech Technology Provider",
+        "Best GovTech Solution Award"
+      ]
+    },
+    "Artificial Intelligence & Data Science": {
+      "AI Excellence": [
+        "AI Startup of the Year",
+        "Best AI Innovation Award",
+        "Machine Learning Excellence Award",
+        "Generative AI Solution Award",
+        "AI for Social Impact Award",
+        "AI in Healthcare Excellence Award",
+        "AI in Finance Innovation Award",
+        "AI in Manufacturing Award"
+      ],
+      "Data & Analytics": [
+        "Data Analytics Company of the Year",
+        "Big Data Excellence Award",
+        "Predictive Analytics Innovation Award",
+        "Business Intelligence Excellence Award",
+        "Data Security & Privacy Innovation Award",
+        "Cloud Data Platform Excellence Award"
+      ]
+    },
+    "Cybersecurity & Cloud Computing": {
+      "Cybersecurity": [
+        "Cybersecurity Company of the Year",
+        "Best Network Security Solution",
+        "Ethical Hacking Excellence Award",
+        "Cloud Security Innovation Award",
+        "Zero Trust Security Award",
+        "Data Protection Excellence Award",
+        "Cyber Defense Leadership Award"
+      ],
+      "Cloud & DevOps": [
+        "Cloud Service Provider of the Year",
+        "Best Cloud Migration Project",
+        "DevOps Excellence Award",
+        "IaaS Award",
+        "PaaS Excellence Award",
+        "Hybrid Cloud Innovation Award"
+      ]
+    },
+    "Blockchain, Web3 & Emerging Tech": {
+      "Blockchain Excellence": [
+        "Blockchain Startup of the Year",
+        "Best DeFi Innovation Award",
+        "Web3 Platform Excellence Award",
+        "Smart Contract Innovation Award",
+        "Crypto Security Excellence Award"
+      ],
+      "Emerging Technologies": [
+        "AR/VR Innovation Award",
+        "Metaverse Platform Excellence Award",
+        "Quantum Computing Breakthrough Award",
+        "IoT Innovation Award",
+        "Robotics & Automation Excellence Award"
+      ]
+    },
+    "Digital Transformation – Enterprise": {
+      "Corporate Digitalization": [
+        "Best Digital Transformation Initiative",
+        "Smart Enterprise Award",
+        "Digital Banking Transformation Award",
+        "Industry 4.0 Excellence Award",
+        "Digital Supply Chain Innovation Award",
+        "Digital HR Transformation Award",
+        "Smart Manufacturing Initiative Award"
+      ],
+      "Customer Experience": [
+        "Digital Customer Experience Award",
+        "Omnichannel Innovation Award",
+        "UX/UI Excellence Award",
+        "Mobile App Innovation Award"
+      ]
+    },
+    "Startups & Innovation Ecosystem": {
+      "Startup Excellence": [
+        "Tech Startup of the Year",
+        "Most Innovative Tech Startup",
+        "Disruptive Innovation Award",
+        "Emerging SaaS Startup Award",
+        "DeepTech Innovation Award",
+        "AgriTech Innovation Award",
+        "HealthTech Startup Award"
+      ],
+      "Incubation & Acceleration": [
+        "Best Tech Incubator",
+        "Startup Accelerator Excellence Award",
+        "Innovation Hub of the Year"
+      ]
+    },
+    "E-Commerce & Digital Platforms": {
+      "Platform Excellence": [
+        "Best E-Commerce Platform",
+        "Digital Marketplace of the Year",
+        "B2B Platform Excellence Award",
+        "D2C Brand Technology Award",
+        "Online Payment Innovation Award"
+      ],
+      "MarTech & AdTech": [
+        "Digital Marketing Technology Award",
+        "AdTech Innovation Award",
+        "SEO/SEM Excellence Award",
+        "Marketing Automation Excellence Award"
+      ]
+    },
+    "Telecom & Connectivity": {
+      "Telecommunication Excellence": [
+        "Telecom Company of the Year",
+        "5G Innovation Award",
+        "Best Broadband Service Provider",
+        "Satellite Communication Excellence Award",
+        "Smart City Connectivity Award"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "Tech Leadership": [
+        "Tech CEO of the Year",
+        "CIO of the Year",
+        "CTO of the Year",
+        "Chief Digital Officer Award",
+        "Women Leader in Technology Award",
+        "Young Tech Entrepreneur Award",
+        "Tech Influencer of the Year"
+      ],
+      "Lifetime & Visionary": [
+        "Lifetime Achievement in Technology",
+        "Digital Visionary Award",
+        "Global Tech Icon Award"
+      ]
+    },
+    "Sustainability & Ethical Tech": {
+      "Green Tech": [
+        "Green Technology Innovation Award",
+        "Sustainable IT Infrastructure Award",
+        "Energy Efficient Data Center Award",
+        "Carbon Neutral Technology Award"
+      ],
+      "Ethical & Inclusive Tech": [
+        "Tech for Social Impact Award",
+        "Inclusive Technology Award",
+        "Digital Accessibility Excellence Award"
+      ]
+    },
+    "Government & Public Sector Digitalization": {
+      "e-Governance": [
+        "Best e-Governance Initiative",
+        "Digital Public Service Award",
+        "Smart Governance Innovation Award",
+        "Digital India Excellence Award"
+      ]
+    },
+    "Special Recognition": {
+      "Brand & Legacy": [
+        "Iconic Technology Brand of the Decade",
+        "Fastest Growing Tech Company",
+        "Global Digital Excellence Award",
+        "Customer Trust Excellence Award"
+      ]
+    }
+  },
+  "Finance & Banking": {
+    "Banking Institutions": {
+      "Overall Banking Excellence": [
+        "Bank of the Year",
+        "Best Public Sector Bank",
+        "Best Private Sector Bank",
+        "Best International Bank",
+        "Best Regional Bank",
+        "Fastest Growing Bank Award",
+        "Most Trusted Bank Brand",
+        "Customer Service Excellence in Banking"
+      ],
+      "Retail & Corporate Banking": [
+        "Excellence in Retail Banking",
+        "Best Corporate Banking Services",
+        "Best SME Banking Services",
+        "Best NRI Banking Services",
+        "Excellence in Trade Finance",
+        "Best Loan & Credit Services"
+      ],
+      "Digital Banking": [
+        "Best Digital Bank",
+        "Best Mobile Banking App",
+        "Digital Customer Experience Award",
+        "Innovation in Online Banking",
+        "AI-Powered Banking Excellence Award"
+      ]
+    },
+    "FinTech & Digital Finance": {
+      "FinTech Excellence": [
+        "FinTech Startup of the Year",
+        "Most Innovative FinTech Company",
+        "Best Payment Gateway Provider",
+        "Digital Wallet Innovation Award",
+        "Cross-Border Payment Excellence Award",
+        "Blockchain in Finance Award",
+        "Embedded Finance Innovation Award",
+        "Open Banking Excellence Award"
+      ],
+      "Lending & Credit Tech": [
+        "Best Digital Lending Platform",
+        "P2P Lending Excellence Award",
+        "BNPL Innovation Award",
+        "Credit Scoring Innovation Award"
+      ]
+    },
+    "Insurance Sector": {
+      "Insurance Excellence": [
+        "Insurance Company of the Year",
+        "Best Life Insurance Provider",
+        "Best General Insurance Company",
+        "Health Insurance Excellence Award",
+        "Digital Insurance Innovation Award",
+        "Claims Settlement Excellence Award"
+      ],
+      "InsurTech Innovation": [
+        "InsurTech Startup of the Year",
+        "AI in Insurance Innovation Award",
+        "Insurance Customer Experience Award"
+      ]
+    },
+    "Investment & Wealth Management": {
+      "Asset & Wealth Management": [
+        "Best Asset Management Company",
+        "Wealth Management Excellence Award",
+        "Best Mutual Fund House",
+        "Investment Advisory Excellence Award",
+        "Portfolio Management Excellence Award",
+        "Private Equity Excellence Award",
+        "Venture Capital Firm of the Year"
+      ],
+      "Alternative Investments": [
+        "Hedge Fund Excellence Award",
+        "Real Estate Investment Excellence Award",
+        "ESG Investment Leadership Award"
+      ]
+    },
+    "Capital Markets & Stock Exchange": {
+      "Market Excellence": [
+        "Stock Exchange of the Year",
+        "Best Brokerage Firm",
+        "Capital Market Innovation Award",
+        "IPO Advisory Excellence Award",
+        "Equity Research Excellence Award",
+        "Derivatives Market Excellence Award"
+      ]
+    },
+    "NBFC & Microfinance": {
+      "NBFC Excellence": [
+        "NBFC of the Year",
+        "Best Gold Loan Company",
+        "Best Consumer Finance Company",
+        "Housing Finance Excellence Award"
+      ],
+      "Financial Inclusion": [
+        "Microfinance Institution of the Year",
+        "Financial Inclusion Champion Award",
+        "Rural Banking Excellence Award",
+        "Women Empowerment through Finance Award"
+      ]
+    },
+    "Risk, Compliance & Governance": {
+      "Risk Management": [
+        "Risk Management Excellence Award",
+        "Fraud Prevention Innovation Award",
+        "AML & Compliance Excellence Award",
+        "Cyber Risk Excellence in Finance"
+      ],
+      "Governance": [
+        "Best Corporate Governance in Finance",
+        "Ethical Banking Leadership Award"
+      ]
+    },
+    "ESG & Sustainable Finance": {
+      "Green Finance": [
+        "Green Finance Initiative Award",
+        "Sustainable Banking Excellence Award",
+        "Climate Finance Leadership Award",
+        "Carbon Neutral Finance Institution Award"
+      ],
+      "Impact Finance": [
+        "Social Impact Investment Award",
+        "Sustainable Investment Fund of the Year"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "Executive Leadership": [
+        "Banking CEO of the Year",
+        "CFO of the Year – Financial Sector",
+        "FinTech Visionary Award",
+        "Women Leader in Finance Award",
+        "Young Financial Leader Award",
+        "Digital Banking Leader Award"
+      ],
+      "Lifetime & Iconic": [
+        "Lifetime Achievement in Banking",
+        "Finance Industry Icon Award",
+        "Global Financial Visionary Award"
+      ]
+    },
+    "Special Recognition": {
+      "Brand & Performance": [
+        "Iconic Financial Brand of the Decade",
+        "Fastest Growing Financial Institution",
+        "Customer Trust Excellence Award",
+        "Innovation in Financial Services Award"
+      ]
+    }
+  },
+  "Sustainability & Environment": {
+    "Corporate Sustainability": {
+      "Overall Excellence": [
+        "Sustainable Company of the Year",
+        "ESG Leader of the Year",
+        "Net Zero Commitment Award",
+        "Carbon Reduction Excellence Award",
+        "Sustainable Supply Chain Award",
+        "Responsible Business Award",
+        "Green Corporate Leadership Award"
+      ],
+      "ESG Performance": [
+        "Best ESG Reporting Award",
+        "Climate Risk Disclosure Excellence",
+        "Sustainable Governance Award",
+        "Diversity & Inclusion Impact Award",
+        "Ethical Business Excellence Award"
+      ]
+    },
+    "Renewable Energy & Clean Tech": {
+      "Clean Energy Projects": [
+        "Solar Energy Project of the Year",
+        "Wind Energy Excellence Award",
+        "Hydropower Innovation Award",
+        "Green Hydrogen Innovation Award",
+        "Bioenergy Excellence Award",
+        "Energy Storage Innovation Award"
+      ],
+      "Renewable Companies": [
+        "Renewable Energy Company of the Year",
+        "CleanTech Startup of the Year",
+        "Energy Efficiency Excellence Award",
+        "Smart Grid Innovation Award"
+      ]
+    },
+    "Climate Action & Carbon Management": {
+      "Climate Initiatives": [
+        "Climate Action Leadership Award",
+        "Carbon Neutral Organization Award",
+        "Carbon Capture Innovation Award",
+        "Net Zero Initiative of the Year",
+        "Green Building Excellence Award"
+      ],
+      "Adaptation & Resilience": [
+        "Climate Resilience Project Award",
+        "Sustainable Urban Development Award",
+        "Disaster Risk Reduction Excellence Award"
+      ]
+    },
+    "Water & Waste Management": {
+      "Water Conservation": [
+        "Water Sustainability Initiative Award",
+        "Wastewater Treatment Innovation Award",
+        "Water Recycling Excellence Award",
+        "River Restoration Excellence Award"
+      ],
+      "Waste & Circular Economy": {
+        "General": [
+          "Zero Waste Initiative Award",
+          "Recycling Innovation Award",
+          "Circular Economy Excellence Award",
+          "Plastic Reduction Leadership Award",
+          "E-Waste Management Excellence Award"
+        ]
+      }
+    },
+    "Agriculture & Biodiversity": {
+      "Sustainable Agriculture": [
+        "Organic Farming Excellence Award",
+        "Agri Sustainability Innovation Award",
+        "Sustainable Food Production Award",
+        "Soil Health Excellence Award"
+      ],
+      "Biodiversity Protection": [
+        "Wildlife Conservation Excellence Award",
+        "Forest Restoration Leadership Award",
+        "Marine Conservation Award",
+        "Biodiversity Impact Award"
+      ]
+    },
+    "Green Infrastructure & Urban Sustainability": {
+      "Sustainable Cities": [
+        "Smart Green City Award",
+        "Urban Sustainability Excellence Award",
+        "Eco-Friendly Infrastructure Award",
+        "Green Mobility Innovation Award",
+        "Sustainable Transport Initiative Award"
+      ],
+      "Buildings & Construction": [
+        "LEED Certified Project of the Year",
+        "Energy Efficient Building Award",
+        "Green Architecture Excellence Award"
+      ]
+    },
+    "Sustainable Finance & Investment": {
+      "Green Finance": [
+        "Green Finance Initiative Award",
+        "Sustainable Investment Fund of the Year",
+        "Climate Finance Leadership Award",
+        "Impact Investment Excellence Award"
+      ],
+      "ESG Investors": [
+        "ESG Investment Leader Award",
+        "Sustainable Banking Excellence Award"
+      ]
+    },
+    "NGO & Social Impact": {
+      "Environmental NGOs": [
+        "Environmental NGO of the Year",
+        "Community Sustainability Leadership Award",
+        "Grassroots Climate Action Award",
+        "Environmental Education Excellence Award"
+      ],
+      "Youth & Community": [
+        "Youth Climate Leader Award",
+        "Community Green Initiative Award",
+        "Women in Sustainability Leadership Award"
+      ]
+    },
+    "Technology for Sustainability": {
+      "Green Tech": [
+        "Clean Technology Innovation Award",
+        "AI for Climate Action Award",
+        "IoT for Environmental Monitoring Award",
+        "Sustainable Manufacturing Innovation Award"
+      ],
+      "Digital & Data Impact": [
+        "Carbon Tracking Innovation Award",
+        "Environmental Data Analytics Award",
+        "Sustainability Reporting Tech Award"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "Executive Leadership": [
+        "Sustainability Leader of the Year",
+        "CSO Award",
+        "Green Entrepreneur of the Year",
+        "Women Leader in Sustainability Award",
+        "Young Climate Innovator Award"
+      ],
+      "Lifetime & Recognition": [
+        "Lifetime Achievement in Environmental Leadership",
+        "Global Sustainability Visionary Award"
+      ]
+    },
+    "Special Recognition": {
+      "Brand & Legacy": [
+        "Iconic Green Brand of the Decade",
+        "Fastest Growing Sustainable Company",
+        "Global Environmental Excellence Award",
+        "Sustainability Impact Award"
+      ]
+    }
+  },
+  "Public & Government Sector": {
+    "Governance & Public Administration": {
+      "Overall Excellence": [
+        "Government Department of the Year",
+        "Public Administration Excellence Award",
+        "Best State Government Initiative",
+        "Best Central Government Initiative",
+        "Outstanding District Administration Award",
+        "Citizen-Centric Governance Award",
+        "Transparent Governance Excellence Award"
+      ],
+      "Policy & Reform": [
+        "Public Policy Innovation Award",
+        "Administrative Reform Excellence Award",
+        "Good Governance Leadership Award",
+        "Ease of Doing Business Initiative Award"
+      ]
+    },
+    "e-Governance & Digital Public Services": {
+      "Digital Innovation": [
+        "Best e-Governance Initiative",
+        "Digital Public Service Award",
+        "Smart Governance Innovation Award",
+        "Digital Transformation in Government Award",
+        "Best Government Portal Award",
+        "AI in Public Service Award",
+        "Blockchain in Governance Award"
+      ],
+      "Citizen Services": [
+        "Online Citizen Service Excellence Award",
+        "Digital Grievance Redressal Award",
+        "Best Public Service App Award"
+      ]
+    },
+    "Smart Cities & Urban Development": {
+      "Urban Excellence": [
+        "Smart City of the Year",
+        "Urban Sustainability Excellence Award",
+        "Best Municipal Corporation Award",
+        "Clean City Excellence Award",
+        "Public Transport Innovation Award",
+        "Waste Management Leadership Award"
+      ],
+      "Infrastructure Development": [
+        "Urban Infrastructure Excellence Award",
+        "Affordable Housing Initiative Award",
+        "Green Urban Development Award"
+      ]
+    },
+    "Public Sector Undertakings (PSUs)": {
+      "PSU Excellence": [
+        "Public Sector Enterprise of the Year",
+        "PSU Innovation Excellence Award",
+        "Best Government-Owned Company",
+        "PSU Sustainability Leadership Award",
+        "Outstanding Contribution by PSU Award"
+      ]
+    },
+    "Public Health & Education Initiatives": {
+      "Healthcare Programs": [
+        "Public Health Initiative of the Year",
+        "Rural Healthcare Excellence Award",
+        "Immunization & Vaccination Excellence Award",
+        "Health Awareness Campaign Award"
+      ],
+      "Education Programs": [
+        "Government Education Reform Award",
+        "Skill Development Initiative Award",
+        "Digital Education Excellence Award"
+      ]
+    },
+    "Rural Development & Social Welfare": {
+      "Community Development": [
+        "Rural Development Excellence Award",
+        "Women Empowerment Initiative Award",
+        "Poverty Alleviation Excellence Award",
+        "Social Justice Leadership Award",
+        "Inclusive Governance Award"
+      ],
+      "Agriculture & Livelihood": [
+        "Agricultural Development Excellence Award",
+        "Farmer Welfare Initiative Award",
+        "Self-Help Group Empowerment Award"
+      ]
+    },
+    "Environment & Sustainability Programs": {
+      "Green Government": [
+        "Sustainable Governance Award",
+        "Climate Action by Government Award",
+        "Renewable Energy Adoption Excellence Award",
+        "Water Conservation Initiative Award"
+      ]
+    },
+    "Defense, Safety & Law Enforcement": {
+      "Public Safety": [
+        "Law Enforcement Excellence Award",
+        "Disaster Management Leadership Award",
+        "Fire & Emergency Services Excellence Award",
+        "Traffic Management Innovation Award"
+      ],
+      "Defense Services": [
+        "Defense Excellence Award",
+        "Border Security Leadership Award"
+      ]
+    },
+    "Transport & Infrastructure": {
+      "Transport Innovation": [
+        "Public Transport Excellence Award",
+        "Railway Innovation Award",
+        "Airport Development Excellence Award",
+        "Road Infrastructure Excellence Award"
+      ]
+    },
+    "Leadership & Individual Awards": {
+      "Administrative Leadership": [
+        "Public Service Leader of the Year",
+        "IAS Officer Excellence Award",
+        "Civil Services Leadership Award",
+        "Young Public Administrator Award",
+        "Women Leader in Public Service Award"
+      ],
+      "Lifetime Recognition": [
+        "Lifetime Achievement in Public Service",
+        "Governance Visionary Award"
+      ]
+    },
+    "Special Recognition": {
+      "National & Global Impact": [
+        "National Governance Excellence Award",
+        "Global Public Sector Leadership Award",
+        "Public Trust Excellence Award",
+        "Innovation in Public Policy Award"
+      ]
+    }
+  },
+  "Media, Culture & Sports": {
+    "Media & Journalism": {
+      "Print & News Media": [
+        "Newspaper of the Year",
+        "Regional Newspaper Excellence Award",
+        "Investigative Journalism Award",
+        "Political Reporting Excellence Award",
+        "Business Journalism Award",
+        "Best Editorial Leadership Award",
+        "Photojournalism Excellence Award"
+      ],
+      "Television & Broadcast": [
+        "News Channel of the Year",
+        "Best TV Anchor Award",
+        "Breaking News Coverage Award",
+        "Documentary Excellence Award",
+        "Best Talk Show Award"
+      ],
+      "Digital Media": [
+        "Digital News Platform of the Year",
+        "Best News Website Award",
+        "Podcast Excellence Award",
+        "Social Media Journalism Award",
+        "YouTube News Channel Award"
+      ]
+    },
+    "Film & Entertainment": {
+      "Cinema Awards": [
+        "Film of the Year",
+        "Best Director Award",
+        "Best Actor Award",
+        "Best Actress Award",
+        "Best Supporting Actor Award",
+        "Best Screenplay Award",
+        "Best Cinematography Award",
+        "Best Music Director Award",
+        "Best Editing Award"
+      ],
+      "OTT & Streaming": [
+        "Best OTT Platform",
+        "Web Series of the Year",
+        "Best Digital Actor Award",
+        "Streaming Innovation Award"
+      ],
+      "Production & Studios": [
+        "Production House of the Year",
+        "Animation Studio Excellence Award",
+        "VFX Innovation Award"
+      ]
+    },
+    "Advertising, PR & Marketing": {
+      "Advertising Excellence": [
+        "Ad Agency of the Year",
+        "Creative Campaign of the Year",
+        "Brand Storytelling Excellence Award",
+        "Digital Advertising Innovation Award"
+      ],
+      "Public Relations": [
+        "PR Agency of the Year",
+        "Corporate Communication Excellence Award",
+        "Crisis Communication Award"
+      ]
+    },
+    "Arts & Culture": {
+      "Performing Arts": [
+        "Theatre Production of the Year",
+        "Classical Music Excellence Award",
+        "Dance Performance Excellence Award",
+        "Folk Art Preservation Award"
+      ],
+      "Visual Arts": [
+        "Artist of the Year",
+        "Contemporary Art Excellence Award",
+        "Photography Excellence Award",
+        "Sculpture Innovation Award"
+      ],
+      "Cultural Heritage": [
+        "Heritage Preservation Award",
+        "Cultural Promotion Excellence Award",
+        "Museum of the Year"
+      ]
+    },
+    "Literature & Publishing": {
+      "Literary Excellence": [
+        "Author of the Year",
+        "Book of the Year",
+        "Poetry Excellence Award",
+        "Fiction Excellence Award",
+        "Non-Fiction Excellence Award"
+      ],
+      "Publishing Industry": [
+        "Publishing House of the Year",
+        "Literary Editor Excellence Award"
+      ]
+    },
+    "Fashion & Lifestyle": {
+      "Fashion Industry": [
+        "Fashion Designer of the Year",
+        "Sustainable Fashion Brand Award",
+        "Luxury Fashion House Award",
+        "Emerging Designer Award"
+      ],
+      "Lifestyle Media": [
+        "Lifestyle Influencer Award",
+        "Fashion Magazine of the Year"
+      ]
+    },
+    "Sports – Individual & Team": {
+      "Athlete Awards": [
+        "Athlete of the Year",
+        "Best Male Athlete Award",
+        "Best Female Athlete Award",
+        "Young Sports Talent Award",
+        "Para Athlete Excellence Award"
+      ],
+      "Team & Federation": [
+        "Sports Team of the Year",
+        "Best Sports Federation Award",
+        "Coaching Excellence Award",
+        "Grassroots Sports Development Award"
+      ]
+    },
+    "eSports & Digital Gaming": {
+      "Gaming Excellence": [
+        "eSports Player of the Year",
+        "eSports Team of the Year",
+        "Best Gaming Tournament Award",
+        "Game Developer Excellence Award"
+      ]
+    },
+    "Leadership & Lifetime Recognition": {
+      "Media Leadership": [
+        "Media Personality of the Year",
+        "Entertainment Icon Award",
+        "Sports Leadership Award",
+        "Cultural Ambassador Award",
+        "Women Leader in Media Award"
+      ],
+      "Lifetime Honors": [
+        "Lifetime Achievement in Media",
+        "Lifetime Achievement in Sports",
+        "Cultural Legacy Award"
+      ]
+    },
+    "Special Recognition": {
+      "Impact & Innovation": [
+        "Global Media Excellence Award",
+        "Innovation in Entertainment Award",
+        "Cultural Impact Award",
+        "Social Impact Through Media Award"
+      ]
+    }
+  },
+};
+
+const sectorIcons = {
+  "Healthcare": <Building className="w-5 h-5" />,
+  "Education": <GraduationCap className="w-5 h-5" />,
+  "Real Estate & Infrastructure": <Building className="w-5 h-5" />,
+  "Hospitality & Tourism": <Plane className="w-5 h-5" />,
+  "Manufacturing & Industrial": <Factory className="w-5 h-5" />,
+  "Beauty & Wellness": <Sparkles className="w-5 h-5" />,
+  "Technology & Digital Transformation": <Cpu className="w-5 h-5" />,
+  "Finance & Banking": <Wallet className="w-5 h-5" />,
+  "Sustainability & Environment": <Leaf className="w-5 h-5" />,
+  "Public & Government Sector": <Shield className="w-5 h-5" />,
+  "Media, Culture & Sports": <Clapperboard className="w-5 h-5" />,
+};
+
 export default function Categories() {
-  const categories = [
-    // Category array unchanged, just above for brevity
-    {
-      category: "Healthcare",
-      title: "Best Multi-Speciality Hospital of the Year",
-      desc: "Recognizes hospitals demonstrating excellence in patient care, advanced medical technology, and clinical outcomes.",
-    },
-    {
-      category: "Healthcare",
-      title: "Visionary Healthcare Leader of the Year",
-      desc: "Honors doctors and healthcare executives driving large-scale transformation in medical services and global impact.",
-    },
-    {
-      category: "Education",
-      title: "Excellence in Higher Education & University Leadership",
-      desc: "Recognizes universities and colleges demonstrating excellence in research, academic rigor, and global standards.",
-    },
-    {
-      category: "Education",
-      title: "Outstanding School of the Year (K-12)",
-      desc: "Honors schools providing a balanced environment for academic excellence and holistic student development.",
-    },
-    {
-      category: "Business",
-      title: "Business Icon of the Year",
-      desc: "Recognizing visionary entrepreneurs and business leaders who have shown exceptional growth and innovation.",
-    },
-    {
-      category: "Business",
-      title: "Excellence in Corporate Leadership",
-      desc: "Honors companies and leaders setting new benchmarks in corporate governance and industry impact.",
-    },
-    {
-      category: "Dental",
-      title: "Best Dental Clinic of the Year",
-      desc: "Recognizing clinical excellence, patient comfort, and innovative dental practices.",
-    },
-    {
-      category: "Lifestyle",
-      title: "Most Influential Lifestyle Brand",
-      desc: "Honoring brands in fashion, wellness, and luxury that are setting global trends.",
-    },
-    {
-      category: "Lifestyle",
-      title: "Excellence in Wellness & Spa Services",
-      desc: "Recognizing outstanding contributions to health, wellness, and holistic lifestyle services.",
-    },
-  ];
+  const [activeSector, setActiveSector] = useState("Healthcare");
+  const [expandedCategory, setExpandedCategory] = useState(null);
+
+  const sectors = Object.keys(fieldMap);
 
   return (
-    <section className="relative bg-[#210a0e] py-20 sm:py-28 md:py- overflow-hidden">
-      {/* BACKGROUND GLOW, LIGHTS & LUX EFFECTS */}
+    <section className="relative min-h-screen bg-[#0a0505] py-20 sm:py-28 overflow-hidden font-sans">
+      {/* Background Decorative Elements */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        {/* Reddish Pink Glow */}
-        <div className="absolute -top-16 -left-20 w-96 h-96 bg-[#f4646b]/30 rounded-full blur-[105px] opacity-40 animate-pulse" />
-        {/* Orange Glow */}
-        <div className="absolute bottom-[10%] right-0 w-80 h-72 bg-[#fbbf24]/20 rounded-full blur-[95px] opacity-20 animate-[movebg_8s_ease-in-out_infinite_alternate]" />
-        {/* Subtle Deep Red/Gold Shine */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-8 w-[78vw] h-16 bg-gradient-to-r from-[#fbbf245a] via-[#f472b680] to-[#f4646b3b] blur-lg opacity-60" />
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(33,10,14,0.18)_0%,_rgba(22,7,11,0.92)_100%)] pointer-events-none" />
-        {/* Shimmer sparkles */}
-        <div className="hidden md:block absolute w-full h-full pointer-events-none animate-pulse opacity-20">
-          <div className="absolute left-1/4 top-40 w-2 h-2 bg-[#fb7185] rounded-full shadow-md"></div>
-          <div className="absolute left-2/3 top-1/2 w-1.5 h-1.5 bg-[#fde68a] rounded-full shadow"></div>
-          <div className="absolute left-1/5 top-3/4 w-1.5 h-1.5 bg-[#fbbf24] rounded-full shadow"></div>
-          <div className="absolute right-32 bottom-32 w-1 h-1 bg-[#eab308] rounded-full"></div>
-          <div className="absolute left-16 bottom-24 w-1.5 h-1.5 bg-[#fb7185] rounded-full"></div>
-        </div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#d4af37]/5 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#c62828]/5 rounded-full blur-[120px] animate-pulse delay-1000" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 ">
-        <div className="absolute left-3 right-3 -top-3 h-1 bg-gradient-to-r from-transparent via-[#fbbf24] to-transparent opacity-90 rounded-full blur-sm pointer-events-none" />
-        {/* Heading Section */}
-        <div className="text-center mb-16 sm:mb-20">
-          <h1 className="relative inline-block text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-extrabold text-transparent bg-gradient-to-br from-[#fff5bd] via-[#fb7185] to-[#fbbf24] bg-clip-text drop-shadow-[0_5px_28px_#fbbf2466] mb-5 sm:mb-6 tracking-tight">
-            Global Icon Award{" "}
-            <span className="inline-block animate-shine bg-gradient-to-br from-[#fde68a] via-[#fbbf24] to-[#fb7185] bg-[length:310%_100%] bg-clip-text text-transparent drop-shadow-[0_2px_9px_#fbbf24aa]">
-              Categories
-              <span className="inline-block absolute -top-2 -right-8 animate-pulse text-3xl sm:text-4xl text-[#fde68a] drop-shadow-xl">✨</span>
-            </span>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+        {/* Header Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></span>
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-[#d4af37] uppercase">Global Recognition</span>
+          </div>
+          <h1 className="text-4xl xs:text-5xl md:text-7xl font-heading font-black mb-6 bg-gradient-to-r from-[#fff5bd] via-[#d4af37] to-[#fff5bd] bg-clip-text text-transparent drop-shadow-2xl">
+            Award Categories
           </h1>
-          <div className="w-52 h-[4px] sm:w-80 bg-gradient-to-r from-transparent via-[#fb7185]/90 to-transparent mx-auto rounded-full shadow-xl shadow-[#fbbf2466]" />
-          <p className="max-w-2xl mx-auto text-[#fde68a] text-lg xs:text-xl font-medium mt-5 px-1 text-shadow-glow">
-            Recognizing <span className="text-[#fb7185] font-bold">excellence</span> and <span className="text-[#fbbf24] font-bold">innovation</span> across Healthcare, Education, Business, Dental, and Lifestyle sectors.
+          <p className="max-w-2xl mx-auto text-[#dbc6ad] text-lg sm:text-xl leading-relaxed">
+            Honouring excellence and innovation across <span className="text-[#d4af37] font-bold">11 detailed sectors</span> worldwide.
           </p>
         </div>
-        {/* Responsive Card Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full rounded-3xl pb-2 mb-4">
-          {categories.map((item, index) => (
+
+        {/* Sector Tabs Navigation */}
+        <div className="mb-12">
+          <div className="flex flex-wrap justify-center gap-3">
+            {sectors.map((sector) => (
+              <button
+                key={sector}
+                onClick={() => {
+                  setActiveSector(sector);
+                  setExpandedCategory(null);
+                }}
+                className={`flex items-center gap-2 px-5 py-3 rounded-full border transition-all duration-300 whitespace-nowrap text-sm font-bold tracking-wide
+                  ${activeSector === sector
+                    ? "bg-gradient-to-r from-[#d4af37] to-[#f1d46b] text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.3)] scale-105"
+                    : "bg-white/5 text-[#dbc6ad] border-white/10 hover:border-[#d4af37]/50 hover:bg-white/10"
+                  }`}
+              >
+                {sectorIcons[sector]}
+                {sector}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Categories and Awards Masonry Grid */}
+        <div className="columns-1 md:columns-2 gap-8 space-y-8">
+          {Object.entries(fieldMap[activeSector]).map(([category, subCategories], catIdx) => (
             <div
-              key={index}
-              className={`
-                group relative rounded-3xl border border-[#fb718555] bg-gradient-to-br from-[#391015]/95 via-[#7c262a]/97 to-[#462019]/98 overflow-hidden shadow-[0_10px_30px_-10px_#fbbf2422,0_0.5px_0_#fde68a22_inset]
-                hover:from-[#4c181b]/98 hover:via-[#924533]/97 hover:to-[#ba6d13]/99 hover:shadow-lg hover:shadow-[#fbbf2433] transition-all duration-300
-              `}
-              style={{
-                boxShadow: "0 2px 14px -2px #fbbf2444, 0 1px 0 #fde68a21 inset",
-              }}
+              key={category}
+              className="break-inside-avoid group relative bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl rounded-3xl border border-white/10 hover:border-[#d4af37]/40 transition-all duration-500 overflow-hidden"
             >
-              {/* Animated Ribbon */}
-              <div className="absolute -top-2 left-4">
-                <span className="px-2 py-0.5 rounded-xl bg-gradient-to-tr from-[#fb7185] to-[#fbbf24] text-xs font-bold text-white shadow shadow-[#fbbf2433] tracking-wider animate-shine">
-                  {item.category}
-                </span>
-              </div>
-              {/* Star Icon Top Right */}
-              <div className="absolute top-3 right-4 text-[#fde68a] text-lg opacity-30 group-hover:opacity-70 transition-all select-none">✦</div>
-              {/* Card Content */}
-              <div className="flex flex-col gap-2 items-start px-6 pt-10 pb-7 min-h-[238px]">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl animate-bounce text-[#fbbf24]">🏅</span>
-                  <span className="text-lg font-extrabold text-transparent bg-gradient-to-r from-[#fffbe2] via-[#fb7185] to-[#fbbf24] bg-clip-text drop-shadow-[0_2px_10px_#fb718544]">
-                    {item.title}
-                  </span>
+              {/* Category Header */}
+              <div className="p-6 border-b border-white/5">
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="p-2.5 rounded-2xl bg-[#d4af37]/10 text-[#d4af37]">
+                    <Trophy className="w-5 h-5" />
+                  </div>
+                  <h2 className="text-xl font-black text-white group-hover:text-[#d4af37] transition-colors leading-tight">
+                    {category}
+                  </h2>
                 </div>
-                <div className="flex items-start gap-2 mt-2">
-                  <span className="text-lg animate-spin-slow text-[#fb7185]">📝</span>
-                  <span className="text-base text-[#fde68a] group-hover:text-[#fbbf24] font-medium leading-relaxed transition duration-200">
-                    {item.desc}
-                  </span>
-                </div>
+                <p className="text-[#dbc6ad] text-[10px] sm:text-xs italic uppercase tracking-wider opacity-60">
+                  Specialized Honors & Sector Excellence
+                </p>
               </div>
-              {/* Glow on Hover */}
-              <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-35 transition-all duration-300 bg-gradient-to-tr from-[#fbbf2444] via-[#fb718522] to-transparent rounded-3xl" />
+
+              {/* Sub-categories List */}
+              <div className="p-6 space-y-6">
+                {typeof subCategories === "object" && !Array.isArray(subCategories) ? (
+                  Object.entries(subCategories).map(([subCat, awards], subIdx) => (
+                    <div key={subCat} className="space-y-3">
+                      <div className="flex items-center gap-2 text-[#d4af37] font-bold text-[11px] uppercase tracking-[0.15em] opacity-90">
+                        <Star className="w-2.5 h-2.5 fill-current" />
+                        {subCat}
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        {awards.map((award, aIdx) => (
+                          <div
+                            key={aIdx}
+                            className="flex items-start gap-2.5 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-[#d4af37]/5 hover:border-[#d4af37]/20 transition-all duration-300 group/award"
+                          >
+                            <div className="mt-1.5 w-1 h-1 rounded-full bg-[#d4af37] group-hover/award:scale-125 transition-transform shrink-0" />
+                            <span className="text-[#ebdcc8] text-xs sm:text-sm font-medium leading-normal group-hover/award:text-white transition-colors">
+                              {award}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="grid grid-cols-1 gap-2">
+                    {Array.isArray(subCategories) && subCategories.map((award, aIdx) => (
+                      <div
+                        key={aIdx}
+                        className="flex items-start gap-2.5 p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-[#d4af37]/5 hover:border-[#d4af37]/20 transition-all duration-300 group/award"
+                      >
+                        <div className="mt-1.5 w-1 h-1 rounded-full bg-[#d4af37] group-hover/award:scale-125 transition-transform shrink-0" />
+                        <span className="text-[#ebdcc8] text-xs sm:text-sm font-medium leading-normal group-hover/award:text-white transition-colors">
+                          {award}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Decorative Corner Glow */}
+              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#d4af37]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             </div>
           ))}
         </div>
-        {/* Info Footer */}
-        <div className="text-center mt-12 sm:mt-20 text-[#fde68a] text-sm sm:text-lg font-medium px-1 italic drop-shadow-[0_2px_15px_#fb718522] hover:drop-shadow-[0_5px_28px_#fbbf2433] transition">
-          <span className="inline-flex items-center gap-1">
-            <span className="text-[#fbbf24] text-lg">⚜️</span>
-            All award categories are subject to jury review.
-            <span className="mx-2 text-[#fb7185]">|</span>
-            For queries, <span className="underline decoration-[#fb7185]/70 hover:text-[#fde68a]/90 cursor-pointer transition">contact us</span>.
-          </span>
+
+        {/* Footer Info */}
+        <div className="mt-20 text-center">
+          <p className="text-[#dbc6ad] text-base sm:text-lg italic mb-8">
+            <span className="text-[#d4af37] font-bold">Note:</span> All nominations are subject to independent jury validation and site assessment.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
+            <div className="flex items-center gap-2 text-white/60 text-sm">
+              <Zap className="w-4 h-4 text-[#d4af37]" />
+              Authenticity Guaranteed
+            </div>
+            <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-white/20" />
+            <div className="flex items-center gap-2 text-white/60 text-sm">
+              <Shield className="w-4 h-4 text-[#d4af37]" />
+              Transparent Evaluation
+            </div>
+            <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-white/20" />
+            <div className="flex items-center gap-2 text-white/60 text-sm">
+              <Award className="w-4 h-4 text-[#d4af37]" />
+              Global Credibility
+            </div>
+          </div>
         </div>
       </div>
-      {/* Extra fancy floating animated shining points */}
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <span className="hidden sm:block absolute left-[14%] top-[35%] w-2 h-2 bg-[#fb7185] rounded-full blur-[2px] opacity-70 animate-shine" />
-        <span className="hidden md:block absolute left-[70%] top-[70%] w-1.5 h-1.5 bg-[#fde68a] rounded-full blur-[1px] opacity-60 animate-pulse" />
-        <span className="hidden md:block absolute left-[83%] top-[29%] w-2.5 h-2.5 bg-[#fbbf24] rounded-full opacity-90 animate-shine" />
-      </div>
-      {/* Animate keyframes for shine and slow-spin */}
-      <style>
-        {`
-        @keyframes shine {
-          0% { filter: brightness(1.07) }
-          20% { filter: brightness(1.23) }
-          50% { filter: brightness(1.41) }
-          75% { filter: brightness(1.18) }
-          100% { filter: brightness(1.07) }
-        }
-        .animate-shine {
-          animation: shine 3.2s cubic-bezier(.4,0,.6,1) infinite alternate;
-        }
-        @keyframes spin-slow { to { transform: rotate(360deg); } }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        `}
-      </style>
     </section>
   );
 }
-

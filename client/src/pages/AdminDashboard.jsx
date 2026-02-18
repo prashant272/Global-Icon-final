@@ -35,11 +35,17 @@ const PARTICIPATION_TYPE_FILTER_OPTIONS = [
 
 const FIELD_FILTER_OPTIONS = [
   { value: "all", label: "All Fields" },
-  { value: "Healthcare Excellence", label: "Healthcare" },
-  { value: "Education & Leadership", label: "Education" },
-  { value: "Business & Entrepreneurship", label: "Business" },
-  { value: "Dental Care Innovation", label: "Dental" },
-  { value: "Lifestyle & Wellness", label: "Lifestyle" },
+  { value: "Healthcare", label: "Healthcare" },
+  { value: "Education", label: "Education" },
+  { value: "Real Estate & Infrastructure", label: "Real Estate" },
+  { value: "Hospitality & Tourism", label: "Hospitality" },
+  { value: "Manufacturing & Industrial", label: "Manufacturing" },
+  { value: "Beauty & Wellness", label: "Beauty" },
+  { value: "Technology & Digital Transformation", label: "Technology" },
+  { value: "Finance & Banking", label: "Finance" },
+  { value: "Sustainability & Environment", label: "Sustainability" },
+  { value: "Public & Government Sector", label: "Public sector" },
+  { value: "Media, Culture & Sports", label: "Media & Sports" },
 ];
 
 const LOCATION_FILTER_OPTIONS = [
