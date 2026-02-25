@@ -6,7 +6,9 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import s3Client from "../config/s3.js";
 
 import Nomination from "../models/Nomination.js";
-import { authenticate } from "../middleware/authMiddleware.js";
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import { authenticate, optionalAuthenticate } from "../middleware/authMiddleware.js";
 import { sendNominationConfirmation } from "../services/emailService.js";
 
 const router = express.Router();
@@ -48,11 +50,43 @@ const getSignedPdfUrl = async (key) => {
   return await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 };
 
-// Create a nomination (logged-in user)
-router.post("/", authenticate, upload.single("pdf"), async (req, res) => {
+// Create a nomination (guest or logged-in user)
+router.post("/", optionalAuthenticate, upload.single("pdf"), async (req, res) => {
   try {
     const payload = req.body || {};
     let pdfUrl = "";
+    let userId = req.user?.id;
+    let autoCreated = false;
+    let passwordPlain = "";
+
+    // Handle guest submission
+    if (!userId) {
+      // Determine email to use
+      const emailToUse = (payload.contactEmail || payload.email || "").toLowerCase();
+      if (!emailToUse) {
+        return res.status(400).json({ message: "Email is required for nomination" });
+      }
+
+      // Check if user already exists
+      let user = await User.findOne({ email: emailToUse });
+
+      if (!user) {
+        // Create new user
+        passwordPlain = Math.random().toString(36).slice(-8); // Random 8-char password
+        const salt = await bcrypt.genSalt(10);
+        const passwordHash = await bcrypt.hash(passwordPlain, salt);
+
+        user = await User.create({
+          name: payload.contactName || payload.nomineeName || "User",
+          email: emailToUse,
+          passwordHash: passwordHash,
+          isVerified: true, // Auto-verify guest nomination users
+          role: "user"
+        });
+        autoCreated = true;
+      }
+      userId = user._id;
+    }
 
     if (req.file) {
       const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -73,7 +107,7 @@ router.post("/", authenticate, upload.single("pdf"), async (req, res) => {
 
     const nomination = await Nomination.create({
       ...payload,
-      user: req.user.id,
+      user: userId,
       pdfUrl: pdfUrl || undefined,
     });
 
@@ -82,12 +116,20 @@ router.post("/", authenticate, upload.single("pdf"), async (req, res) => {
       doc.pdfUrl = await getSignedPdfUrl(doc.pdfUrl);
     }
 
-    // Send confirmation email asynchronously
-    sendNominationConfirmation(req.user.email, req.user.name).catch(err =>
+    // Determine name and email for confirmation
+    const userForEmail = await User.findById(userId);
+    const confirmationEmail = userForEmail.email;
+    const confirmationName = userForEmail.name;
+
+    // Send single combined email (includes credentials section if auto-created)
+    sendNominationConfirmation(confirmationEmail, confirmationName, autoCreated ? passwordPlain : null).catch(err =>
       console.error("Async confirmation email error:", err)
     );
 
-    return res.status(201).json(doc);
+    return res.status(201).json({
+      ...doc,
+      autoCreated, // Let frontend know if an account was created
+    });
   } catch (err) {
     console.error("Create nomination error:", err);
     return res.status(400).json({

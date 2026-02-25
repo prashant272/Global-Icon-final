@@ -1784,8 +1784,8 @@ export default function NominationForm() {
         await updateUserNomination(id, formData, token);
         navigate(`/dashboard`);
       } else {
-        await createNomination(formData, token);
-        navigate("/success");
+        const response = await createNomination(formData, token);
+        navigate("/success", { state: { autoCreated: response?.autoCreated } });
       }
     } catch (err) {
       setError(err?.response?.data?.message || err.message || "Submission failed");

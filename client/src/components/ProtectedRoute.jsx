@@ -16,8 +16,8 @@ export default function ProtectedRoute({ children, allowedRoles }) {
 
   if (!isAuthenticated) {
     // If this route is meant for admins, send to admin login page instead of user login.
-    // User requested to send guests to /register for nomination flow instead of /login
-    const loginPath = allowedRoles?.includes("admin") ? "/admin/login" : "/register";
+    // User requested to send guests to /login instead of /register
+    const loginPath = allowedRoles?.includes("admin") ? "/admin/login" : "/login";
     return <Navigate to={loginPath} replace state={{ from: location }} />;
   }
 

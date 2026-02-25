@@ -49,11 +49,7 @@ export default function Home() {
   }, []);
 
   const handleNominateClick = () => {
-    if (!isAuthenticated || user?.role !== "user") {
-      navigate("/register", { state: { from: { pathname: "/nominate" } } });
-    } else {
-      navigate("/nominate");
-    }
+    navigate("/nominate");
   };
 
   //Event Data

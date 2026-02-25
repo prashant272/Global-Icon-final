@@ -140,11 +140,11 @@ export default function Terms() {
           Terms &amp; Conditions
         </h1>
         <p className="block font-semibold text-[#fde68a]/90 text-base md:text-lg mb-2 md:mb-3">
-          Global Education Excellence Awards 2026
+          Global Icon Excellence Awards 2026
         </p>
         <div className="mx-auto w-20 md:w-28 h-1 rounded-full bg-gradient-to-r from-[#fde68a] via-[#fbbf24] to-[#eab308] mb-3 md:mb-4 opacity-70" />
         <p className="text-[#fde68a]/80 text-xs sm:text-sm md:text-base font-medium">
-          By submitting a nomination for the Global Education Excellence Awards 2026, the nominee and/or nominator agrees to the following terms and conditions:
+          By submitting a nomination for the Global Icon Excellence Awards 2026, the nominee and/or nominator agrees to the following terms and conditions:
         </p>
       </div>
 

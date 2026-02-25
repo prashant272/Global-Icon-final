@@ -199,8 +199,34 @@ router.get(
       name: req.user.name,
     });
 
+    // List of allowed origins for redirection
+    const allowedOrigins = [
+      "https://www.globaleducationawards.in",
+      "https://globaleducationawards.in",
+      "https://business-leadership.primetimemedia.in",
+      "https://investmentindia.primetimemedia.in",
+      "https://www.globaliconawards.in",
+      "https://globaliconawards.in",
+      "http://localhost:5173"
+    ];
+
+    // Determine target frontend URL
+    let targetFrontend = process.env.FRONTEND_URL;
+    const origin = req.get('origin') || req.get('referer');
+    if (origin) {
+      try {
+        const originUrl = new URL(origin);
+        const originBase = `${originUrl.protocol}//${originUrl.host}`;
+        if (allowedOrigins.includes(originBase)) {
+          targetFrontend = originBase;
+        }
+      } catch (e) {
+        // Fallback to default
+      }
+    }
+
     // Redirect to frontend with token
-    res.redirect(`${process.env.FRONTEND_URL}/login?token=${token}&user=${encodeURIComponent(JSON.stringify({
+    res.redirect(`${targetFrontend}/login?token=${token}&user=${encodeURIComponent(JSON.stringify({
       id: req.user._id,
       name: req.user.name,
       email: req.user.email,

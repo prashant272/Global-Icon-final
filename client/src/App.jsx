@@ -54,14 +54,7 @@ export default function App() {
           <Route path="/media" element={<Media />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/editions/:year" element={<EditionDetail />} />
-          <Route
-            path="/nominate/:id?"
-            element={
-              <ProtectedRoute allowedRoles={["user"]}>
-                <NominationForm />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/nominate/:id?" element={<NominationForm />} />
           <Route
             path="/nomination/:id"
             element={

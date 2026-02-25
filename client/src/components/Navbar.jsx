@@ -75,7 +75,7 @@ export default function Navbar() {
       if (isUser) {
         logout();
       } else {
-        navigate("/register");
+        navigate("/login");
       }
     }
   };

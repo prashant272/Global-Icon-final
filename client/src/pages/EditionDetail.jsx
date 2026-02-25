@@ -202,7 +202,7 @@ export default function EditionDetail() {
               {year} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd966] via-[#f7c53a] to-[#b2872d]">Education Awards</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-[#ffeab0a0] leading-relaxed max-w-2xl mx-auto sm:mx-0">
-              {edition.hero || `The ${year} Global Education Excellence Awards celebrated the visionaries, institutions, and academic leaders who redefined educational standards.`}
+              {edition.hero || `The ${year} Global Icon Excellence Awards celebrated the visionaries, institutions, and academic leaders who redefined educational standards.`}
             </p>
           </header>
 

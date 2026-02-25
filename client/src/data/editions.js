@@ -48,7 +48,7 @@ export const EDITIONS = [
   {
     year: 2023,
     path: "/editions/2023",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "11th Edition",
     locations: ["Mumbai"],
     fullDate: "Year 2023",
@@ -71,7 +71,7 @@ export const EDITIONS = [
   {
     year: 2022,
     path: "/editions/2022",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "10th Edition",
     locations: ["Bengaluru"],
     fullDate: "Year 2022",
@@ -94,7 +94,7 @@ export const EDITIONS = [
   {
     year: 2021,
     path: "/editions/2021",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "9th Edition",
     locations: ["Hyderabad"],
     fullDate: "Year 2021",
@@ -117,7 +117,7 @@ export const EDITIONS = [
   {
     year: 2020,
     path: "/editions/2020",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "8th Edition",
     locations: ["Virtual"],
     fullDate: "Year 2020",
@@ -140,7 +140,7 @@ export const EDITIONS = [
   {
     year: 2019,
     path: "/editions/2019",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "7th Edition",
     locations: ["Chennai"],
     fullDate: "Year 2019",
@@ -163,7 +163,7 @@ export const EDITIONS = [
   {
     year: 2018,
     path: "/editions/2018",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "6th Edition",
     locations: ["New Delhi"],
     fullDate: "Year 2018",
@@ -179,7 +179,7 @@ export const EDITIONS = [
   {
     year: 2017,
     path: "/editions/2017",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "5th Edition",
     locations: ["Mumbai"],
     fullDate: "Year 2017",
@@ -195,7 +195,7 @@ export const EDITIONS = [
   {
     year: 2016,
     path: "/editions/2016",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "4th Edition",
     locations: ["Bengaluru"],
     fullDate: "Year 2016",
@@ -211,7 +211,7 @@ export const EDITIONS = [
   {
     year: 2015,
     path: "/editions/2015",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "3rd Edition",
     locations: ["Hyderabad"],
     fullDate: "Year 2015",
@@ -227,7 +227,7 @@ export const EDITIONS = [
   {
     year: 2014,
     path: "/editions/2014",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "2nd Edition",
     locations: ["New Delhi"],
     fullDate: "Year 2014",
@@ -243,7 +243,7 @@ export const EDITIONS = [
   {
     year: 2013,
     path: "/editions/2013",
-    title: "Global Education Awards",
+    title: "Global Icon Awards",
     editionLabel: "1st Edition",
     locations: ["New Delhi"],
     fullDate: "Year 2013",

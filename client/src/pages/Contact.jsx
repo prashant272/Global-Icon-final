@@ -70,7 +70,7 @@ export default function Contact() {
           <div className="w-full grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 md:grid-cols-2">
             <div className="space-y-4 xs:space-y-5">
               <a
-                href="mailto:info@globaleducationawards.com"
+                href="mailto:info@globaliconawards.in"
                 className="flex flex-col xs:flex-row items-start xs:items-center gap-3 xs:gap-4 p-4 sm:p-5 rounded-lg sm:rounded-xl border border-[#ffd966]/15 bg-[#251114]/80 hover:shadow-lg hover:bg-[#3b191a] transition-all duration-300 group"
               >
                 <div className="rounded-lg bg-gradient-to-br from-[#d4af37] via-[#ffd966] to-[#b2994c] p-2 shadow group-hover:scale-110 transition">
@@ -78,7 +78,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="text-xs text-[#ffeec3]/70 font-semibold">Email</div>
-                  <div className="font-bold text-[#ffeec3] tracking-wide text-[1.02rem] xs:text-[1.08rem]">info@globaleducationawards.com</div>
+                  <div className="font-bold text-[#ffeec3] tracking-wide text-[1.02rem] xs:text-[1.08rem]">info@globaliconawards.in</div>
                 </div>
               </a>
 
@@ -120,7 +120,7 @@ export default function Contact() {
                 </div>
               </a>
               <a
-                href="https://globaleducationawards.com/"
+                href="https://www.globaliconawards.in/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-col xs:flex-row items-start xs:items-center gap-2 xs:gap-4 p-4 sm:p-5 rounded-lg sm:rounded-xl border border-[#ffd966]/15 bg-[#251114]/80 hover:shadow-lg hover:bg-[#3b191a] transition-all duration-300 group"
@@ -130,7 +130,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="text-xs text-[#ffeec3]/70 font-semibold">Website</div>
-                  <div className="font-bold text-[#ffeec3] tracking-wide text-[1.02rem] xs:text-[1.08rem]">www.globaleducationawards.com</div>
+                  <div className="font-bold text-[#ffeec3] tracking-wide text-[1.02rem] xs:text-[1.08rem]">www.globaliconawards.in</div>
                 </div>
               </a>
             </div>
