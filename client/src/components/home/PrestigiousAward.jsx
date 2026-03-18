@@ -4,11 +4,11 @@ const PrestigiousAward = ({ SECTION_BG }) => {
   const sections = [
  {
   title: "India Excellence Awards & Conference 2026",
-  subtitle: "Recognising Excellence in Business & Leadership",
+  subtitle: "Mumbai Edition",
   description:
-    "Prime Time Research Media has conducted multiple national and international awards and business summits in countries such as India, USA, Dubai, and UK to recognize excellence in business, leadership, innovation, and professional achievements. India Excellence Awards & Conference 2026 continues this legacy by honouring outstanding individuals and organizations across various industries.",
-  highlight: "Celebrating Excellence, Innovation, and Professional Success.",
-  image: "/Awards/excellence.jpeg",
+    "Prime Time Research Media presents the India Excellence Awards & Conference 2026, a prestigious platform honouring outstanding entrepreneurs, professionals, and organizations for their excellence, innovation, and leadership across various industries. The event will be held in Mumbai on 17th May 2026 with distinguished guests and award winners from across India.",
+  highlight: "Honouring Excellence, Innovation & Leadership.",
+  image: "/Awards/india-excellence.png",
   reverse: false
 },
    {

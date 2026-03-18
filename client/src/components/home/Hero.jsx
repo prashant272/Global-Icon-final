@@ -5,16 +5,16 @@ import 'swiper/css/pagination';
 
 export default function Hero({ videoRef, events, handleNominateClick }) {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-[#0a0503]">
+    <section className="relative min-h-screen lg:max-h-[900px] xl:max-h-[1000px] w-full overflow-hidden bg-[#0a0503]">
       {/* ===== BACKGROUND VIDEO ===== */}
       <div className="absolute inset-0 z-0 w-full h-full pointer-events-none select-none">
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover object-center sm:object-[center_30%] transition-all duration-700 max-h-[120vh] min-h-full"
+          className="absolute inset-0 w-full h-full object-cover object-center sm:object-[center_30%] transition-all duration-700"
           src="/videos/hero.mp4"
           autoPlay muted loop playsInline preload="auto"
           poster="/videos/hero-poster.jpg"
-          style={{ background: "linear-gradient(180deg,#0f0805,#0a0503 80%)", minHeight:"100%", maxHeight:"120vh", minWidth:"100%" }}
+          style={{ background: "linear-gradient(180deg,#0f0805,#0a0503 80%)", minHeight:"100%", minWidth:"100%" }}
         />
         <noscript>
           <img src="/videos/hero-poster.jpg" alt="Award Ceremony" className="w-full h-full object-cover object-center" />
@@ -27,7 +27,7 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
       <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-black/70 via-black/30 to-[#0a0503]/60" />
 
       {/* ===== CONTENT ===== */}
-      <div className="relative z-20 flex min-h-screen flex-col items-center justify-start px-4 sm:px-6 md:px-8 pt-15 md:pt-24 pb-10 text-center">
+      <div className="relative z-20 flex min-h-full flex-col items-center justify-start px-4 sm:px-6 md:px-8 pt-15 md:pt-24 pb-10 text-center">
 
         {/* ===== FLOATING PARTICLES ===== */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
