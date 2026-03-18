@@ -319,111 +319,74 @@ const menuLinks = (color, onClick, headerRef, isUser, isMobile = false, editions
       <NavItem to="/guidelines" icon={<FaBook />} label="Entry Guidelines" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/judging" icon={<FaGavel />} label="Selection Process" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/terms" icon={<FaFileContract />} label="T&C" color={color} onClick={createNavHandler(onClick)} />
-      <NavItem to="/terms" icon={<FaFileContract />} label="T&C" color={color} onClick={createNavHandler(onClick)} />
       
       {/* Upcoming Awards Dropdown */}
-      <div className={`relative ${isMobile ? "w-full" : "group flex items-center h-full cursor-default"}`}>
-        <div
-          onClick={() => isMobile && setMobileUpcomingOpen(!mobileUpcomingOpen)}
-          className={`flex items-center gap-1 transition-all duration-300 py-3 sm:py-4 cursor-pointer sm:cursor-default ${
-            color === "white"
-              ? "opacity-80 group-hover:opacity-100"
-              : "text-gray-700 group-hover:text-black"
-          }`}
-        >
-          <span className="text-[11px]"><FaTrophy /></span>
-          <span className="whitespace-nowrap flex-1">Upcoming Awards</span>
-          <FaChevronDown className={`text-[10px] ml-1 opacity-70 transition-transform duration-300 ${
-            (isMobile ? mobileUpcomingOpen : true) ? "rotate-0 sm:group-hover:rotate-180" : ""
-          } ${isMobile && mobileUpcomingOpen ? "rotate-180" : ""}`} />
-        </div>
-
-        {/* Dropdown Content */}
-        <div className={`
-          ${isMobile 
-            ? `${mobileUpcomingOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 bg-white/5 rounded-2xl ml-4` 
-            : "absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]"
-          } flex flex-col py-1 overflow-hidden
-        `}>
-          {upcomingAwards.length > 0 ? (
-            <>
-              {!isMobile && (
-                <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
-                  Latest Summits
-                </div>
-              )}
-              {upcomingAwards.map((award) => (
+      {isMobile ? (
+        <div className="w-full">
+          <div
+            onClick={() => setMobileUpcomingOpen(!mobileUpcomingOpen)}
+            className={`flex items-center gap-1 py-3 text-white cursor-pointer ${mobileUpcomingOpen ? "opacity-100" : "opacity-80"}`}
+          >
+            <span className="text-[11px]"><FaTrophy /></span>
+            <span className="flex-1">Upcoming Awards</span>
+            <FaChevronDown className={`text-[10px] ml-1 transition-transform ${mobileUpcomingOpen ? "rotate-180" : ""}`} />
+          </div>
+          <div className={`${mobileUpcomingOpen ? "max-h-[500px] opacity-100 mb-2" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 bg-white/5 rounded-2xl ml-4 flex flex-col`}>
+             {upcomingAwards.map((award) => (
                 <NavLink
                   key={award._id}
                   to={`/upcoming-awards/${award.slug}`}
                   onClick={createNavHandler(onClick)}
-                  className={`px-4 py-2 text-sm transition-colors ${
-                    isMobile 
-                    ? "text-gray-300 border-l border-white/10 hover:text-white" 
-                    : "text-gray-700 hover:bg-amber-50 hover:text-amber-700"
-                  }`}
+                  className="px-4 py-2 text-sm text-gray-300 border-l border-white/10 hover:text-white"
                 >
                   {award.title}
                 </NavLink>
               ))}
-            </>
-          ) : (
-            <span className="px-4 py-2 text-sm text-gray-400 italic">No upcoming events</span>
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <NavDropdown 
+          icon={<FaTrophy />} 
+          label="Upcoming Awards" 
+          color={color} 
+          options={upcomingAwards.map(a => ({ title: a.title, path: `/upcoming-awards/${a.slug}` }))} 
+          headerLabel="Latest Summits"
+        />
+      )}
 
-      {/* Awards Dropdown (Previous Editions) */}
-      <div className={`relative ${isMobile ? "w-full" : "group flex items-center h-full cursor-default"}`}>
-        <div
-          onClick={() => isMobile && setMobileAwardsOpen(!mobileAwardsOpen)}
-          className={`flex items-center gap-1 transition-all duration-300 py-3 sm:py-4 cursor-pointer sm:cursor-default ${
-            color === "white"
-              ? "opacity-80 group-hover:opacity-100"
-              : "text-gray-700 group-hover:text-black"
-          }`}
-        >
-          <span className="text-[11px]"><FaTrophy /></span>
-          <span className="flex-1">Previous Edition</span>
-          <FaChevronDown className={`text-[10px] ml-1 opacity-70 transition-transform duration-300 ${
-            (isMobile ? mobileAwardsOpen : true) ? "rotate-0 sm:group-hover:rotate-180" : ""
-          } ${isMobile && mobileAwardsOpen ? "rotate-180" : ""}`} />
-        </div>
-
-        {/* Dropdown Content */}
-        <div className={`
-          ${isMobile 
-            ? `${mobileAwardsOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 bg-white/5 rounded-2xl ml-4` 
-            : "absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]"
-          } flex flex-col py-1 overflow-hidden
-        `}>
-          {editions.length > 0 ? (
-            <>
-              {!isMobile && (
-                <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
-                  Previous Editions
-                </div>
-              )}
-              {editions.map((e) => (
+      {/* Previous Edition Dropdown */}
+      {isMobile ? (
+        <div className="w-full">
+          <div
+            onClick={() => setMobileAwardsOpen(!mobileAwardsOpen)}
+            className={`flex items-center gap-1 py-3 text-white cursor-pointer ${mobileAwardsOpen ? "opacity-100" : "opacity-80"}`}
+          >
+            <span className="text-[11px]"><FaHistory /></span>
+            <span className="flex-1">Previous Edition</span>
+            <FaChevronDown className={`text-[10px] ml-1 transition-transform ${mobileAwardsOpen ? "rotate-180" : ""}`} />
+          </div>
+          <div className={`${mobileAwardsOpen ? "max-h-[500px] opacity-100 mb-2" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 bg-white/5 rounded-2xl ml-4 flex flex-col`}>
+             {editions.map((e) => (
                 <NavLink
                   key={e._id || e.year}
                   to={`/editions/${e.slug || e.year}`}
                   onClick={createNavHandler(onClick)}
-                  className={`px-4 py-2 text-sm transition-colors ${
-                    isMobile 
-                    ? "text-gray-300 border-l border-white/10 hover:text-white" 
-                    : "text-gray-600 hover:bg-gray-50 hover:text-black"
-                  }`}
+                  className="px-4 py-2 text-sm text-gray-300 border-l border-white/10 hover:text-white"
                 >
                   {e.title} {e.year ? `(${e.year})` : ""}
                 </NavLink>
               ))}
-            </>
-          ) : (
-            <span className="px-4 py-2 text-sm text-gray-400 italic">No previous awards</span>
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <NavDropdown 
+          icon={<FaHistory />} 
+          label="Previous Edition" 
+          color={color} 
+          options={editions.map(e => ({ title: `${e.title} ${e.year ? `(${e.year})` : ""}`, path: `/editions/${e.slug || e.year}` }))} 
+          headerLabel="Awards Archive"
+        />
+      )}
 
       <NavItem to="/faq" icon={<FaQuestionCircle />} label="FAQ" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/nominate" icon={<FaRegEdit />} label="Nominate Now" color={color} onClick={createNavHandler(onClick)} isSpecial={true} />
@@ -555,5 +518,79 @@ function MobileMenuDrawer({
         </div>
       </aside>
     </>
+  );
+}
+
+function NavDropdown({ icon, label, color, options, headerLabel }) {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const isActiveGroup = options.some(opt => location.pathname === opt.path);
+
+  return (
+    <div
+      className="relative group h-full flex items-center"
+      ref={dropdownRef}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <div
+        className={`flex items-center gap-1 cursor-pointer transition-all duration-300 py-4 ${
+          color === "white"
+            ? (isActiveGroup ? "text-[#d4af37] font-semibold" : "opacity-80 hover:opacity-100 text-white")
+            : (isActiveGroup ? "text-[#d4af37] font-semibold" : "text-gray-700 hover:text-black")
+        }`}
+      >
+        <span className="text-[11px]">{icon}</span>
+        <span className="whitespace-nowrap">{label}</span>
+        <FaChevronDown className={`text-[10px] ml-1 transition-transform duration-300 ${open ? "rotate-180 text-[#d4af37]" : "opacity-50"}`} />
+      </div>
+
+      <div
+        className={`absolute top-[80%] left-0 pt-2 z-50 transition-all duration-300 ${
+          open ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-2"
+        }`}
+      >
+        <div className="min-w-[260px] max-h-[70vh] overflow-hidden flex flex-col bg-[#0a0503] border border-[#d4af37]/30 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+           <div className="px-4 py-2.5 text-[9px] uppercase tracking-widest text-[#d4af37]/60 font-black border-b border-white/5 bg-white/5">
+             {headerLabel}
+           </div>
+           <div className="flex-1 overflow-y-auto gold-scrollbar py-2">
+            {options.length > 0 ? (
+              options.map((opt, i) => {
+                const isAct = location.pathname === opt.path;
+                return (
+                  <NavLink
+                    key={i}
+                    to={opt.path}
+                    className={`block px-5 py-2.5 text-xs transition-all duration-200 border-l-2 ${
+                      isAct 
+                      ? 'bg-[#d4af37]/10 font-bold border-[#d4af37] text-white' 
+                      : 'border-transparent text-gray-300 hover:bg-white/5 hover:text-[#d4af37] hover:border-[#d4af37]/30'
+                    }`}
+                  >
+                    {opt.title}
+                  </NavLink>
+                );
+              })
+            ) : (
+              <div className="px-5 py-3 text-xs text-gray-500 italic">Coming soon...</div>
+            )}
+           </div>
+           <div className="h-1 bg-gradient-to-r from-transparent via-[#d4af37]/20 to-transparent" />
+        </div>
+      </div>
+    </div>
   );
 }
