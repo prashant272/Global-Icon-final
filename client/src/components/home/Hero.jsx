@@ -27,7 +27,7 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
       <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-black/70 via-black/30 to-[#0a0503]/60" />
 
       {/* ===== CONTENT ===== */}
-      <div className="relative z-20 flex min-h-screen flex-col items-center justify-center px-4 sm:px-6 md:px-8 pt-20 pb-10 text-center">
+      <div className="relative z-20 flex min-h-screen flex-col items-center justify-start px-4 sm:px-6 md:px-8 pt-15 md:pt-24 pb-10 text-center">
 
         {/* ===== FLOATING PARTICLES ===== */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
@@ -170,7 +170,7 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
                     <div className="mt-auto">
                       <button
                         onClick={handleNominateClick}
-                        className="w-full relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-7 py-3 text-base font-black uppercase tracking-wider text-[#644b0d] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 group/btn"
+                        className="w-full relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-6 py-2.5 text-sm md:text-base font-black uppercase tracking-wider text-[#644b0d] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 group/btn"
                         style={{ letterSpacing: '0.065em' }}
                       >
                         <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.5)_50%,rgba(255,255,255,0)_80%)] -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out" />

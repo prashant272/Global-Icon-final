@@ -24,6 +24,19 @@ export default function Navbar() {
   const [showPill, setShowPill] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+
+  // Scroll logic for body lock
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    // Cleanup
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [mobileMenuOpen]);
   const navigate = useNavigate();
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
@@ -37,7 +50,8 @@ export default function Navbar() {
 
   const [editions, setEditions] = useState([]);
   const [upcomingAwards, setUpcomingAwards] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileUpcomingOpen, setMobileUpcomingOpen] = useState(false);
+  const [mobileAwardsOpen, setMobileAwardsOpen] = useState(false);
 
   useEffect(() => {
     fetchPreviousEditions()
@@ -183,7 +197,7 @@ export default function Navbar() {
               </div>
             </div>
             <nav className="bg-transparent h-12">
-              <div className="max-w-7xl mx-auto px-6 h-full flex justify-center items-center gap-6 text-sm">
+              <div className="max-w-7xl mx-auto px-6 h-full flex justify-center items-center gap-4 text-sm">
                 {menuLinks("white", undefined, headerRef, isUser, false, editions, upcomingAwards)}
               </div>
             </nav>
@@ -193,7 +207,7 @@ export default function Navbar() {
         {/* ================= SCROLL PILL FOR DESKTOP ================= */}
         {showPill && (
           <div className="fixed top-4 w-full z-50 flex justify-center">
-            <div className="bg-[#0a0503]/90 backdrop-blur-md text-white border border-[#d4af37]/40 rounded-full shadow-lg px-6 py-1.5 flex items-center gap-8 text-sm">
+            <div className="bg-[#0a0503]/90 backdrop-blur-md text-white border border-[#d4af37]/40 rounded-full shadow-lg px-6 py-1.5 flex items-center gap-6 text-sm">
               <div className="flex items-center font-semibold">
                 <img
                   src="/images/primetimelogo.gif"
@@ -201,7 +215,7 @@ export default function Navbar() {
                   className="h-11 w-auto object-contain"
                 />
               </div>
-              <div className="flex gap-5">{menuLinks("white", undefined, headerRef, isUser, false, editions, upcomingAwards)}</div>
+              <div className="flex gap-3">{menuLinks("white", undefined, headerRef, isUser, false, editions, upcomingAwards)}</div>
             </div>
           </div>
         )}
@@ -217,21 +231,27 @@ export default function Navbar() {
           ref={headerRef}
         >
           {/* LOGO + app title (left side) */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 overflow-hidden flex-1">
             <img
               src="/images/primetimelogo.gif"
               alt="PrimeTime Logo"
-              className="h-9 w-auto object-contain"
-              style={{ maxWidth: 40 }}
+              className="h-8 w-auto object-contain flex-shrink-0"
             />
-            <span className="text-[13px] font-semibold whitespace-nowrap text-white">Prime Time Research Media Pvt. Ltd.</span>
+            <div className="flex flex-col min-w-0">
+               <span className="text-[10px] xs:text-[12px] font-bold text-white truncate leading-tight">
+                Prime Time Research Media
+              </span>
+              <span className="text-[9px] text-[#d4af37] font-black uppercase tracking-tighter truncate">
+                Global Icon Awards
+              </span>
+            </div>
           </div>
           {/* Welcome & logout/login */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2 ml-2 flex-shrink-0">
             {isUser && (
               <button
                 onClick={handleLoginClick}
-                className="border border-white text-white px-3 py-1 rounded-full text-xs hover:bg-white hover:text-black transition"
+                className="hidden xs:block border border-white text-white px-3 py-1 rounded-full text-[10px] hover:bg-white hover:text-black transition"
               >
                 Logout
               </button>
@@ -239,15 +259,15 @@ export default function Navbar() {
             {!isUser && (
               <button
                 onClick={handleLoginClick}
-                className="border border-white text-white px-3 py-1 rounded-full text-xs hover:bg-white hover:text-black transition"
+                className="border border-white text-white px-3 py-1 rounded-full text-[10px] hover:bg-white hover:text-black transition"
               >
-                Register / Login
+                {isUser ? "Logout" : "Login"}
               </button>
             )}
             <button
               aria-label="Open Menu"
               onClick={() => setMobileMenuOpen(true)}
-              className="ml-2 text-white text-xl flex items-center justify-center"
+              className="w-10 h-10 bg-white/5 border border-white/10 rounded-xl text-white text-xl flex items-center justify-center hover:bg-white/10 transition-all active:scale-95"
             >
               <FaBars />
             </button>
@@ -264,6 +284,10 @@ export default function Navbar() {
           isUser={isUser}
           editions={editions}
           upcomingAwards={upcomingAwards}
+          mobileUpcomingOpen={mobileUpcomingOpen}
+          setMobileUpcomingOpen={setMobileUpcomingOpen}
+          mobileAwardsOpen={mobileAwardsOpen}
+          setMobileAwardsOpen={setMobileAwardsOpen}
         />
       </div>
     </>
@@ -274,7 +298,7 @@ export default function Navbar() {
 
 // onClick will be used to close drawer, headerRef for scroll fix on tab switch.
 // Added showDashboard param to control visibility of "My Nominations" link
-const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true, editions = [], upcomingAwards = []) => {
+const menuLinks = (color, onClick, headerRef, isUser, isMobile = false, editions = [], upcomingAwards = [], mobileUpcomingOpen = false, setMobileUpcomingOpen = () => {}, mobileAwardsOpen = false, setMobileAwardsOpen = () => {}) => {
   // Will scroll page to just under header if in mobile and not at top
   const createNavHandler = (routeHandler) => (e) => {
     if (onClick) onClick();
@@ -286,6 +310,7 @@ const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true, edit
     }, 0);
     if (routeHandler && typeof routeHandler === 'function') routeHandler(e);
   };
+
   return (
     <>
       <NavItem to="/" icon={<FaHome />} label="Home" color={color} onClick={createNavHandler(onClick)} />
@@ -294,34 +319,49 @@ const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true, edit
       <NavItem to="/guidelines" icon={<FaBook />} label="Entry Guidelines" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/judging" icon={<FaGavel />} label="Selection Process" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/terms" icon={<FaFileContract />} label="T&C" color={color} onClick={createNavHandler(onClick)} />
-      <NavItem to="/contact" icon={<FaEnvelope />} label="Contact Us" color={color} onClick={createNavHandler(onClick)} />
+      <NavItem to="/terms" icon={<FaFileContract />} label="T&C" color={color} onClick={createNavHandler(onClick)} />
+      
       {/* Upcoming Awards Dropdown */}
-      <div className="relative group flex items-center h-full cursor-default">
+      <div className={`relative ${isMobile ? "w-full" : "group flex items-center h-full cursor-default"}`}>
         <div
-          className={`flex items-center gap-1 transition-all duration-300 py-4 ${
+          onClick={() => isMobile && setMobileUpcomingOpen(!mobileUpcomingOpen)}
+          className={`flex items-center gap-1 transition-all duration-300 py-3 sm:py-4 cursor-pointer sm:cursor-default ${
             color === "white"
               ? "opacity-80 group-hover:opacity-100"
               : "text-gray-700 group-hover:text-black"
           }`}
         >
           <span className="text-[11px]"><FaTrophy /></span>
-          <span className="whitespace-nowrap">Upcoming Awards</span>
-          <FaChevronDown className="text-[10px] ml-1 opacity-70 group-hover:rotate-180 transition-transform duration-300" />
+          <span className="whitespace-nowrap flex-1">Upcoming Awards</span>
+          <FaChevronDown className={`text-[10px] ml-1 opacity-70 transition-transform duration-300 ${
+            (isMobile ? mobileUpcomingOpen : true) ? "rotate-0 sm:group-hover:rotate-180" : ""
+          } ${isMobile && mobileUpcomingOpen ? "rotate-180" : ""}`} />
         </div>
 
-        {/* Dropdown */}
-        <div className="absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col py-2 z-[100] overflow-hidden">
+        {/* Dropdown Content */}
+        <div className={`
+          ${isMobile 
+            ? `${mobileUpcomingOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 bg-white/5 rounded-2xl ml-4` 
+            : "absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]"
+          } flex flex-col py-1 overflow-hidden
+        `}>
           {upcomingAwards.length > 0 ? (
             <>
-              <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
-                Latest Summits
-              </div>
+              {!isMobile && (
+                <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
+                  Latest Summits
+                </div>
+              )}
               {upcomingAwards.map((award) => (
                 <NavLink
                   key={award._id}
                   to={`/upcoming-awards/${award.slug}`}
                   onClick={createNavHandler(onClick)}
-                  className="px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                  className={`px-4 py-2 text-sm transition-colors ${
+                    isMobile 
+                    ? "text-gray-300 border-l border-white/10 hover:text-white" 
+                    : "text-gray-700 hover:bg-amber-50 hover:text-amber-700"
+                  }`}
                 >
                   {award.title}
                 </NavLink>
@@ -333,34 +373,47 @@ const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true, edit
         </div>
       </div>
 
-      {/* Awards Dropdown */}
-      <div className="relative group flex items-center h-full cursor-default">
+      {/* Awards Dropdown (Previous Editions) */}
+      <div className={`relative ${isMobile ? "w-full" : "group flex items-center h-full cursor-default"}`}>
         <div
-          className={`flex items-center gap-1 transition-all duration-300 py-4 ${
+          onClick={() => isMobile && setMobileAwardsOpen(!mobileAwardsOpen)}
+          className={`flex items-center gap-1 transition-all duration-300 py-3 sm:py-4 cursor-pointer sm:cursor-default ${
             color === "white"
               ? "opacity-80 group-hover:opacity-100"
               : "text-gray-700 group-hover:text-black"
           }`}
         >
           <span className="text-[11px]"><FaTrophy /></span>
-          <span>Awards</span>
-          <FaChevronDown className="text-[10px] ml-1 opacity-70 group-hover:rotate-180 transition-transform duration-300" />
+          <span className="flex-1">Previous Edition</span>
+          <FaChevronDown className={`text-[10px] ml-1 opacity-70 transition-transform duration-300 ${
+            (isMobile ? mobileAwardsOpen : true) ? "rotate-0 sm:group-hover:rotate-180" : ""
+          } ${isMobile && mobileAwardsOpen ? "rotate-180" : ""}`} />
         </div>
 
-        {/* Dropdown */}
-        <div className="absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col py-2 z-[100] overflow-hidden">
-          {/* Previous Editions Section */}
+        {/* Dropdown Content */}
+        <div className={`
+          ${isMobile 
+            ? `${mobileAwardsOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"} overflow-hidden transition-all duration-300 bg-white/5 rounded-2xl ml-4` 
+            : "absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[100]"
+          } flex flex-col py-1 overflow-hidden
+        `}>
           {editions.length > 0 ? (
             <>
-              <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
-                Previous Editions
-              </div>
+              {!isMobile && (
+                <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
+                  Previous Editions
+                </div>
+              )}
               {editions.map((e) => (
                 <NavLink
                   key={e._id || e.year}
                   to={`/editions/${e.slug || e.year}`}
                   onClick={createNavHandler(onClick)}
-                  className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-black transition-colors"
+                  className={`px-4 py-2 text-sm transition-colors ${
+                    isMobile 
+                    ? "text-gray-300 border-l border-white/10 hover:text-white" 
+                    : "text-gray-600 hover:bg-gray-50 hover:text-black"
+                  }`}
                 >
                   {e.title} {e.year ? `(${e.year})` : ""}
                 </NavLink>
@@ -418,7 +471,11 @@ function MobileMenuDrawer({
   headerRef,
   isUser,
   editions,
-  upcomingAwards
+  upcomingAwards,
+  mobileUpcomingOpen,
+  setMobileUpcomingOpen,
+  mobileAwardsOpen,
+  setMobileAwardsOpen
 }) {
   // Esc key or overlay for closing drawer
   useEffect(() => {
@@ -451,12 +508,12 @@ function MobileMenuDrawer({
       ></div>
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 z-[60] w-4/5 max-w-xs h-full bg-[#0a0503] text-white shadow-lg transform transition-transform duration-250 ${open ? "translate-x-0" : "translate-x-full"
-          } flex flex-col`}
+        className={`fixed top-0 right-0 z-[60] w-4/5 max-w-xs h-[100dvh] bg-[#0a0503] text-white shadow-lg transform transition-transform duration-250 ${open ? "translate-x-0" : "translate-x-full"
+          } flex flex-col overflow-hidden`}
         style={{ transitionProperty: "transform, opacity" }}
       >
         {/* Drawer header with logo */}
-        <div className="flex items-center justify-between px-4 h-14 border-b border-white/10">
+        <div className="flex-shrink-0 flex items-center justify-between px-4 h-14 border-b border-white/10">
           <div className="flex items-center gap-2">
             <img
               src="/images/primetimelogo.gif"
@@ -473,13 +530,13 @@ function MobileMenuDrawer({
             <FaTimes />
           </button>
         </div>
-        <div className="flex-1 flex flex-col justify-between">
-          <nav className="flex flex-col gap-3 mt-6 px-4">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          <nav className="flex-1 overflow-y-auto px-4 py-8 flex flex-col gap-2 scroll-smooth overscroll-contain">
             {/* Give headerRef & isUser to menuLinks for scroll fix and user-related links */}
             {/* Pass true for showDashboard to show My Nominations in mobile drawer */}
-            {menuLinks("white", onClose, headerRef, isUser, true, editions, upcomingAwards)}
+            {menuLinks("white", onClose, headerRef, isUser, true, editions, upcomingAwards, mobileUpcomingOpen, setMobileUpcomingOpen, mobileAwardsOpen, setMobileAwardsOpen)}
           </nav>
-          <div className="mt-6 border-t border-white/10 px-4 py-4 flex flex-col gap-2">
+          <div className="flex-shrink-0 border-t border-white/10 px-4 py-6 flex flex-col gap-2 bg-[#0a0503]">
             {user && (
               <span className="text-xs text-gray-300">
                 Welcome, <span className="font-semibold">{user.name}</span>
