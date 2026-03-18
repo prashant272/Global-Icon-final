@@ -1,18 +1,15 @@
 
-const DEFAULT_BASE_URL =
-  typeof window !== "undefined"
-    ? window.location.origin
-    : "http://localhost:5000";
 
 export function getBaseUrl() {
   const fromEnv =
-    typeof import.meta !== "undefined"
-      ? import.meta.env?.VITE_API_BASE_URL || import.meta.env?.VITE_API_URL
-      : undefined;
+    import.meta.env?.VITE_API_BASE_URL || import.meta.env?.VITE_API_URL;
 
-  const raw = (fromEnv || DEFAULT_BASE_URL).replace(/\/$/, "");
-  const normalized = raw.endsWith("/api") ? raw.slice(0, -4) : raw;
-  return normalized;
+  if (fromEnv) {
+    // Remove trailing / or /api so we have a clean base for relative paths
+    return fromEnv.replace(/\/$/, "").replace(/\/api$/, "");
+  }
+
+  return (typeof window !== "undefined" ? window.location.origin : "http://localhost:5000").replace(/\/$/, "");
 }
 
 async function request(path, { method = "GET", token, body } = {}) {

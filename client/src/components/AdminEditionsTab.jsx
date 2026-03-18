@@ -25,7 +25,7 @@ export default function AdminEditionsTab({ token }) {
         locations: "", // Comma-separated internally
         fullDate: "",
         hero: "",
-        youtubeLink: "",
+        youtubeLinks: "", // Comma-separated internally
     });
 
     const [selectedImages, setSelectedImages] = useState([]); // File objects
@@ -58,7 +58,7 @@ export default function AdminEditionsTab({ token }) {
             locations: "",
             fullDate: "",
             hero: "",
-            youtubeLink: "",
+            youtubeLinks: "",
         });
         setSelectedImages([]);
         setExistingImages([]);
@@ -76,7 +76,7 @@ export default function AdminEditionsTab({ token }) {
             locations: edition.locations ? edition.locations.join(", ") : "",
             fullDate: edition.fullDate || "",
             hero: edition.hero || "",
-            youtubeLink: edition.youtubeLink || "",
+            youtubeLinks: edition.youtubeLinks ? edition.youtubeLinks.join(", ") : "",
         });
         setSelectedImages([]);
         setExistingImages(edition.images || []);
@@ -118,7 +118,7 @@ export default function AdminEditionsTab({ token }) {
             payload.append("locations", formData.locations);
             payload.append("fullDate", formData.fullDate);
             payload.append("hero", formData.hero);
-            payload.append("youtubeLink", formData.youtubeLink);
+            payload.append("youtubeLinks", formData.youtubeLinks);
 
             if (formData._id) {
                 payload.append("removeImages", JSON.stringify(imagesToRemove));
@@ -326,12 +326,12 @@ export default function AdminEditionsTab({ token }) {
                             </div>
 
                             <div>
-                                <label className="text-xs text-[#f6e589] font-bold tracking-widest uppercase mb-1 block">YouTube Video Link</label>
+                                <label className="text-xs text-[#f6e589] font-bold tracking-widest uppercase mb-1 block">YouTube Video Links (Comma separated)</label>
                                 <input
                                     className={inputClass}
-                                    placeholder="e.g. https://www.youtube.com/watch?v=..."
-                                    value={formData.youtubeLink}
-                                    onChange={(e) => setFormData({ ...formData, youtubeLink: e.target.value })}
+                                    placeholder="e.g. https://youtube.com/watch?v=1, https://youtube.com/watch?v=2"
+                                    value={formData.youtubeLinks}
+                                    onChange={(e) => setFormData({ ...formData, youtubeLinks: e.target.value })}
                                 />
                             </div>
 

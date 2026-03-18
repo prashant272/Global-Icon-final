@@ -25,9 +25,10 @@ async function deleteS3Objects(urls = []) {
     }
 }
 
-function generateSlug(title, year) {
-    if (!title) return String(year);
-    return title
+function generateSlug(title, year, label) {
+    let base = title || "Global Icon Excellence Awards";
+    if (label) base += ` ${label}`;
+    return base
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)+/g, '') + `-${year}`;
@@ -38,7 +39,7 @@ export async function getAll(_req, res) {
     try {
         const editions = await PreviousEdition.find({})
             .sort({ year: -1 })
-            .select("year title editionLabel slug locations fullDate hero coverImage images youtubeLink")
+            .select("year title editionLabel slug locations fullDate hero coverImage images youtubeLinks")
             .lean();
         return res.json(editions);
     } catch (err) {
@@ -72,7 +73,7 @@ export async function getByYear(req, res) {
 /* ---------- POST /api/previous-editions ---------- */
 export async function create(req, res) {
     try {
-        const { year, title, editionLabel, locations, fullDate, hero, youtubeLink } = req.body;
+        const { year, title, editionLabel, locations, fullDate, hero, youtubeLinks } = req.body;
 
         if (!year) return res.status(400).json({ message: "Year is required" });
 
@@ -84,7 +85,7 @@ export async function create(req, res) {
             : (locations || []);
 
         const finalTitle = title || "Global Icon Excellence Awards";
-        const slug = generateSlug(finalTitle, year);
+        const slug = generateSlug(finalTitle, year, editionLabel);
 
         const edition = new PreviousEdition({
             year: Number(year),
@@ -94,7 +95,9 @@ export async function create(req, res) {
             locations: locationsArr,
             fullDate: fullDate || String(year),
             hero: hero || "",
-            youtubeLink: youtubeLink || "",
+            youtubeLinks: typeof youtubeLinks === "string"
+                ? youtubeLinks.split(",").map((l) => l.trim()).filter(Boolean)
+                : (youtubeLinks || []),
             coverImage: imageUrls[0] || "",
             images: imageUrls,
         });
@@ -115,7 +118,7 @@ export async function update(req, res) {
         const edition = await PreviousEdition.findById(req.params.id);
         if (!edition) return res.status(404).json({ message: "Edition not found" });
 
-        const { year, title, editionLabel, locations, fullDate, hero, youtubeLink, removeImages } = req.body;
+        const { year, title, editionLabel, locations, fullDate, hero, youtubeLinks, removeImages } = req.body;
 
         // Images to remove
         const toRemove = typeof removeImages === "string"
@@ -134,7 +137,11 @@ export async function update(req, res) {
         if (year !== undefined) edition.year = Number(year);
         if (title !== undefined) edition.title = title;
         if (editionLabel !== undefined) edition.editionLabel = editionLabel;
-        if (youtubeLink !== undefined) edition.youtubeLink = youtubeLink;
+        if (youtubeLinks !== undefined) {
+            edition.youtubeLinks = typeof youtubeLinks === "string"
+                ? youtubeLinks.split(",").map((l) => l.trim()).filter(Boolean)
+                : youtubeLinks;
+        }
         if (locations !== undefined) {
             edition.locations = typeof locations === "string"
                 ? locations.split(",").map((l) => l.trim()).filter(Boolean)
@@ -143,9 +150,9 @@ export async function update(req, res) {
         if (fullDate !== undefined) edition.fullDate = fullDate;
         if (hero !== undefined) edition.hero = hero;
 
-        // Auto-update slug if title or year changes
-        if (title !== undefined || year !== undefined) {
-            edition.slug = generateSlug(edition.title, edition.year);
+        // Auto-update slug if title, year, or label changes
+        if (title !== undefined || year !== undefined || editionLabel !== undefined) {
+            edition.slug = generateSlug(edition.title, edition.year, edition.editionLabel);
         }
 
         // Update coverImage to first image if not set

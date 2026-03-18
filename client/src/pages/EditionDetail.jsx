@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getEditionByYear } from "../data/editions.js";
 
+import VideoGallery from "../components/VideoGallery.jsx";
+
 // Helper to check if an image exists
 const checkImage = (url) => {
   return new Promise((resolve) => {
@@ -117,44 +119,6 @@ function EventGallery({ images }) {
   );
 }
 
-// Video Gallery for YouTube embed
-function VideoGallery({ youtubeLink }) {
-  if (!youtubeLink) return null;
-
-  // Extract video ID safely
-  let videoId = "";
-  try {
-    const url = new URL(youtubeLink);
-    if (url.hostname.includes("youtube.com")) {
-      videoId = url.searchParams.get("v");
-    } else if (url.hostname.includes("youtu.be")) {
-      videoId = url.pathname.slice(1);
-    }
-  } catch (e) {
-    console.error("Invalid youtube link", e);
-  }
-
-  if (!videoId) return null;
-
-  return (
-    <div className="mb-16 sm:mb-24">
-      <h3 className="text-2xl sm:text-3xl font-black text-[#fbd24e] mb-6 sm:mb-10 tracking-wide flex items-center gap-3 sm:gap-4">
-        <span className="w-8 sm:w-12 h-1 bg-[#d4af37] rounded-full"></span>
-        Video Gallery
-      </h3>
-      <div className="relative w-full overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-white/10 shadow-2xl pb-[56.25%] bg-black">
-        <iframe
-          className="absolute top-0 left-0 w-full h-full"
-          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
-          title="YouTube Video"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
-    </div>
-  );
-}
 
 export default function EditionDetail() {
   const { slug } = useParams();
@@ -254,7 +218,7 @@ export default function EditionDetail() {
           <>
             <BannerSlider images={images} year={derivedYear} />
             <EventGallery images={images} />
-            {edition.youtubeLink && <VideoGallery youtubeLink={edition.youtubeLink} />}
+            <VideoGallery videoLinks={edition.youtubeLinks} />
           </>
         )}
 
