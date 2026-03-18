@@ -54,13 +54,13 @@ export default function Jury() {
   const deepRed = "#c62828";
   const black80 = "rgba(24,24,28,0.8)";
   const black90 = "rgba(27,20,23,0.9)";
-  const brown80 = "rgba(58,20,24,0.8)";
+  const brown80 = "rgba(15,8,6,0.8)";
 
   return (
     <section
-      className="relative py-20 md:py-28 overflow-hidden"
+      className="relative min-h-screen bg-[#0a0503] py-20 sm:py-28 overflow-hidden font-sans"
       style={{
-        background: "linear-gradient(to bottom, #2b0f12, #3a1418 60%, #2b0f12)"
+        background: "linear-gradient(to bottom, #0f0805, #0a0503 60%, #0f0805)"
       }}
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6" ref={sectionRef}>

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 const gold = "#d4af37";
 const goldGrad = `linear-gradient(90deg, #b2872d 0%, #d4af37 40%, #ffeec3 70%, #d4af37 100%)`;
 const borderGold = "rgba(212,175,55,0.45)";
-const bgGrad = "linear-gradient(120deg,#130606 0%, #24100d 63%, #2b0f12 100%)";
+const bgGrad = "linear-gradient(120deg, #090402 0%, #0f0805 63%, #0a0503 100%)";
 
 export default function Footer() {
   return (
@@ -86,11 +86,6 @@ export default function Footer() {
               <li>
                 <Link to="/media" className="hover:text-[#d4af37] hover:pl-2 transition-all duration-200">
                   Media
-                </Link>
-              </li>
-              <li>
-                <Link to="/previous-editions" className="hover:text-[#d4af37] hover:pl-2 transition-all duration-200">
-                  Previous Editions
                 </Link>
               </li>
             </ul>

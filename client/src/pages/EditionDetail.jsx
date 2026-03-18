@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getEditionByYear } from "../data/editions.js";
-import EditionYearSwitcher from "../components/EditionYearSwitcher.jsx";
 
 // Helper to check if an image exists
 const checkImage = (url) => {
@@ -118,13 +117,60 @@ function EventGallery({ images }) {
   );
 }
 
+// Video Gallery for YouTube embed
+function VideoGallery({ youtubeLink }) {
+  if (!youtubeLink) return null;
+
+  // Extract video ID safely
+  let videoId = "";
+  try {
+    const url = new URL(youtubeLink);
+    if (url.hostname.includes("youtube.com")) {
+      videoId = url.searchParams.get("v");
+    } else if (url.hostname.includes("youtu.be")) {
+      videoId = url.pathname.slice(1);
+    }
+  } catch (e) {
+    console.error("Invalid youtube link", e);
+  }
+
+  if (!videoId) return null;
+
+  return (
+    <div className="mb-16 sm:mb-24">
+      <h3 className="text-2xl sm:text-3xl font-black text-[#fbd24e] mb-6 sm:mb-10 tracking-wide flex items-center gap-3 sm:gap-4">
+        <span className="w-8 sm:w-12 h-1 bg-[#d4af37] rounded-full"></span>
+        Video Gallery
+      </h3>
+      <div className="relative w-full overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] border-2 border-white/10 shadow-2xl pb-[56.25%] bg-black">
+        <iframe
+          className="absolute top-0 left-0 w-full h-full"
+          src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+          title="YouTube Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
+    </div>
+  );
+}
+
 export default function EditionDetail() {
-  const { year } = useParams();
-  const edition = useMemo(() => getEditionByYear(year), [year]);
+  const { slug } = useParams();
+
+  // Try parsing slug to see if it's just a year
+  const rawYearMatch = slug.match(/\d{4}$/);
+  const derivedYear = rawYearMatch ? rawYearMatch[0] : slug;
+
+  // Static fallback data
+  const staticEdition = useMemo(() => getEditionByYear(derivedYear), [derivedYear]);
+
+  const [edition, setEdition] = useState(staticEdition);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const isCovidYear = year === "2020" || year === "2021";
+  const isCovidYear = derivedYear === "2020" || derivedYear === "2021";
 
   useEffect(() => {
     if (isCovidYear) {
@@ -133,9 +179,29 @@ export default function EditionDetail() {
       return;
     }
 
-    async function discover() {
+    async function fetchData() {
       setLoading(true);
-      const potentialPaths = Array.from({ length: 30 }, (_, i) => `/${year}/${i + 1}.jpg`);
+      try {
+        // 1. Try to fetch dynamic data from API using slug
+        const { fetchEditionByYear } = await import("../services/api.js");
+        const apiData = await fetchEditionByYear(slug);
+
+        if (apiData) {
+          // Merge API data over static data
+          setEdition({ ...staticEdition, ...apiData });
+
+          if (apiData.images && apiData.images.length > 0) {
+            setImages(apiData.images);
+            setLoading(false);
+            return; // We have dynamic images, skip local probing
+          }
+        }
+      } catch (err) {
+        console.warn(`No dynamic edition found for ${slug}, falling back to static/local images.`);
+      }
+
+      // 2. Fallback to local image probing if no dynamic images exist
+      const potentialPaths = Array.from({ length: 30 }, (_, i) => `/${derivedYear}/${i + 1}.jpg`);
 
       const results = await Promise.all(
         potentialPaths.map(async (url) => {
@@ -148,15 +214,15 @@ export default function EditionDetail() {
       setImages(found);
       setLoading(false);
     }
-    discover();
-  }, [year, isCovidYear]);
+    fetchData();
+  }, [slug, derivedYear, isCovidYear]);
 
   if (!edition) {
     return (
-      <div className="min-h-screen bg-[#0f0a07] text-white flex items-center justify-center p-6">
-        <div className="text-center">
+      <div className="min-h-screen bg-[#0a0503] flex items-center justify-center p-6 text-white text-center">
+        <div>
           <h1 className="text-4xl font-black text-[#ffd966] mb-4">Edition Not Found</h1>
-          <p className="text-[#ffeab080] mb-8">We couldn't find the information for the year {year}.</p>
+          <p className="text-[#ffeab080] mb-8">We couldn't find the information for this edition.</p>
           <Link to="/previous-editions" className="bg-[#ffd966] text-black px-8 py-3 rounded-full font-bold hover:bg-white transition-all">
             Browse All Editions
           </Link>
@@ -166,16 +232,14 @@ export default function EditionDetail() {
   }
 
   return (
-    <section className="bg-[#0f0a07] text-white min-h-screen pt-24 sm:pt-32 pb-16 px-4 sm:px-8 md:px-12 lg:px-16 overflow-x-hidden">
+    <section className="bg-[#0a0503] text-white min-h-screen pt-24 sm:pt-32 pb-16 px-4 sm:px-8 md:px-12 lg:px-16 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
-        <EditionYearSwitcher currentYear={parseInt(year)} />
-
         {isCovidYear ? (
-          <div className="relative w-full h-[300px] sm:h-[450px] mb-12 rounded-[2rem] overflow-hidden bg-gradient-to-br from-[#1a130d] to-[#0f0a07] border-2 border-[#d4af37]/20 flex flex-col items-center justify-center text-center p-8 shadow-2xl">
+          <div className="relative w-full h-[300px] sm:h-[450px] mb-12 rounded-[2rem] overflow-hidden bg-gradient-to-br from-[#1a130d] to-[#0a0503] border-2 border-[#d4af37]/20 flex flex-col items-center justify-center text-center p-8 shadow-2xl">
             <div className="absolute inset-0 bg-white/[0.02] bg-[radial-gradient(#d4af37_1px,transparent_1px)] [background-size:20px_20px] opacity-20" />
             <div className="text-6xl mb-6">😷</div>
             <h2 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#ffd966] to-[#b2872d] mb-4">
-              Edition {year}
+              Edition {derivedYear}
             </h2>
             <div className="bg-[#ffd966]/10 px-6 py-2 rounded-full border border-[#ffd966]/30 animate-pulse">
               <p className="text-[#ffd788] font-black text-lg sm:text-2xl uppercase tracking-tighter">
@@ -188,21 +252,22 @@ export default function EditionDetail() {
           </div>
         ) : (
           <>
-            <BannerSlider images={images} year={year} />
+            <BannerSlider images={images} year={derivedYear} />
             <EventGallery images={images} />
+            {edition.youtubeLink && <VideoGallery youtubeLink={edition.youtubeLink} />}
           </>
         )}
 
         <div className="space-y-16 sm:space-y-24">
           <header className="max-w-4xl text-center sm:text-left">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 text-[#d4af37] text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] mb-4 sm:mb-6">
-              ✨ {edition.editionLabel}
+              ✨ {edition.editionLabel || `Edition ${derivedYear}`}
             </div>
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 sm:mb-8 leading-[1.1] tracking-tight">
-              {year} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd966] via-[#f7c53a] to-[#b2872d]">Education Awards</span>
+              {edition.title || derivedYear} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd966] via-[#f7c53a] to-[#b2872d]">Education Awards</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-[#ffeab0a0] leading-relaxed max-w-2xl mx-auto sm:mx-0">
-              {edition.hero || `The ${year} Global Icon Excellence Awards celebrated the visionaries, institutions, and academic leaders who redefined educational standards.`}
+              {edition.hero || `The ${derivedYear} Global Icon Excellence Awards celebrated the visionaries, institutions, and academic leaders who redefined educational standards.`}
             </p>
           </header>
 
@@ -213,11 +278,11 @@ export default function EditionDetail() {
                   <div className="absolute top-0 right-0 w-32 h-32 bg-[#d4af37]/10 blur-3xl rounded-full group-hover:bg-[#d4af37]/20 transition-colors" />
                   <h2 className="text-2xl sm:text-3xl font-black text-[#ffe19f] mb-4 sm:mb-6 flex items-center gap-3 sm:gap-4">
                     <span className="text-3xl sm:text-4xl">📌</span>
-                    The {year} Legacy
+                    The {derivedYear} Legacy
                   </h2>
                   <div className="text-base sm:text-lg text-[#fffaddcc] leading-relaxed space-y-4 sm:space-y-6">
                     <p>
-                      Organized by <strong className="text-[#ffd966]">Prime Time Research Media Pvt. Ltd.</strong>, the {year} ceremony in <strong className="text-[#ffd966]">{edition.locations.join(", ")}</strong> served as a powerful platform for networking and recognition.
+                      Organized by <strong className="text-[#ffd966]">Prime Time Research Media Pvt. Ltd.</strong>, the {derivedYear} ceremony in <strong className="text-[#ffd966]">{edition.locations?.join(", ")}</strong> served as a powerful platform for networking and recognition.
                     </p>
                     <p>
                       From private schools to prestigious universities, we identified leaders who prioritize student success, pedagogical innovation, and institutional excellence.
@@ -231,9 +296,9 @@ export default function EditionDetail() {
                   { label: "500+", sub: "Nominations Received" },
                   { label: "40+", sub: "Award Categories" },
                   { label: "100+", sub: "Institutions Represented" },
-                  { label: edition.editionLabel.split(" ")[0], sub: "Successful Edition" }
+                  { label: (edition.editionLabel || "").split(" ")[0], sub: "Successful Edition" }
                 ].map((item, i) => (
-                  <div key={i} className="bg-[#1a130d] p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-[#d4af37]/10 flex flex-col justify-center text-center group hover:border-[#d4af37]/30 transition-all">
+                  <div key={i} className="bg-[#0a0503] p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] border border-[#d4af37]/10 flex flex-col justify-center text-center group hover:border-[#d4af37]/30 transition-all">
                     <div className="text-3xl sm:text-4xl text-[#ffd966] font-black mb-1 sm:mb-2">{item.label}</div>
                     <div className="text-[10px] sm:text-xs font-bold text-[#ffeab080] uppercase tracking-widest leading-tight">{item.sub}</div>
                   </div>
@@ -242,7 +307,7 @@ export default function EditionDetail() {
             </div>
           )}
 
-          <section className="bg-gradient-to-r from-[#1a1308] to-[#140e0a] p-8 sm:p-12 rounded-[2rem] sm:rounded-[3.5rem] border border-[#d4af37]/20 shadow-2xl relative overflow-hidden">
+          <section className="bg-gradient-to-r from-[#0a0503] to-[#0f0805] p-8 sm:p-12 rounded-[2rem] sm:rounded-[3.5rem] border border-[#d4af37]/20 shadow-2xl relative overflow-hidden">
             <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-[#d4af37]/5 blur-[100px] rounded-full" />
             <h2 className="text-3xl sm:text-4xl font-black text-center mb-10 sm:mb-16 tracking-tight">
               Rigorous <span className="text-[#ffd966]">Evaluation</span> Architecture

@@ -62,7 +62,7 @@ export default function UserDashboard() {
   }, [token]);
 
   return (
-    <section className="relative min-h-screen py-16 px-2 sm:py-20 sm:px-4 md:px-8 bg-gradient-to-br from-[#140a08] via-[#2f1a12] to-[#5d3e13] text-white flex items-start justify-center">
+    <section className="relative min-h-screen py-16 px-2 sm:py-20 sm:px-4 md:px-8 bg-[#0a0503] text-white flex items-start justify-center">
       {/* Decorations for premium look */}
       <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 z-0 w-[90vw] max-w-[700px] h-[80vw] max-h-[220px] rounded-[14vw] blur-[14vw] opacity-80 bg-gradient-to-br from-[#ffeec3]/40 via-[#d4af37]/50 to-[#c62828]/30" />
       <div className="pointer-events-none absolute right-[-8vw] lg:right-[-20vw] bottom-4 sm:bottom-9 z-0 w-[60vw] max-w-[430px] h-[40vw] max-h-[300px] rounded-[15vw] blur-[15vw] opacity-70 bg-gradient-to-br from-[#ffd966]/30 via-[#d4af37]/20 to-transparent" />
@@ -71,7 +71,7 @@ export default function UserDashboard() {
         {/* Dashboard Card */}
         <div className="rounded-2xl sm:rounded-3xl border border-[#ffeec3]/25 bg-black/40 shadow-[0_6px_22px_#c4a44038] md:shadow-[0_18px_48px_#c4a44048] backdrop-blur-3xl overflow-hidden">
           {/* Header Premium */}
-          <header className="relative px-3 xs:px-5 sm:px-7 md:px-14 pt-7 sm:pt-10 pb-5 sm:pb-7 bg-gradient-to-br from-[#211207]/80 via-[#2b1911]/90 to-[#291e16]/75 shadow-gold flex flex-col items-center gap-2 sm:gap-3 border-b border-[#ffd966]/15">
+          <header className="relative px-3 xs:px-5 sm:px-7 md:px-14 pt-7 sm:pt-10 pb-5 sm:pb-7 bg-gradient-to-br from-[#0a0503]/80 via-[#0f0805]/90 to-[#0a0503]/75 shadow-gold flex flex-col items-center gap-2 sm:gap-3 border-b border-[#ffd966]/15">
             <div className="flex flex-col xs:flex-row items-center justify-center gap-1.5 xs:gap-3 sm:gap-4 text-center w-full">
               <Crown className="w-7 h-7 sm:w-8 sm:h-8 text-[#ffedc3] drop-shadow-gold animate-gold-glow" />
               <h1 className="font-heading text-xl xs:text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wider bg-gradient-to-r from-[#ffeec3] via-[#ffd966] to-[#d4af37] bg-clip-text text-transparent [text-shadow:0_1px_6px_#d4af3740] drop-shadow-2xl">
@@ -127,7 +127,7 @@ export default function UserDashboard() {
                     className={`
                       relative overflow-visible
                       rounded-xl sm:rounded-2xl group border border-[#ffd966]/30 bg-gradient-to-tr
-                      from-[#1b120b]/70 via-[#252014]/85 to-[#2b1510]/80 shadow-[0_2px_10px_0_#d4af3710] sm:shadow-[0_4px_24px_0_#d4af371a]
+                      from-[#0a0503]/70 via-[#0f0805]/85 to-[#0a0503]/80 shadow-[0_2px_10px_0_#d4af3710] sm:shadow-[0_4px_24px_0_#d4af371a]
                       hover:shadow-[0_5px_18px_0_#ffeec350] sm:hover:shadow-[0_6px_34px_0_#ffeec370] transition duration-300
                       px-3 pt-5 pb-4 xs:px-4 xs:pt-6 xs:pb-5 sm:px-6 sm:pt-7 sm:pb-6 md:px-10 md:pt-9 md:pb-8
                     `}

@@ -85,7 +85,7 @@ export default function FAQ() {
     ];
 
     return (
-        <div className="relative w-full min-h-screen bg-gradient-to-b from-[#22130d] via-[#281910] to-[#1a0c07] text-[#f5f3f0] font-sans overflow-x-hidden pt-20">
+        <div className="relative w-full min-h-screen bg-[#0a0503] text-[#f5f3f0] font-sans overflow-x-hidden pt-20">
             {/* Premium Animated Sparkles */}
             <div className="pointer-events-none absolute inset-0 -z-10">
                 <div className="absolute -top-16 right-[-60px] w-72 h-72 bg-gradient-to-br from-[#ffeec3]/30 via-[#d4af37]/30 to-transparent rounded-full blur-3xl animate-pulse opacity-70" />
@@ -94,7 +94,7 @@ export default function FAQ() {
                 <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-transparent via-[#ffeec3]/20 to-transparent blur-sm opacity-60 animate-shimmer" />
             </div>
 
-            <section className="relative max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-20 md:py-24">
+            <section id="faq" className="relative max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-20 md:py-24">
                 {/* Header block */}
                 <div className="text-center mb-16 sm:mb-24">
                     <div className="flex justify-center mb-6">
@@ -122,7 +122,7 @@ export default function FAQ() {
                         <Fragment key={index}>
                             <div className="
                 relative group rounded-[2.5rem] overflow-hidden
-                bg-gradient-to-br from-[#2a1b12]/85 via-[#3c230f]/95 to-[#dac377]/15
+                bg-gradient-to-br from-[#0a0503]/85 via-[#0f0805]/95 to-[#dac377]/15
                 border border-[#eed47c]/25 hover:border-[#ffd966]/70
                 hover:scale-[1.03] shadow-2xl hover:shadow-[0_20px_50px_-10px_#ffd96644]
                 p-8 sm:p-10 flex flex-col min-h-[260px] transition-all duration-500
@@ -131,7 +131,7 @@ export default function FAQ() {
                                 {/* Top Accent Bar */}
                                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ffd966] via-[#ffeec3] to-[#d4af37] opacity-80"></div>
                                 {/* Decorative Glow */}
-                                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#ffeec3]/10 via-transparent to-transparent opacity-90 -z-10 rounded-b-[2.5rem] pointer-events-none" />
+                                <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0a0503] via-[#0a0503]/80 to-transparent pointer-events-none" />
 
                                 {/* Q Number Circle & Icon */}
                                 <div className="flex items-center gap-3 mb-6">

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Media() {
   return (
-    <section className="bg-gradient-to-tr from-[#241308] via-[#2c190d] to-[#44321d] min-h-screen py-20 px-4 text-white relative overflow-hidden">
+    <section className="bg-[#0a0503] min-h-screen py-20 px-4 text-white relative overflow-hidden">
       {/* Subtle floating premium golden orbs */}
       <div className="pointer-events-none absolute -top-32 left-0 w-[400px] h-[320px] bg-gradient-to-br from-[#efd27d33] via-[#d4af3730] to-transparent rounded-full blur-3xl z-0 opacity-65"></div>
       <div className="pointer-events-none absolute bottom-0 right-0 w-[280px] h-[280px] bg-gradient-to-bl from-[#ffe6a666] to-transparent blur-3xl rounded-full z-0 opacity-50"></div>

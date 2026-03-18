@@ -1527,11 +1527,17 @@ const fieldMap = {
         "Social Impact Through Media Award"
       ]
     }
-  },
+  }
 };
 
+const AVAILABLE_AWARDS = [
+  "India Excellence Awards & Conference 2026",
+  "Invest India Summit 2026 –",
+  "Business and Leadership Summit 2026",
+];
 
 const initialForm = {
+  awardName: AVAILABLE_AWARDS[0],
   participationType: "nominated as award", // default
   field: "",
   category: "",
@@ -1627,8 +1633,9 @@ export default function NominationForm() {
     }
 
     if (name === "participationType") {
-      setForm(() => ({
+      setForm((prev) => ({
         ...initialForm,
+        awardName: prev.awardName,
         participationType: value,
       }));
       setFieldErrors({});
@@ -1798,8 +1805,8 @@ export default function NominationForm() {
   const groupedSubCategories = availableCategories[form.category] || {};
 
   const getSelectClass = (name) => {
-    const base = "w-full bg-[#2a0d0f]/80 border rounded-xl px-4 py-3.5 text-white outline-none transition-all duration-300 focus:ring-2 focus:ring-[#d4af37]/50 appearance-none cursor-pointer";
-    const errorClass = fieldErrors[name] ? "border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]" : "border-white/10 hover:border-[#d4af37]/50 hover:bg-[#3a1418]";
+    const base = "w-full bg-[#0a0503]/80 border rounded-xl px-4 py-3.5 text-white outline-none transition-all duration-300 focus:ring-2 focus:ring-[#d4af37]/50 appearance-none cursor-pointer";
+    const errorClass = fieldErrors[name] ? "border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]" : "border-white/10 hover:border-[#d4af37]/50 hover:bg-[#0f0805]";
     return `${base} ${errorClass}`;
   };
 
@@ -1811,14 +1818,14 @@ export default function NominationForm() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#3a1418] flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0503] flex items-center justify-center">
         <FiRefreshCcw className="text-[#d4af37] w-12 h-12 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-32 relative overflow-hidden bg-[#3a1418]">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-32 relative overflow-hidden bg-[#0a0503]">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#d4af37] opacity-[0.03] rounded-full blur-[120px]"></div>
@@ -1847,15 +1854,18 @@ export default function NominationForm() {
         <div className="mb-8 md:mb-12 text-center relative group">
           <div className="flex flex-col items-center justify-center mb-4">
             <h1 className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 tracking-tighter uppercase font-black px-4 text-center">
-              <span className="text-2xl sm:text-3xl md:text-5xl text-[#ffb400] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                Global
-              </span>
-              <span className="text-2xl sm:text-3xl md:text-5xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                Global Icon Awards
-              </span>
-              <span className="text-2xl sm:text-3xl md:text-5xl text-[#ffb400] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                & summit 2026
-              </span>
+              {form.awardName.split(" ").map((word, i, arr) => {
+                const isOrange = i === 0 || word.toLowerCase() === "summit" || word === "2026";
+                return (
+                  <span
+                    key={i}
+                    className={`text-2xl sm:text-3xl md:text-5xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${isOrange ? "text-[#ffb400]" : "text-white"
+                      }`}
+                  >
+                    {word}
+                  </span>
+                );
+              })}
             </h1>
           </div>
 
@@ -1879,6 +1889,32 @@ export default function NominationForm() {
 
         <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] ring-1 ring-white/5">
           <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-8">
+
+            {/* Award Selection */}
+            <div className="md:col-span-2 space-y-4 mb-4">
+              <label className="text-xs font-black text-[#ffb400] uppercase tracking-[0.3em] pl-1">
+                Select Award / Summit Event *
+              </label>
+              <div className="relative group">
+                <select
+                  name="awardName"
+                  value={form.awardName}
+                  onChange={handleChange}
+                  className="w-full bg-[#0a0503] border-2 border-[#d4af37]/30 rounded-2xl px-6 py-4 text-white text-lg font-bold outline-none transition-all duration-300 focus:border-[#ffb400] focus:ring-4 focus:ring-[#ffb400]/10 appearance-none cursor-pointer shadow-2xl"
+                >
+                  {AVAILABLE_AWARDS.map((award) => (
+                    <option key={award} value={award} className="bg-black text-white">
+                      {award}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-white/50 group-hover:text-[#ffb400] transition-colors">
+                  <svg className="w-6 h-6 fill-current" viewBox="0 0 20 20">
+                    <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
 
             {/* Participation Choice */}
             <div className="md:col-span-2 space-y-6">
@@ -2242,7 +2278,7 @@ export default function NominationForm() {
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                {["New Delhi", "Dubai", "USA", "UK"].map((loc) => (
+                {["Mumbai", "USA", "London"].map((loc) => (
                   <label
                     key={loc}
                     className={`flex items-center justify-center p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer text-center

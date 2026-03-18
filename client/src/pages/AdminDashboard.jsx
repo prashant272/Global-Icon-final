@@ -8,6 +8,9 @@ import {
 import { useAuth } from "../context/AuthContext.jsx";
 import { ShieldCheck, Edit2, Trash2, Eye, Crown, BarChart3 } from "lucide-react";
 
+import AdminEditionsTab from "../components/AdminEditionsTab.jsx";
+import AdminUpcomingAwardsTab from "../components/AdminUpcomingAwardsTab.jsx";
+
 /* ------------------ Constants ------------------ */
 const goldGrad =
   "linear-gradient(90deg,#e9d781 0%,#dac24a 29.69%,#fee19a 70%,#bc9830 100%)";
@@ -286,7 +289,8 @@ export default function AdminDashboard() {
       <table className="min-w-[1600px] w-full text-xs border-separate border-spacing-0">
         <thead className="sticky top-0 z-40">
           <tr className="bg-gradient-to-r from-[#231e09] to-[#2e2612] text-[#f2eab6] border-0">
-            <th className="px-4 py-3 text-left bg-inherit">Participation</th>
+            <th className="px-4 py-3 text-left bg-inherit">Award</th>
+            <th className="px-4 py-3 text-left">Participation</th>
             <th className="px-4 py-3 text-left">Field</th>
             <th className="px-4 py-3 text-left">Category</th>
             <th className="px-4 py-3 text-left">Mobile</th>
@@ -316,6 +320,9 @@ export default function AdminDashboard() {
                 : "bg-gradient-to-r from-[#211c12be] to-[#35341be6]"
                 }`}
             >
+              <td className="px-4 py-4 font-bold text-[#ffb400] whitespace-nowrap">
+                {n.awardName || "Global Icon Awards"}
+              </td>
               <td className="px-4 py-4 font-semibold text-[#fee5af]">
                 {n.participationType === "nominated as award" ? "🏆 Award" :
                   n.participationType === "attend as speaker" ? "🎤 Speaker" :
@@ -476,7 +483,8 @@ export default function AdminDashboard() {
       <table className="min-w-[1100px] w-full text-xs border-separate border-spacing-0">
         <thead className="sticky top-0 z-40">
           <tr className="bg-gradient-to-r from-[#231e09] to-[#2e2612] text-[#f2eab6]">
-            <th className="px-4 py-3 text-left rounded-tl-2xl bg-inherit">Name</th>
+            <th className="px-4 py-3 text-left rounded-tl-2xl bg-inherit">Award</th>
+            <th className="px-4 py-3 text-left">Name</th>
             <th className="px-4 py-3 text-left">Mobile</th>
             <th className="px-4 py-3 text-left">Email</th>
             <th className="px-4 py-3 text-left">Nomination Status (User View)</th>
@@ -500,6 +508,9 @@ export default function AdminDashboard() {
                   : "bg-gradient-to-r from-[#242108be] to-[#352a1eda]"
                   }`}
               >
+                <td className="px-4 py-3 font-bold text-[#ffb400]">
+                  {n.awardName || "Global Icon"}
+                </td>
                 <td className="px-4 py-3">
                   <div className="font-semibold text-lg text-[#eed99b]">{n.nomineeName}</div>
                 </td>
@@ -785,6 +796,8 @@ export default function AdminDashboard() {
             <nav className="space-y-2 font-medium">
               {[
                 { id: "nominations", label: "Nominations", icon: "🏆" },
+                { id: "editions", label: "Previous Editions", icon: "🖼️" },
+                { id: "upcoming", label: "Upcoming Awards", icon: "⭐" },
                 { id: "status", label: "Status & Payment", icon: "💸" },
                 { id: "analytics", label: "Daily Analytics", icon: "📊" },
                 { id: "users", label: "Registered Users", icon: "👤" },
@@ -817,84 +830,88 @@ export default function AdminDashboard() {
             </p>
           </header>
 
-          <div className="flex flex-wrap items-center gap-4 mb-8 bg-[#1a160a]/40 p-4 rounded-2xl border border-[#ffffff0d] backdrop-blur-md">
-            <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider">
-              Filter Status:
-            </span>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
-            >
-              {STATUS_FILTER_OPTIONS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-
-            <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider ml-2">
-              Type:
-            </span>
-            <select
-              value={participationTypeFilter}
-              onChange={(e) => setParticipationTypeFilter(e.target.value)}
-              className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
-            >
-              {PARTICIPATION_TYPE_FILTER_OPTIONS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-
-            <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider ml-2">
-              Location:
-            </span>
-            <select
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-              className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
-            >
-              {LOCATION_FILTER_OPTIONS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-
-            <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider ml-2">
-              Field:
-            </span>
-            <select
-              value={fieldFilter}
-              onChange={(e) => setFieldFilter(e.target.value)}
-              className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
-            >
-              {FIELD_FILTER_OPTIONS.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-            <span className="text-xs text-[#ffd975] font-mono bg-[#d4af37]/10 px-3 py-1 rounded-full border border-[#d4af37]/20">
-              {filteredNominations.length} records
-            </span>
-            {error && (
-              <span className="ml-auto text-sm text-red-400 bg-red-900/20 px-3 py-1 rounded border border-red-500/30">
-                Error: {error}
+          {activeTab !== "editions" && activeTab !== "upcoming" && (
+            <div className="flex flex-wrap items-center gap-4 mb-8 bg-[#1a160a]/40 p-4 rounded-2xl border border-[#ffffff0d] backdrop-blur-md">
+              <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider">
+                Filter Status:
               </span>
-            )}
-            {loading && (
-              <span className="ml-auto text-sm flex items-center gap-2 text-yellow-300">
-                <div className="w-2 h-2 rounded-full bg-yellow-400 animate-ping" />
-                Loading data...
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
+              >
+                {STATUS_FILTER_OPTIONS.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+
+              <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider ml-2">
+                Type:
               </span>
-            )}
-          </div>
+              <select
+                value={participationTypeFilter}
+                onChange={(e) => setParticipationTypeFilter(e.target.value)}
+                className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
+              >
+                {PARTICIPATION_TYPE_FILTER_OPTIONS.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+
+              <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider ml-2">
+                Location:
+              </span>
+              <select
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
+              >
+                {LOCATION_FILTER_OPTIONS.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+
+              <span className="text-[#c7ba7e] font-semibold text-sm uppercase tracking-wider ml-2">
+                Field:
+              </span>
+              <select
+                value={fieldFilter}
+                onChange={(e) => setFieldFilter(e.target.value)}
+                className="bg-[#272316] border border-[#edd14850] rounded-lg px-4 py-2 text-[#fbe376] text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition shadow-inner"
+              >
+                {FIELD_FILTER_OPTIONS.map((s) => (
+                  <option key={s.value} value={s.value}>
+                    {s.label}
+                  </option>
+                ))}
+              </select>
+              <span className="text-xs text-[#ffd975] font-mono bg-[#d4af37]/10 px-3 py-1 rounded-full border border-[#d4af37]/20">
+                {filteredNominations.length} records
+              </span>
+              {error && (
+                <span className="ml-auto text-sm text-red-400 bg-red-900/20 px-3 py-1 rounded border border-red-500/30">
+                  Error: {error}
+                </span>
+              )}
+              {loading && (
+                <span className="ml-auto text-sm flex items-center gap-2 text-yellow-300">
+                  <div className="w-2 h-2 rounded-full bg-yellow-400 animate-ping" />
+                  Loading data...
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="w-full">
             {activeTab === "nominations" && renderNominationsTable()}
+            {activeTab === "editions" && <AdminEditionsTab token={token} />}
+            {activeTab === "upcoming" && <AdminUpcomingAwardsTab />}
             {activeTab === "status" && renderStatusTab()}
             {activeTab === "analytics" && renderAnalyticsTab()}
             {activeTab === "users" && renderUsersTab()}

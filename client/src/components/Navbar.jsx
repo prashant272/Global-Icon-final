@@ -15,8 +15,10 @@ import {
   FaRegClone,
   FaRegEdit,
   FaQuestionCircle,
+  FaChevronDown,
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
+import { fetchPreviousEditions, fetchUpcomingAwards } from "../services/api.js";
 
 export default function Navbar() {
   const [showPill, setShowPill] = useState(false);
@@ -32,6 +34,19 @@ export default function Navbar() {
   const isAdminUser = user?.role === "admin";
   // Ref for scrolling trick on tab change
   const headerRef = useRef();
+
+  const [editions, setEditions] = useState([]);
+  const [upcomingAwards, setUpcomingAwards] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    fetchPreviousEditions()
+      .then((data) => setEditions(data))
+      .catch((err) => console.error("Error fetching editions for navbar:", err));
+    fetchUpcomingAwards()
+      .then((data) => setUpcomingAwards(data))
+      .catch((err) => console.error("Error fetching upcoming awards for navbar:", err));
+  }, []);
 
   // Fix: Scroll to top ONLY relative to header on route (tab) change, but only scroll if not already near top
   useEffect(() => {
@@ -84,7 +99,7 @@ export default function Navbar() {
   // ===== Header for admin routes
   if (isAdminRoute) {
     return (
-      <header className="fixed top-0 w-full z-50 bg-[#020617] text-white border-b border-white/10">
+      <header className="fixed top-0 w-full z-50 bg-[#0a0503] text-white border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between text-sm">
           <div className="flex items-center gap-3">
             <img
@@ -133,7 +148,7 @@ export default function Navbar() {
                     <img
                       src="/images/primetimelogo.gif"
                       alt="PrimeTime Logo"
-                      className="absolute top-[-10px] left-[-30px] h-[100px] w-auto max-w-none object-contain z-50 drop-shadow-md"
+                      className="absolute top-[-10px] left-[-60px] h-[100px] w-auto max-w-none object-contain z-50 drop-shadow-md"
                     />
                   </div>
                   <div className="flex gap-2 font-semibold whitespace-nowrap">
@@ -169,7 +184,7 @@ export default function Navbar() {
             </div>
             <nav className="bg-transparent h-12">
               <div className="max-w-7xl mx-auto px-6 h-full flex justify-center items-center gap-6 text-sm">
-                {menuLinks("white", undefined, headerRef, isUser, false)}
+                {menuLinks("white", undefined, headerRef, isUser, false, editions, upcomingAwards)}
               </div>
             </nav>
           </header>
@@ -178,15 +193,15 @@ export default function Navbar() {
         {/* ================= SCROLL PILL FOR DESKTOP ================= */}
         {showPill && (
           <div className="fixed top-4 w-full z-50 flex justify-center">
-            <div className="bg-white text-black rounded-full shadow-lg px-6 py-3 flex items-center gap-8 text-sm">
-              <div className="flex items-center gap-3 font-semibold">
+            <div className="bg-[#0a0503]/90 backdrop-blur-md text-white border border-[#d4af37]/40 rounded-full shadow-lg px-6 py-1.5 flex items-center gap-8 text-sm">
+              <div className="flex items-center font-semibold">
                 <img
                   src="/images/primetimelogo.gif"
                   alt="Logo"
-                  className="h-7 w-auto object-contain"
+                  className="h-11 w-auto object-contain"
                 />
               </div>
-              <div className="flex gap-5">{menuLinks("black", undefined, headerRef, isUser, false)}</div>
+              <div className="flex gap-5">{menuLinks("white", undefined, headerRef, isUser, false, editions, upcomingAwards)}</div>
             </div>
           </div>
         )}
@@ -196,7 +211,7 @@ export default function Navbar() {
         {/* Phone header with logo, title, my nominations (if user), hamburger, login/logout */}
         <header
           className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 flex items-center h-16 sm:h-20 px-4 justify-between ${showPill
-            ? "bg-[#210a0e]/95 backdrop-blur-lg border-b border-white/10 shadow-xl"
+            ? "bg-[#0a0503]/95 backdrop-blur-lg border-b border-white/10 shadow-xl"
             : "bg-transparent"
             }`}
           ref={headerRef}
@@ -247,6 +262,8 @@ export default function Navbar() {
           handleLoginClick={handleLoginClick}
           headerRef={headerRef}
           isUser={isUser}
+          editions={editions}
+          upcomingAwards={upcomingAwards}
         />
       </div>
     </>
@@ -257,7 +274,7 @@ export default function Navbar() {
 
 // onClick will be used to close drawer, headerRef for scroll fix on tab switch.
 // Added showDashboard param to control visibility of "My Nominations" link
-const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true) => {
+const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true, editions = [], upcomingAwards = []) => {
   // Will scroll page to just under header if in mobile and not at top
   const createNavHandler = (routeHandler) => (e) => {
     if (onClick) onClick();
@@ -278,8 +295,83 @@ const menuLinks = (color, onClick, headerRef, isUser, showDashboard = true) => {
       <NavItem to="/judging" icon={<FaGavel />} label="Selection Process" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/terms" icon={<FaFileContract />} label="T&C" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/contact" icon={<FaEnvelope />} label="Contact Us" color={color} onClick={createNavHandler(onClick)} />
-      <NavItem to="/media" icon={<FaTrophy />} label="Media" color={color} onClick={createNavHandler(onClick)} />
-      <NavItem to="/previous-editions" icon={<FaHistory />} label="Previous Editions" color={color} onClick={createNavHandler(onClick)} />
+      {/* Upcoming Awards Dropdown */}
+      <div className="relative group flex items-center h-full cursor-default">
+        <div
+          className={`flex items-center gap-1 transition-all duration-300 py-4 ${
+            color === "white"
+              ? "opacity-80 group-hover:opacity-100"
+              : "text-gray-700 group-hover:text-black"
+          }`}
+        >
+          <span className="text-[11px]"><FaTrophy /></span>
+          <span className="whitespace-nowrap">Upcoming Awards</span>
+          <FaChevronDown className="text-[10px] ml-1 opacity-70 group-hover:rotate-180 transition-transform duration-300" />
+        </div>
+
+        {/* Dropdown */}
+        <div className="absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col py-2 z-[100] overflow-hidden">
+          {upcomingAwards.length > 0 ? (
+            <>
+              <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
+                Latest Summits
+              </div>
+              {upcomingAwards.map((award) => (
+                <NavLink
+                  key={award._id}
+                  to={`/upcoming-awards/${award.slug}`}
+                  onClick={createNavHandler(onClick)}
+                  className="px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                >
+                  {award.title}
+                </NavLink>
+              ))}
+            </>
+          ) : (
+            <span className="px-4 py-2 text-sm text-gray-400 italic">No upcoming events</span>
+          )}
+        </div>
+      </div>
+
+      {/* Awards Dropdown */}
+      <div className="relative group flex items-center h-full cursor-default">
+        <div
+          className={`flex items-center gap-1 transition-all duration-300 py-4 ${
+            color === "white"
+              ? "opacity-80 group-hover:opacity-100"
+              : "text-gray-700 group-hover:text-black"
+          }`}
+        >
+          <span className="text-[11px]"><FaTrophy /></span>
+          <span>Awards</span>
+          <FaChevronDown className="text-[10px] ml-1 opacity-70 group-hover:rotate-180 transition-transform duration-300" />
+        </div>
+
+        {/* Dropdown */}
+        <div className="absolute top-[80%] left-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col py-2 z-[100] overflow-hidden">
+          {/* Previous Editions Section */}
+          {editions.length > 0 ? (
+            <>
+              <div className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100">
+                Previous Editions
+              </div>
+              {editions.map((e) => (
+                <NavLink
+                  key={e._id || e.year}
+                  to={`/editions/${e.slug || e.year}`}
+                  onClick={createNavHandler(onClick)}
+                  className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-black transition-colors"
+                >
+                  {e.title} {e.year ? `(${e.year})` : ""}
+                </NavLink>
+              ))}
+            </>
+          ) : (
+            <span className="px-4 py-2 text-sm text-gray-400 italic">No previous awards</span>
+          )}
+        </div>
+      </div>
+
       <NavItem to="/faq" icon={<FaQuestionCircle />} label="FAQ" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/nominate" icon={<FaRegEdit />} label="Nominate Now" color={color} onClick={createNavHandler(onClick)} isSpecial={true} />
       {isUser && showDashboard && (
@@ -324,7 +416,9 @@ function MobileMenuDrawer({
   isAuthenticated,
   handleLoginClick,
   headerRef,
-  isUser
+  isUser,
+  editions,
+  upcomingAwards
 }) {
   // Esc key or overlay for closing drawer
   useEffect(() => {
@@ -357,7 +451,7 @@ function MobileMenuDrawer({
       ></div>
       {/* Drawer */}
       <aside
-        className={`fixed top-0 right-0 z-[60] w-4/5 max-w-xs h-full bg-[#17171c] text-white shadow-lg transform transition-transform duration-250 ${open ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 z-[60] w-4/5 max-w-xs h-full bg-[#0a0503] text-white shadow-lg transform transition-transform duration-250 ${open ? "translate-x-0" : "translate-x-full"
           } flex flex-col`}
         style={{ transitionProperty: "transform, opacity" }}
       >
@@ -383,7 +477,7 @@ function MobileMenuDrawer({
           <nav className="flex flex-col gap-3 mt-6 px-4">
             {/* Give headerRef & isUser to menuLinks for scroll fix and user-related links */}
             {/* Pass true for showDashboard to show My Nominations in mobile drawer */}
-            {menuLinks("white", onClose, headerRef, isUser, true)}
+            {menuLinks("white", onClose, headerRef, isUser, true, editions, upcomingAwards)}
           </nav>
           <div className="mt-6 border-t border-white/10 px-4 py-4 flex flex-col gap-2">
             {user && (

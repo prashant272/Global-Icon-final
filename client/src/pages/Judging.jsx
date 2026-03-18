@@ -145,7 +145,7 @@ export default function Judging() {
   ];
 
   return (
-    <section className="relative min-h-screen bg-[#210a0e] selection:bg-[#ffeec350] py-24 overflow-hidden flex flex-col">
+    <section className="relative min-h-screen bg-[#0a0503] selection:bg-[#ffeec350] py-24 overflow-hidden flex flex-col">
       {/* Decorative mesh gradients */}
       <div className="absolute -top-20 -left-32 w-[500px] h-[420px] rounded-full bg-gradient-to-br from-[#fbbf24]/20 via-[#210a0e]/10 to-transparent blur-[120px] pointer-events-none z-0" />
       <div className="absolute bottom-[-120px] right-[-70px] w-[420px] h-[420px] rounded-full bg-gradient-to-tl from-[#a3e635]/30 via-[#210a0e]/10 to-transparent blur-[120px] pointer-events-none z-0" />

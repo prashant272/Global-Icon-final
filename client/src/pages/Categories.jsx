@@ -1547,7 +1547,7 @@ export default function Categories() {
   const sectors = Object.keys(fieldMap);
 
   return (
-    <section className="relative min-h-screen bg-[#0a0505] py-20 sm:py-28 overflow-hidden font-sans">
+    <section className="relative min-h-screen bg-[#0a0503] py-20 sm:py-28 overflow-hidden font-sans">
       {/* Background Decorative Elements */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#d4af37]/5 rounded-full blur-[120px] animate-pulse" />

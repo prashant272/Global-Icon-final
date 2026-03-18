@@ -38,11 +38,10 @@ export default function Contact() {
   ];
 
   return (
-    <section className="relative min-h-screen overflow-hidden py-12 md:py-20 bg-[#4b1e1e] text-white selection:bg-[#7e2546]/60">
+    <section className="relative min-h-screen overflow-hidden py-12 md:py-20 bg-[#0a0503] text-white selection:bg-[#ffeec350]">
       {/* Decorative mesh gradients */}
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0a0503] via-[#0a0503]/80 to-transparent pointer-events-none" />
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute -top-32 -left-1/4 w-[200px] h-[200px] xs:w-[300px] xs:h-[300px] sm:w-[420px] sm:h-[420px] rounded-full bg-gradient-to-br from-[#d4af37]/20 via-[#c62828]/10 to-transparent blur-[60px] sm:blur-[100px]" />
-        <div className="absolute bottom-0 right-[-30%] xs:right-[-10%] w-[220px] h-[220px] xs:w-[350px] xs:h-[350px] sm:w-[450px] sm:h-[450px] rounded-full bg-gradient-to-br from-[#ffeec3]/20 via-[#4b1e1e]/10 to-transparent blur-[60px] sm:blur-[100px]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:28px_28px] sm:bg-[size:56px_56px]" />
       </div>
 

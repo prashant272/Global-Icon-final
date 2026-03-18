@@ -121,7 +121,7 @@ function getGradient(idx) {
   // Alternate left/right and color gradients
   const bgCombinations = [
     // left
-    "from-[#fde68a40] via-[#210a0e50] to-[#fffbe780]",
+    "from-[#0a0503]/40 via-[#0a0503]/50 to-[#0a0503]/80",
     // right
     "from-[#eab30836] via-[#242f2f30] to-[#fde68a33]",
   ];
@@ -130,7 +130,7 @@ function getGradient(idx) {
 
 export default function Terms() {
   return (
-    <section className="bg-[#210a0e] text-white min-h-screen py-8 md:py-20 selection:bg-[#ffeec350] relative">
+    <section className="bg-[#0a0503] min-h-screen py-20 px-4 text-white relative overflow-hidden">
       {/* Hero Title */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center mb-8 md:mb-12">
         <div className="flex justify-center text-3xl md:text-4xl mb-2 md:mb-3">
@@ -203,8 +203,7 @@ export default function Terms() {
 
       {/* A subtle decorative mesh or accent */}
       <div className="absolute pointer-events-none left-0 right-0 top-0 bottom-0 -z-10 overflow-hidden">
-        <div className="absolute -top-20 -left-24 w-[380px] h-[350px] rounded-full bg-gradient-to-br from-[#fbbf24]/20 via-[#eab308]/20 to-transparent blur-[104px]" />
-        <div className="absolute bottom-[-100px] right-[-70px] w-[320px] h-[320px] rounded-full bg-gradient-to-tl from-[#a3e635]/10 via-[#210a0e]/10 to-transparent blur-[100px]" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#0a0503] via-[#0a0503]/80 to-transparent pointer-events-none" />
         <div className="absolute inset-0 bg-[linear-gradient( rgba(255,235,191,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,235,191,0.02)_1px,transparent_1px)] bg-[size:75px_75px]" />
       </div>
     </section>

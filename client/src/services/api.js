@@ -1,16 +1,17 @@
 
+const DEFAULT_BASE_URL =
+  typeof window !== "undefined"
+    ? window.location.origin
+    : "http://localhost:5000";
 
-function getBaseUrl() {
-  // Prefer explicit API base URL if provided
+export function getBaseUrl() {
   const fromEnv =
     typeof import.meta !== "undefined"
       ? import.meta.env?.VITE_API_BASE_URL || import.meta.env?.VITE_API_URL
       : undefined;
 
   const raw = (fromEnv || DEFAULT_BASE_URL).replace(/\/$/, "");
-
   const normalized = raw.endsWith("/api") ? raw.slice(0, -4) : raw;
-
   return normalized;
 }
 
@@ -114,3 +115,52 @@ export function deleteNomination(id, token) {
   return request(`/api/admin/nominations/${id}`, { method: "DELETE", token });
 }
 
+/* ---------------- Previous Editions ---------------- */
+export function fetchPreviousEditions() {
+  return request("/api/previous-editions", { method: "GET" });
+}
+
+export function fetchEditionByYear(year) {
+  return request(`/api/previous-editions/${year}`, { method: "GET" });
+}
+
+export function createPreviousEdition(payload, token) {
+  return request("/api/previous-editions", {
+    method: "POST",
+    body: payload,
+    token,
+  });
+}
+
+export function updatePreviousEdition(id, payload, token) {
+  return request(`/api/previous-editions/${id}`, {
+    method: "PUT",
+    body: payload,
+    token,
+  });
+}
+
+export function deletePreviousEdition(id, token) {
+  return request(`/api/previous-editions/${id}`, { method: "DELETE", token });
+}
+
+/* ---------------- Upcoming Awards ---------------- */
+export function fetchUpcomingAwards() {
+  return request("/api/upcoming-awards", { method: "GET" });
+}
+
+export function fetchUpcomingAwardBySlug(slug) {
+  return request(`/api/upcoming-awards/${slug}`, { method: "GET" });
+}
+
+export function createUpcomingAward(payload, token) {
+  return request("/api/upcoming-awards", { method: "POST", body: payload, token });
+}
+
+export function updateUpcomingAward(id, payload, token) {
+  return request(`/api/upcoming-awards/${id}`, { method: "PUT", body: payload, token });
+}
+
+export function deleteUpcomingAward(id, token) {
+  return request(`/api/upcoming-awards/${id}`, { method: "DELETE", token });
+}

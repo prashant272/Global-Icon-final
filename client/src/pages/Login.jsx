@@ -147,7 +147,7 @@ export default function Login() {
   const heading = getHeading();
 
   return (
-    <section className="min-h-screen w-full bg-[#1a0b0d] flex items-center justify-center relative overflow-hidden px-4 pt-24 pb-12">
+    <section className="min-h-screen w-full bg-[#0a0503] flex items-center justify-center relative overflow-hidden px-4 pt-24 pb-12">
       {/* Dynamic Background Elements */}
       <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#d4af37] opacity-[0.05] rounded-full blur-[120px] animate-pulse"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#d4af37] opacity-[0.05] rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
@@ -396,7 +396,7 @@ export default function Login() {
                   <div className="w-full border-t border-white/10"></div>
                 </div>
                 <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
-                  <span className="bg-[#1a0b0d] px-4 text-gray-500 font-bold">Or continue with</span>
+                  <span className="bg-[#0a0503] px-4 text-gray-500 font-bold">Or continue with</span>
                 </div>
               </div>
 

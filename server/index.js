@@ -6,6 +6,8 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import nominationRoutes from "./routes/nominationRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import previousEditionRoutes from "./routes/previousEditionRoutes.js";
+import upcomingAwardRoutes from "./routes/upcomingAwardRoutes.js";
 import passport from "./config/passport.js";
 
 import path from "path";
@@ -93,6 +95,8 @@ app.use("/api/nominations", nominationRoutes);
 app.use("/nominations", nominationRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/admin", adminRoutes);
+app.use("/api/previous-editions", previousEditionRoutes);
+app.use("/api/upcoming-awards", upcomingAwardRoutes);
 
 /**
  * =========================

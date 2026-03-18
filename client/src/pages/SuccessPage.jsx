@@ -6,7 +6,7 @@ export default function SuccessPage() {
     const autoCreated = location.state?.autoCreated;
 
     return (
-        <div className="min-h-screen bg-[#3a1418] flex items-center justify-center p-4 pt-24 sm:pt-32 overflow-hidden relative">
+        <div className="min-h-screen bg-[#0a0503] flex items-center justify-center p-4 pt-24 sm:pt-32 overflow-hidden relative">
             {/* Background Orbs */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 <div className="absolute top-[20%] right-[10%] w-[300px] h-[300px] bg-[#d4af37] opacity-[0.05] rounded-full blur-[80px]"></div>

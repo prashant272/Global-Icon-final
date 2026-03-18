@@ -92,7 +92,7 @@ function GuidelineCard({ icon, title, items, color, bg }) {
 
 export default function Guidelines() {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-[#371f16] via-[#311412] to-[#200804] py-10 md:py-14 selection:bg-[#ffeec350] isolate flex flex-col justify-start overflow-hidden">
+    <section className="relative min-h-screen bg-[#0a0503] selection:bg-[#ffeec350] py-24 overflow-hidden flex flex-col justify-start">
       {/* Decorative Blurs */}
       <div className="absolute -top-32 -left-28 w-[410px] h-[410px] rounded-full bg-gradient-to-tr from-[#ffeec370] to-transparent blur-[110px] -z-10 pointer-events-none" />
       <div className="absolute top-10 right-0 w-[170px] h-[280px] rounded-full bg-gradient-to-tl from-[#d4af371a] via-[#6c3924cc] to-transparent blur-[80px] -z-10 pointer-events-none" />
