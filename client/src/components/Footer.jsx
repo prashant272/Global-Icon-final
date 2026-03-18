@@ -305,6 +305,52 @@ export default function Footer() {
         <span className="text-[#d4af37] font-bold">
           Prime Time Research Media Pvt. Ltd
         </span>
+
+        {/* Developer Credit Badge */}
+        <div className="mt-4 flex justify-center pb-6">
+          <a
+            href="https://primeimpact.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "6px 18px",
+              borderRadius: "999px",
+              border: "1px solid rgba(212,175,55,0.55)",
+              background: "linear-gradient(90deg, rgba(212,175,55,0.08) 0%, rgba(255,238,195,0.13) 50%, rgba(212,175,55,0.08) 100%)",
+              boxShadow: "0 0 14px 2px rgba(212,175,55,0.18)",
+              textDecoration: "none",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.boxShadow = "0 0 24px 6px rgba(212,175,55,0.38)";
+              e.currentTarget.style.borderColor = "rgba(212,175,55,0.9)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.boxShadow = "0 0 14px 2px rgba(212,175,55,0.18)";
+              e.currentTarget.style.borderColor = "rgba(212,175,55,0.55)";
+            }}
+          >
+            <span style={{ fontSize: "11px", color: "rgba(214,207,200,0.75)", letterSpacing: "0.04em", fontWeight: 500 }}>
+              ✦ Designed &amp; Developed by
+            </span>
+            <span
+              style={{
+                fontSize: "13px",
+                fontWeight: 700,
+                letterSpacing: "0.03em",
+                background: "linear-gradient(90deg, #b2872d 0%, #d4af37 40%, #ffeec3 70%, #d4af37 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                color: "transparent",
+              }}
+            >
+              Prime Impact IT Solutions
+            </span>
+          </a>
+        </div>
       </div>
 
     </footer>
