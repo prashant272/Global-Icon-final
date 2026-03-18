@@ -4,6 +4,7 @@ export default function MediaPartners({ mediaPartners, SECTION_BG }) {
       className={`relative pt-8 sm:pt-10 md:pt-16 pb-8 sm:pb-12 md:pb-20 overflow-hidden ${SECTION_BG}`}
       style={{ WebkitTapHighlightColor: "transparent" }}
     >
+      {/* hello */}
       {/* Decorative mesh gradients for premium depth - responsive sizes */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute top-[-50px] xs:top-[-80px] left-1/2 -translate-x-1/2 w-[160px] xs:w-[260px] sm:w-[350px] md:w-[500px] lg:w-[580px] h-[160px] xs:h-[260px] sm:h-[350px] md:h-[500px] lg:h-[580px] bg-[#d4af37]/15 rounded-full blur-[32px] xs:blur-[80px] sm:blur-[110px] animate-pulse -z-10" />
