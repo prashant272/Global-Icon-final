@@ -202,7 +202,7 @@ export default function AdminUpcomingAwardsTab() {
 
       // Handle winners
       const winnersMetadata = (form.winners || [])
-        .filter(w => w.name && w.file)
+        .filter(w => w.file)
         .map((w, idx) => ({ name: w.name, tempId: idx }));
       
       if (winnersMetadata.length > 0) {
@@ -384,7 +384,7 @@ export default function AdminUpcomingAwardsTab() {
                 {editingAward.previousWinners.map((w) => (
                   <div key={w._id} className="relative group bg-black/20 p-2 rounded-xl border border-[#d4af37]/10">
                     <img src={w.image} alt={w.name} className="w-full aspect-square object-cover rounded-lg mb-2" />
-                    <p className="text-[10px] font-bold text-white truncate text-center">{w.name}</p>
+                    {w.name && <p className="text-[10px] font-bold text-white truncate text-center">{w.name}</p>}
                     <button type="button" onClick={() => removeExistingWinner(w._id)}
                       className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-lg">✕</button>
                   </div>
@@ -477,6 +477,11 @@ export default function AdminUpcomingAwardsTab() {
                       ))}
                       {award.guestImages.length > 5 && <span className="text-[10px] text-gray-400 self-center">+{award.guestImages.length - 5}</span>}
                     </div>
+                  )}
+                  {award.previousWinners?.length > 0 && (
+                    <p className="text-[10px] text-[#fae36f]/60 mt-1 font-bold italic">
+                      🏆 {award.previousWinners.length} Winners Registered
+                    </p>
                   )}
                 </div>
                 <div className="flex gap-2 flex-shrink-0">

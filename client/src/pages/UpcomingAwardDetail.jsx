@@ -335,10 +335,12 @@ export default function UpcomingAwardDetail() {
                       <img src={w.image} alt={w.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[2s]" />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8">
-                      <div className="bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 transform translate-y-6 group-hover:translate-y-0 transition-all duration-700 shadow-3xl">
-                        <p className="text-[9px] text-[#ffd966] font-black uppercase tracking-[0.4em] mb-2 text-center opacity-80">Hall of Fame</p>
-                        <h4 className="text-white text-lg font-black text-center truncate tracking-tight">{w.name}</h4>
-                      </div>
+                      {w.name && (
+                        <div className="bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 transform translate-y-6 group-hover:translate-y-0 transition-all duration-700 shadow-3xl">
+                          <p className="text-[9px] text-[#ffd966] font-black uppercase tracking-[0.4em] mb-2 text-center opacity-80">Hall of Fame</p>
+                          <h4 className="text-white text-lg font-black text-center truncate tracking-tight">{w.name}</h4>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}

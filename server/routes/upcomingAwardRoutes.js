@@ -51,16 +51,21 @@ router.post("/", authenticate, requireAdmin, handleUpload, async (req, res) => {
             data.guestImages = [...data.guestImages, ...newGuests];
         }
 
-        // Handle previousWinners (JSON string metadata + files)
+        console.log("POST Body Keys:", Object.keys(req.body));
+        console.log("POST Files Keys:", Object.keys(req.files || {}));
+        
         data.previousWinners = [];
         if (data.winnersMetadata) {
-            const metadata = JSON.parse(data.winnersMetadata); // [{name, tempId}]
+            const metadata = JSON.parse(data.winnersMetadata);
             const files = req.files?.winnerImages || [];
-            
+            console.log("POST metadata:", metadata);
+            console.log("POST winnerImages count:", files.length);
+
             data.previousWinners = metadata.map((m, idx) => ({
-                name: m.name,
+                name: m.name || "",
                 image: files[idx] ? files[idx].location : ""
-            })).filter(w => w.name && w.image);
+            })).filter(w => w.image);
+            console.log("POST final winners count:", data.previousWinners.length);
         }
 
         // Parse isActive properly
@@ -96,15 +101,21 @@ router.put("/:id", authenticate, requireAdmin, handleUpload, async (req, res) =>
             existing.guestImages = [...(existing.guestImages || []), ...newGuests];
         }
 
+        console.log("PUT Body Keys:", Object.keys(req.body));
+        console.log("PUT Files Keys:", Object.keys(req.files || {}));
+
         // Update previousWinners (New winners being added)
         if (data.winnersMetadata) {
             const metadata = JSON.parse(data.winnersMetadata);
             const files = req.files?.winnerImages || [];
-            
+            console.log("PUT metadata:", metadata);
+            console.log("PUT winnerImages count:", files.length);
+
             const newWinners = metadata.map((m, idx) => ({
-                name: m.name,
+                name: m.name || "",
                 image: files[idx] ? files[idx].location : ""
-            })).filter(w => w.name && w.image);
+            })).filter(w => w.image);
+            console.log("PUT final newWinners count:", newWinners.length);
 
             existing.previousWinners = [...(existing.previousWinners || []), ...newWinners];
         }
@@ -125,8 +136,9 @@ router.put("/:id", authenticate, requireAdmin, handleUpload, async (req, res) =>
         delete data.winnersMetadata;
         
         Object.assign(existing, data);
-        await existing.save();
-        res.json(existing);
+        const saved = await existing.save();
+        console.log("PUT saved winners count:", saved.previousWinners?.length);
+        res.json(saved);
     } catch (err) {
         console.error("PUT /api/upcoming-awards error:", err);
         res.status(400).json({ message: err.message });

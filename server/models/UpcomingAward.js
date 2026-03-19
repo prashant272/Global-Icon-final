@@ -9,7 +9,7 @@ const upcomingAwardSchema = new mongoose.Schema(
     banners: { type: [String], default: [] },       // Main banner images slider
     guestImages: { type: [String], default: [] },   // Chief guest photos
     previousWinners: [{
-      name: { type: String, required: true },
+      name: { type: String, default: "" },
       image: { type: String, required: true }
     }],
     link: { type: String, default: "" },

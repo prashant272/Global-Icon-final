@@ -107,7 +107,7 @@ export async function create(req, res) {
     } catch (err) {
         console.error("create edition error:", err);
         if (err.code === 11000)
-            return res.status(409).json({ message: `Edition for year ${req.body?.year} or slug already exists` });
+            return res.status(409).json({ message: "An edition with this title and label for this year already exists" });
         return res.status(500).json({ message: err.message || "Server error" });
     }
 }
@@ -163,7 +163,8 @@ export async function update(req, res) {
         const saved = await edition.save();
         return res.json(saved);
     } catch (err) {
-        console.error("update edition error:", err);
+        if (err.code === 11000)
+            return res.status(409).json({ message: "Another edition with this title and label for this year already exists" });
         return res.status(500).json({ message: err.message || "Server error" });
     }
 }
