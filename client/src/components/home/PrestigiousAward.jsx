@@ -9,17 +9,19 @@ const PrestigiousAward = ({ SECTION_BG }) => {
     "Prime Time Research Media presents the India Excellence Awards & Conference 2026, a prestigious platform honouring outstanding entrepreneurs, professionals, and organizations for their excellence, innovation, and leadership across various industries. The event will be held in Mumbai on 17th May 2026 with distinguished guests and award winners from across India.",
   highlight: "Honouring Excellence, Innovation & Leadership.",
   image: "/Awards/excellence.jpeg",
-  reverse: false
+  reverse: false,
+  link: "https://www.globaliconawards.in/upcoming-awards/india-excellence-awards-2026/"
 },
-   {
-  title: "USA Business & Leadership Summit 2026",
-  subtitle: "Washington DC Edition",
-  description:
-    "Prime Time Research Media presents the USA Business & Leadership Summit 2026, a prestigious international platform honouring entrepreneurs, professionals, and organizations creating global impact through leadership, innovation, and growth. The summit brings together distinguished personalities at Capitol Hill, Washington DC.",
-  highlight: "Honouring Leadership, Innovation & Global Growth.",
-  image: "/Awards/usa.png",
-  reverse: true
-},
+    {
+    title: "USA Business & Leadership Summit 2026",
+    subtitle: "Washington DC Edition",
+    description:
+      "Prime Time Research Media presents the USA Business & Leadership Summit 2026, a prestigious international platform honouring entrepreneurs, professionals, and organizations creating global impact through leadership, innovation, and growth. The summit brings together distinguished personalities at Capitol Hill, Washington DC.",
+    highlight: "Honouring Leadership, Innovation & Global Growth.",
+    image: "/Awards/usa.png",
+    reverse: true,
+    link: "https://www.globaliconawards.in/upcoming-awards/usa-business-leadership-summit"
+  },
 {
   title: "Invest India Summit 2026",
   subtitle: "UK Edition – London",
@@ -27,7 +29,8 @@ const PrestigiousAward = ({ SECTION_BG }) => {
     "Prime Time Research Media presents Invest India Summit 2026 – UK Edition, a global platform focused on investment, business growth, and international leadership. The summit connects entrepreneurs, professionals, and organizations to global markets and strategic opportunities in London, UK.",
   highlight: "Fostering Investment, Leadership, and Global Opportunities.",
   image: "/Awards/uk.png",
-  reverse: true
+  reverse: true,
+  link: "https://www.globaliconawards.in/upcoming-awards/invest-india-summit-2026---uk-edition"
 },
   ];
 
@@ -117,6 +120,17 @@ const PrestigiousAward = ({ SECTION_BG }) => {
                   Nominate Now
                   <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+                <a
+                  href={sec.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl border border-[#d4af37]/50 text-[#d4af37] hover:bg-[#d4af37] hover:text-black font-black text-xs md:text-sm uppercase tracking-widest transition-all duration-300 hover:-translate-y-1 active:scale-95 bg-white/5 backdrop-blur-sm"
+                >
+                  Know More
+                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
                 </a>
                 <div className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/20 text-[10px] md:text-xs font-bold text-[#d4af37] uppercase tracking-wider">

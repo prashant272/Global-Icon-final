@@ -4,11 +4,11 @@ import { Autoplay, FreeMode } from "swiper/modules";
 
 const reels = [
   {
-    id: "PozotDF9MWA",
+    id: "kwWlXq-YsxU",
     title: "Prime Time Research Media | Awards Highlights",
   },
   {
-    id: "UWbsrR3vpMw",
+    id: "uQVIrUzUtPY",
     title: "Global Icon Awards | Ceremony Moments",
   },
   {
