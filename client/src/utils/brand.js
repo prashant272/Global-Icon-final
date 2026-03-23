@@ -14,10 +14,17 @@ export const getAwardName = () => {
     // Ignore www and common local development hosts
     if (subdomain !== 'www' && subdomain !== 'localhost' && !subdomain.includes('127-0-0-1')) {
       // Break subdomain on hyphens (-) or underscores (_)
-      return subdomain
+      const displayName = subdomain
         .split(/[-_]/)
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ") + " Awards";
+        .join(" ");
+
+      // Handle specific exception for investment domains
+      if (subdomain.toLowerCase().includes("india-excellence") || subdomain.toLowerCase().includes("global") ) {
+        return displayName + "Awards";
+      }
+
+      return displayName + " Summit";
     }
   }
 

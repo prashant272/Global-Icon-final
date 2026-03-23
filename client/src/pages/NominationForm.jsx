@@ -1532,8 +1532,9 @@ const fieldMap = {
 };
 
 const AVAILABLE_AWARDS = [
+  getAwardName(),
   "India Excellence Awards & Conference 2026",
-  "Invest India Summit 2026 –",
+  "Invest India Summit 2026",
   "Business and Leadership Summit 2026",
 ];
 
@@ -1596,7 +1597,7 @@ export default function NominationForm() {
 
   const [form, setForm] = useState({
     ...initialForm,
-    awardName: awardFromQuery || AVAILABLE_AWARDS[0]
+    awardName: awardFromQuery || getAwardName()
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
