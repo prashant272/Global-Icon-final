@@ -17,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+app.set("trust proxy", true);
 app.use(passport.initialize());
 
 /**
@@ -94,8 +95,8 @@ app.get("/", (_req, res) => {
 
 // Dynamic Robots.txt
 app.get("/robots.txt", (req, res) => {
-  const host = req.get("host");
-  const protocol = req.protocol === "https" || req.get("X-Forwarded-Proto") === "https" ? "https" : "http";
+  const host = req.hostname;
+  const protocol = req.protocol;
   
   const content = `User-agent: *
 Allow: /
@@ -107,8 +108,8 @@ Sitemap: ${protocol}://${host}/sitemap.xml
 
 // Dynamic Sitemap.xml
 app.get("/sitemap.xml", (req, res) => {
-  const host = req.get("host");
-  const protocol = req.protocol === "https" || req.get("X-Forwarded-Proto") === "https" ? "https" : "http";
+  const host = req.hostname;
+  const protocol = req.protocol;
   const baseUrl = `${protocol}://${host}`;
 
   const pages = [
