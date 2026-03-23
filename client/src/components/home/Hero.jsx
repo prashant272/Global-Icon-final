@@ -67,7 +67,7 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
             <span className="font-semibold bg-gradient-to-r from-[#c62828] to-[#d4af37] bg-clip-text text-transparent hover:brightness-125 transition duration-200">
               Prime Time Research Media Pvt. Ltd.
             </span>{" "}
-            – Global Award Events
+            – {getAwardName()}
           </p>
         </div>
 

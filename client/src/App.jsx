@@ -26,12 +26,14 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
 import { Toaster } from "react-hot-toast";
+import DynamicSEO from "./components/DynamicSEO.jsx";
 
 export default function App() {
   const location = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0503]">
+      <DynamicSEO />
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
       <Navbar />

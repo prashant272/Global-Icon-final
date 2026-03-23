@@ -88,6 +88,61 @@ app.get("/", (_req, res) => {
 
 /**
  * =========================
+ * SEO - Dynamic Robots.txt & Sitemap
+ * =========================
+ */
+
+// Dynamic Robots.txt
+app.get("/robots.txt", (req, res) => {
+  const host = req.get("host");
+  const protocol = req.protocol === "https" || req.get("X-Forwarded-Proto") === "https" ? "https" : "http";
+  
+  const content = `User-agent: *
+Allow: /
+Sitemap: ${protocol}://${host}/sitemap.xml
+`;
+  res.type("text/plain");
+  res.send(content);
+});
+
+// Dynamic Sitemap.xml
+app.get("/sitemap.xml", (req, res) => {
+  const host = req.get("host");
+  const protocol = req.protocol === "https" || req.get("X-Forwarded-Proto") === "https" ? "https" : "http";
+  const baseUrl = `${protocol}://${host}`;
+
+  const pages = [
+    "",
+    "/categories",
+    "/nominate",
+    "/jury",
+    "/guidelines",
+    "/judging",
+    "/contact",
+    "/media",
+    "/faq",
+    "/terms"
+  ];
+
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  pages.forEach(page => {
+    xml += '  <url>\n';
+    xml += `    <loc>${baseUrl}${page}</loc>\n`;
+    xml += '    <changefreq>weekly</changefreq>\n';
+    xml += '    <priority>' + (page === "" ? "1.0" : "0.8") + '</priority>\n';
+    xml += '  </url>\n';
+  });
+
+  xml += '</urlset>';
+  
+  res.type("application/xml");
+  res.send(xml);
+});
+
+/**
+ * =========================
  * ROUTES
  * =========================
  */

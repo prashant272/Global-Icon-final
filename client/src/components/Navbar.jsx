@@ -484,7 +484,10 @@ function MobileMenuDrawer({
               alt="PrimeTime Logo"
               className="h-8 w-auto object-contain"
             />
-            <span className="font-semibold text-sm text-white">Prime Time Research Media Pvt. Ltd.</span>
+            <div className="flex flex-col">
+              <span className="font-bold text-[11px] text-white leading-tight">Prime Time Research Media</span>
+              <span className="text-[10px] text-[#d4af37] font-black uppercase tracking-tighter">{getAwardName()}</span>
+            </div>
           </div>
           <button
             aria-label="Close Menu"
