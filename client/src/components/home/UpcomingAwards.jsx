@@ -72,7 +72,7 @@ export default function UpcomingAwards({ upcomingAwards, HIGHLIGHT_BG }) {
                   </div>
 
                   {/* Gradient Overlay for Text Visibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-700"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-100 transition-opacity duration-700"></div>
 
                   {/* Content Overlay */}
                   <div className="relative h-full flex flex-col justify-between p-5 sm:p-8 z-10">

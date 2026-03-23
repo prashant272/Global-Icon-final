@@ -52,7 +52,7 @@ function BannerSlider({ images, year }) {
         alt={`Banner ${curr + 1}`}
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#18120888] via-transparent to-[#201207bb] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 pointer-events-none" />
 
       {/* Navigation Buttons */}
       <button

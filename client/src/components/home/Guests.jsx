@@ -32,15 +32,15 @@ export default function Guests({ guests, sectionRefs, HIGHLIGHT_BG }) {
                   <img
                     src={member.image || `/images/jury${index + 1}.jpeg`}
                     alt={member.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-110 brightness-90 group-hover:brightness-100"
+                    className="w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-110"
                     loading="lazy"
                     onError={e => {
                       e.target.onerror = null;
                       e.target.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=3087&auto=format&fit=crop";
                     }}
                   />
-                  {/* Sophisticated Gradient - Bottom Heavy to protect faces */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
+                  {/* Aggressively lightened gradient to fix 'black black' issue */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   
                   {/* Top-Left Floating Tag (Mobile optimized) */}
                   <div className="absolute top-0.5 -left-1 z-20">

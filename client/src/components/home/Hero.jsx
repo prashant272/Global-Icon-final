@@ -24,7 +24,7 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
       </div>
 
       {/* ===== GRADIENT OVERLAY ===== */}
-      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-black/70 via-black/30 to-[#0a0503]/60" />
+      <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-black/40 via-transparent to-[#0a0503]/20" />
 
       {/* ===== CONTENT ===== */}
       <div className="relative z-20 flex min-h-full flex-col items-center justify-start px-4 sm:px-6 md:px-8 pt-15 md:pt-24 pb-10 text-center">

@@ -166,8 +166,8 @@ export default function UpcomingAwardDetail() {
                     alt={`${award.title} banner ${i + 1}`}
                     className="w-full h-full object-cover scale-105 group-hover:scale-100 transition duration-1000"
                   />
-                  {/* Subtle Gradient for readability - matching EditionDetail style */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60 pointer-events-none" />
+                  {/* Removed dark gradient for maximum clarity as requested */}
+                  <div className="absolute inset-0 bg-black/5 pointer-events-none" />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -334,7 +334,7 @@ export default function UpcomingAwardDetail() {
         {/* PREVIOUS WINNERS - SQUARE IMPACT GRID (Original if exists) */}
         {award.previousWinners?.length > 0 && (
           <div className="relative">
-            <div className="flex flex-col items-center mb-24 text-center px-4">
+            <div className="flex flex-col items-center mb-12 text-center px-4">
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-widest">Excellence Registry</h2>
               <div className="flex items-center gap-6">
                 <div className="h-px w-12 sm:w-20 bg-[#d4af37]" />
@@ -343,13 +343,13 @@ export default function UpcomingAwardDetail() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {award.previousWinners.map((w, i) => (
                 <div key={w._id} className="group relative bg-[#0a0503] rounded-[4rem] overflow-hidden border border-white/5 hover:border-[#d4af37]/40 transition-all duration-[1.2s] hover:-translate-y-4 hover:shadow-[0_40px_80px_rgba(0,0,0,0.8)]">
-                  <div className="aspect-square overflow-hidden">
-                    <img src={w.image} alt={w.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[2s]" />
+                  <div className="relative overflow-hidden bg-white/5">
+                    <img src={w.image} alt={w.name} className="w-full h-auto transition-all duration-[2s] group-hover:scale-110" />
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent flex flex-col justify-end p-8">
                     {w.name && (
                       <div className="bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 transform translate-y-6 group-hover:translate-y-0 transition-all duration-700 shadow-3xl">
                         <p className="text-[9px] text-[#ffd966] font-black uppercase tracking-[0.4em] mb-2 text-center opacity-80">Hall of Fame</p>
@@ -368,7 +368,7 @@ export default function UpcomingAwardDetail() {
                 className="group relative px-12 py-5 bg-gradient-to-r from-[#d4af37] to-[#ffd966] rounded-full overflow-hidden shadow-[0_10px_40px_rgba(212,175,55,0.3)] transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_rgba(212,175,55,0.4)]"
               >
                 <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                <span className="relative z-10 text-black font-black text-[10px] uppercase tracking-[0.3em]">Become the Next Winner &mdash; Nominate Now</span>
+                <span className="relative z-10 text-black font-black text-sm sm:text-lg uppercase tracking-[0.2em]">Nominate Now</span>
               </button>
             </div>
           </div>

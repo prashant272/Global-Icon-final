@@ -62,8 +62,8 @@ function ReelCard({ reel }) {
             className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
           />
 
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          {/* Lightened dark overlay for better visibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
           {/* Play Button */}
           <div className="absolute inset-0 flex items-center justify-center">
