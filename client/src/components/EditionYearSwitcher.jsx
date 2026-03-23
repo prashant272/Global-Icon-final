@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { EDITIONS } from "../data/editions.js";
+import { getAwardName } from "../utils/brand.js";
 
 export default function EditionYearSwitcher({ currentYear }) {
   const years = EDITIONS.map((e) => e.year).sort((a, b) => b - a);
@@ -11,7 +12,7 @@ export default function EditionYearSwitcher({ currentYear }) {
           Previous Editions
         </p>
         <h2 className="text-xl md:text-2xl font-extrabold text-[#ffe9b3]">
-          Global Icon Awards – {currentYear}
+          {getAwardName()} – {currentYear}
         </h2>
       </div>
       <div className="flex flex-wrap gap-2 text-xs">

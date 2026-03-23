@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getAwardName } from "../utils/brand.js";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchUpcomingAwardBySlug } from "../services/api.js";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -173,7 +174,7 @@ export default function UpcomingAwardDetail() {
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a0503] to-[#0f0805] flex items-center justify-center">
               <div className="bg-[#d4af37]/10 px-6 py-2 rounded-full border border-[#d4af37]/30">
-                <p className="text-[#ffd788] font-black tracking-widest uppercase">Global Icon Awards</p>
+                <p className="text-[#ffd788] font-black tracking-widest uppercase">{getAwardName()}</p>
               </div>
             </div>
           )}
@@ -405,7 +406,7 @@ export default function UpcomingAwardDetail() {
               { title: "Filtering", desc: "We scan thousands of applications for real impact." },
               { title: "Verification", desc: "Documents and ground work are checked by experts." },
               { title: "Interview", desc: "Top names are called for a deep one-on-one session." },
-              { title: "Final Veto", desc: "The VVIP jury selects the absolute global icons." }
+              { title: "Final Veto", desc: `The VVIP jury selects the absolute ${getAwardName()} winners.` }
             ].map((step, i) => (
               <div key={i} className="relative group/step">
                 <div className="text-[10rem] font-black text-[#d4af37]/5 group-hover/step:text-[#d4af37]/15 transition-all duration-1000 absolute -top-24 -left-8 select-none leading-none">0{i + 1}</div>
@@ -422,7 +423,7 @@ export default function UpcomingAwardDetail() {
         {/* FINAL CTA - MOBILE REPLICA */}
         <div className="lg:hidden pb-20">
           <div className="bg-gradient-to-br from-[#0a0503] to-[#0f0805] border border-[#d4af37]/40 rounded-[4rem] p-14 text-center shadow-[0_20px_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
-            <h3 className="text-3xl font-black text-white mb-8 tracking-tighter uppercase leading-none">Become a <span className="text-[#ffd966]">Global Icon</span></h3>
+            <h3 className="text-3xl font-black text-white mb-8 tracking-tighter uppercase leading-none">Become a <span className="text-[#ffd966]">{getAwardName()}</span></h3>
             <p className="text-[#d4af3780] text-xs mb-12 font-black uppercase tracking-[0.2em]">Join the prestigious winner's circle.</p>
             <div className="flex flex-col gap-5">
               {award.link && (

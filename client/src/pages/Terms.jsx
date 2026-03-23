@@ -1,4 +1,5 @@
 import React from "react";
+import { getAwardName } from "../utils/brand.js";
 
 // Minimal vertical gap between cards for mobile view, better spacing
 const terms = [
@@ -104,7 +105,7 @@ const terms = [
         <li>Loss of data due to system issues</li>
         <li>Any indirect or consequential losses</li>
       </ul>,
-      "Participation is entirely at the nominee’s own discretion and responsibility.",
+      "Participation is entirely at the nominee's own discretion and responsibility.",
     ]
   },
   {
@@ -112,17 +113,14 @@ const terms = [
     title: "Amendments & Governing Rights",
     items: [
       "The Organising Committee reserves the right to modify or amend these Terms & Conditions at any time without prior notice.",
-      "All matters shall be governed by applicable laws, and jurisdiction shall lie with the organiser’s registered office location."
+      "All matters shall be governed by applicable laws, and jurisdiction shall lie with the organiser's registered office location."
     ]
   }
 ];
 
 function getGradient(idx) {
-  // Alternate left/right and color gradients
   const bgCombinations = [
-    // left
     "from-[#0a0503]/40 via-[#0a0503]/50 to-[#0a0503]/80",
-    // right
     "from-[#eab30836] via-[#242f2f30] to-[#fde68a33]",
   ];
   return `bg-gradient-to-br ${bgCombinations[idx % 2]}`;
@@ -134,17 +132,17 @@ export default function Terms() {
       {/* Hero Title */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center mb-8 md:mb-12">
         <div className="flex justify-center text-3xl md:text-4xl mb-2 md:mb-3">
-          <span role="img" aria-label="scroll"></span>
+          <span role="img" aria-label="scroll">📜</span>
         </div>
         <h1 className="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-[#fde68a] via-[#fbbf24] to-[#eab308] bg-clip-text text-transparent mb-1 md:mb-2 drop-shadow-lg tracking-wide">
           Terms &amp; Conditions
         </h1>
         <p className="block font-semibold text-[#fde68a]/90 text-base md:text-lg mb-2 md:mb-3">
-          Global Icon Excellence Awards 2026
+          {getAwardName()} 2026
         </p>
         <div className="mx-auto w-20 md:w-28 h-1 rounded-full bg-gradient-to-r from-[#fde68a] via-[#fbbf24] to-[#eab308] mb-3 md:mb-4 opacity-70" />
         <p className="text-[#fde68a]/80 text-xs sm:text-sm md:text-base font-medium">
-          By submitting a nomination for the Global Icon Excellence Awards 2026, the nominee and/or nominator agrees to the following terms and conditions:
+          By submitting a nomination for the {getAwardName()} 2026, the nominee and/or nominator agrees to the following terms and conditions:
         </p>
       </div>
 
@@ -176,9 +174,7 @@ export default function Terms() {
             `}
             style={{
               minHeight: 178,
-              marginTop: idx % 2
-                ? "1.2rem"
-                : undefined,
+              marginTop: idx % 2 ? "1.2rem" : undefined,
             }}
           >
             {/* Icon & Title */}

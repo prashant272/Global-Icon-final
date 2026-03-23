@@ -58,7 +58,7 @@ export default function UpcomingAwards({ upcomingAwards, HIGHLIGHT_BG }) {
             }}
             className="pb-16 sm:pb-24 !px-4 sm:!px-0"
           >
-            {upcomingAwards.map((award, index) => (
+            {(upcomingAwards.length < 6 ? [...upcomingAwards, ...upcomingAwards] : upcomingAwards).map((award, index) => (
               <SwiperSlide key={index}>
                 <div className="group relative flex flex-col rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden aspect-[3/4] sm:aspect-[2/2.5] max-w-[320px] sm:max-w-sm mx-auto border border-white/10 hover:border-[#d4af37]/50 transition-all duration-700 hover:shadow-[0_40px_80px_-20px_rgba(212,175,55,0.4)]">
 

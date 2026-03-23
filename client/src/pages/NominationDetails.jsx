@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getAwardName } from "../utils/brand.js";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchNominationById } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -234,7 +235,7 @@ export default function NominationDetails() {
                 {/* Branding Footer */}
                 <div className="mt-12 text-center">
                     <p className="text-xs font-bold text-gray-600 uppercase tracking-[0.3em]">
-                        Global Icon Awards &bull; Prime Time Research Media Pvt. Ltd
+                        {getAwardName()} &bull; Prime Time Research Media Pvt. Ltd
                     </p>
                 </div>
             </div>

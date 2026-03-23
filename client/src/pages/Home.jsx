@@ -18,6 +18,7 @@ import PreviousAwardees from "../components/home/PreviousAwardees.jsx";
 import PrestigiousAward from "../components/home/PrestigiousAward.jsx";
 import ReelsSection from "../components/home/ReelsSection.jsx";
 import { fetchUpcomingAwards } from "../services/api";
+import { getAwardName } from "../utils/brand.js";
 
 // Centralized brand background
 const PRIMARY_BG = "bg-[#0a0503]";
@@ -177,8 +178,8 @@ export default function Home() {
 
   const homeFaqs = [
     {
-      q: "What is Global Icon Awards 2026?",
-      a: "Global Icon Awards 2026 is an international recognition platform that honours excellence, innovation, and quality across 11 key sectors including Healthcare, Education, Real Estate, Technology, Finance, and more.",
+      q: `What is ${getAwardName()} 2026?`,
+      a: `${getAwardName()} 2026 is an international recognition platform that honours excellence, innovation, and quality across 11 key sectors including Healthcare, Education, Real Estate, Technology, Finance, and more.`,
     },
     {
       q: "Who can apply for nomination?",
@@ -213,7 +214,7 @@ export default function Home() {
     <div className={`w-full text-[#f5f3f0] ${PRIMARY_BG}`}>
       {/* SEO H1 - Hidden */}
       <h1 className="sr-only">
-        Global Icon Awards by Prime Time Research Media Pvt. Ltd.
+        {getAwardName()} by Prime Time Research Media Pvt. Ltd.
       </h1>
 
       <Hero

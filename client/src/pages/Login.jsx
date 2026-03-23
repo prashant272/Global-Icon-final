@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getAwardName } from "../utils/brand.js";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { FiMail, FiLock, FiArrowRight, FiShield, FiCheckCircle, FiKey } from "react-icons/fi";
@@ -141,7 +142,7 @@ export default function Login() {
     if (forgotStep === 1) return { title: "Reset Password", sub: "Enter your registered email" };
     if (forgotStep === 2) return { title: "Secure Account", sub: `Enter code sent to ${email}` };
     if (showOtp) return { title: "Verify Access", sub: `Enter code sent to ${email}` };
-    return { title: "Welcome Back", sub: "Global Icon Awards 2026" };
+    return { title: "Welcome Back", sub: `${getAwardName()} 2026` };
   };
 
   const heading = getHeading();
@@ -157,7 +158,7 @@ export default function Login() {
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl flex flex-col items-center justify-center">
           <div className="w-16 h-16 border-4 border-[#d4af37]/20 border-t-[#d4af37] rounded-full animate-spin mb-6"></div>
           <h2 className="text-[#d4af37] text-2xl font-black uppercase tracking-widest animate-pulse">Authenticating...</h2>
-          <p className="text-gray-500 mt-4 font-medium tracking-wide">Syncing your profile with Global Icon Awards</p>
+          <p className="text-gray-500 mt-4 font-medium tracking-wide">Syncing your profile with {getAwardName()}</p>
         </div>
       )}
 

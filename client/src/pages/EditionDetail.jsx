@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getEditionByYear } from "../data/editions.js";
+import { getAwardName } from "../utils/brand.js";
 
 import VideoGallery from "../components/VideoGallery.jsx";
 
@@ -185,7 +186,7 @@ export default function EditionDetail() {
     const title = edition?.title || derivedYear;
     if (title) {
       window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { 
-        detail: `Hello, I'm interested in the ${title} Edition.` 
+        detail: `Hello, I'm interested in the ${title} Edition of ${getAwardName()}.` 
       }));
     }
     return () => {
@@ -243,7 +244,7 @@ export default function EditionDetail() {
               {edition.title || derivedYear} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffd966] via-[#f7c53a] to-[#b2872d]">Education Awards</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-[#ffeab0a0] leading-relaxed max-w-2xl mx-auto sm:mx-0">
-              {edition.hero || `The ${derivedYear} Global Icon Excellence Awards celebrated the visionaries, institutions, and academic leaders who redefined educational standards.`}
+              {edition.hero || `The ${derivedYear} ${getAwardName()} celebrated the visionaries, institutions, and academic leaders who redefined educational standards.`}
             </p>
           </header>
 

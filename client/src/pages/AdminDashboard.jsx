@@ -7,6 +7,7 @@ import {
 } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ShieldCheck, Edit2, Trash2, Eye, Crown, BarChart3 } from "lucide-react";
+import { getAwardName } from "../utils/brand.js";
 
 import AdminEditionsTab from "../components/AdminEditionsTab.jsx";
 import AdminUpcomingAwardsTab from "../components/AdminUpcomingAwardsTab.jsx";
@@ -321,7 +322,7 @@ export default function AdminDashboard() {
                 }`}
             >
               <td className="px-4 py-4 font-bold text-[#ffb400] whitespace-nowrap">
-                {n.awardName || "Global Icon Awards"}
+                {n.awardName || getAwardName()}
               </td>
               <td className="px-4 py-4 font-semibold text-[#fee5af]">
                 {n.participationType === "nominated as award" ? "🏆 Award" :
@@ -509,7 +510,7 @@ export default function AdminDashboard() {
                   }`}
               >
                 <td className="px-4 py-3 font-bold text-[#ffb400]">
-                  {n.awardName || "Global Icon"}
+                  {n.awardName || getAwardName()}
                 </td>
                 <td className="px-4 py-3">
                   <div className="font-semibold text-lg text-[#eed99b]">{n.nomineeName}</div>
@@ -939,7 +940,7 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <h2 className="text-3xl font-black text-white tracking-tight">Nomination Profile</h2>
-                <p className="text-[#d4af37] font-bold text-sm tracking-[0.2em] uppercase">{viewingNomination.awardName || "Global Icon Awards"}</p>
+                <p className="text-[#d4af37] font-bold text-sm tracking-[0.2em] uppercase">{viewingNomination.awardName || getAwardName()}</p>
               </div>
             </div>
 

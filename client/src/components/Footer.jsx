@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getAwardName } from "../utils/brand.js";
 const gold = "#d4af37";
 const goldGrad = `linear-gradient(90deg, #b2872d 0%, #d4af37 40%, #ffeec3 70%, #d4af37 100%)`;
 const borderGold = "rgba(212,175,55,0.45)";
@@ -48,7 +49,7 @@ export default function Footer() {
               <span
                 className="font-heading text-xl sm:text-2xl font-extrabold bg-clip-text text-transparent"
                 style={{ backgroundImage: goldGrad }}>
-                Global Icon Awards 2026
+                {getAwardName()} 2026
               </span>
             </div>
             <div
@@ -297,7 +298,7 @@ export default function Footer() {
             color: "transparent",
           }}
         >
-          Global Icon Awards
+          {getAwardName()}
         </span>
 
         {" "} &bull; © {new Date().getFullYear()} All Rights Reserved

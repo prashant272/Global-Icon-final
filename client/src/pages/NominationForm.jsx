@@ -4,6 +4,7 @@ import { FiArrowLeft, FiX, FiRefreshCcw } from "react-icons/fi";
 import { Crown } from "lucide-react";
 import { createNomination, fetchNominationById, updateUserNomination } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { getAwardName } from "../utils/brand.js";
 
 const fieldMap = {
   "Healthcare": {

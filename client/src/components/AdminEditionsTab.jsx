@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Edit2, Plus, Trash2, X, Image as ImageIcon } from "lucide-react";
+import { getAwardName } from "../utils/brand.js";
 import {
     fetchPreviousEditions,
     createPreviousEdition,
@@ -20,7 +21,7 @@ export default function AdminEditionsTab({ token }) {
     const [formData, setFormData] = useState({
         _id: "",
         year: "",
-        title: "Global Icon Excellence Awards",
+        title: `${getAwardName()} Excellence Awards`,
         editionLabel: "",
         locations: "", // Comma-separated internally
         fullDate: "",
@@ -53,7 +54,7 @@ export default function AdminEditionsTab({ token }) {
         setFormData({
             _id: "",
             year: "",
-            title: "Global Icon Excellence Awards",
+            title: `${getAwardName()} Excellence Awards`,
             editionLabel: "",
             locations: "",
             fullDate: "",
@@ -71,7 +72,7 @@ export default function AdminEditionsTab({ token }) {
         setFormData({
             _id: edition._id,
             year: edition.year,
-            title: edition.title || "Global Icon Excellence Awards",
+            title: edition.title || `${getAwardName()} Excellence Awards`,
             editionLabel: edition.editionLabel || "",
             locations: edition.locations ? edition.locations.join(", ") : "",
             fullDate: edition.fullDate || "",

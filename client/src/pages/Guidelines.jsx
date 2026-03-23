@@ -1,4 +1,5 @@
 import React from "react";
+import { getAwardName } from "../utils/brand.js";
 
 const GUIDELINES = [
   {
@@ -118,7 +119,7 @@ export default function Guidelines() {
         </div>
         <div className="mx-auto w-32 h-1 rounded-full bg-gradient-to-r from-[#ffd966]/0 via-[#d4af37] to-[#ffd966]/0 opacity-80 my-2" />
         <p className="text-[#ffeec3] text-sm md:text-base max-w-lg mx-auto leading-relaxed font-medium">
-          Please read the guidelines before you submit your nomination for the Global Icon Awards.
+          Please read the guidelines before you submit your nomination for the {getAwardName()}.
           <span className="block mt-1 text-[#d4af37]/90 font-semibold text-xs sm:text-sm">
             Adherence is mandatory for successful evaluation.
           </span>

@@ -1,10 +1,11 @@
 import { Fragment } from "react";
+import { getAwardName } from "../utils/brand.js";
 
 export default function FAQ() {
     const faqs = [
         {
-            q: "What is Global Icon Awards 2026?",
-            a: "Global Icon Awards 2026 is an international recognition platform that honours excellence, innovation, and leadership across Healthcare, Education, Business, Dental, and Lifestyle sectors.",
+            q: `What is ${getAwardName()} 2026?`,
+            a: `${getAwardName()} 2026 is an international recognition platform that honours excellence, innovation, and leadership across Healthcare, Education, Business, Dental, and Lifestyle sectors.`,
         },
         {
             q: "Who can apply for nomination?",
@@ -23,8 +24,8 @@ export default function FAQ() {
             a: "The judging panel includes eminent academicians, industry professionals, education analysts, and independent evaluators. The process is designed to remain transparent, unbiased, and independent at every stage.",
         },
         {
-            q: "Where and when will the awards be held?",
-            a: "Global Icon Awards 2026 will be organised in international editions, including a New Delhi Edition (14 March 2026) and a Dubai Edition (26 April 2026). Detailed venue and schedule updates are shared on the official website.",
+            q: `Where and when will the awards be held?`,
+            a: `${getAwardName()} 2026 will be organised in international editions, including a New Delhi Edition (14 March 2026) and a Dubai Edition (26 April 2026). Detailed venue and schedule updates are shared on the official website.`,
         },
         {
             q: "What are the benefits of participating?",
@@ -40,7 +41,7 @@ export default function FAQ() {
         },
         {
             q: "Can international organisations apply?",
-            a: "Yes, organisations and professionals from all countries are welcome to apply for Global Icon Awards 2026.",
+            a: `Yes, organisations and professionals from all countries are welcome to apply for ${getAwardName()} 2026.`,
         },
         {
             q: "Can I apply for more than one category?",
@@ -75,8 +76,8 @@ export default function FAQ() {
             a: "For sponsorship or partnership opportunities, you can connect with our team via the official Contact Us page or the contact details provided in the footer.",
         },
         {
-            q: "Are Global Icon Awards government-affiliated?",
-            a: "No, Global Icon Awards is an independent recognition platform by Prime Time Research Media and is not directly affiliated with any government body.",
+            q: `Are ${getAwardName()} government-affiliated?`,
+            a: `No, ${getAwardName()} is an independent recognition platform by Prime Time Research Media and is not directly affiliated with any government body.`,
         },
         {
             q: "Where can we see previous editions or media coverage?",
@@ -103,7 +104,7 @@ export default function FAQ() {
                         <span className="inline-flex animate-pulse text-4xl sm:text-5xl ml-3">✨</span>
                     </div>
                     <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold font-heading mb-4 tracking-tight bg-gradient-to-r from-[#fffbe7] via-[#ffe479] via-50% to-[#ffd966] bg-clip-text text-transparent drop-shadow-lg">
-                        Global Icon Awards 2026
+                        {getAwardName()} 2026
                         <span className="block text-xl sm:text-3xl font-[350] text-[#fce69a] tracking-[0.2em] opacity-90 mt-2 uppercase">
                             Frequently Asked Questions
                         </span>

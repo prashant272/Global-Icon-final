@@ -1,4 +1,6 @@
-export const EDITIONS = [
+import { getAwardName } from "../utils/brand.js";
+
+const RAW_EDITIONS = [
   {
     year: 2025,
     path: "/editions/2025",
@@ -257,6 +259,11 @@ export const EDITIONS = [
     winners: [],
   },
 ];
+
+export const EDITIONS = RAW_EDITIONS.map(edition => ({
+  ...edition,
+  title: edition.title ? edition.title.replace(/Global Icon Awards/g, getAwardName()) : edition.title
+}));
 
 export function getEditionByYear(year) {
   const y = Number(year);

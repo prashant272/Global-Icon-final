@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getAwardName } from "../utils/brand.js";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import { FiUser, FiMail, FiLock, FiUserPlus, FiShield, FiCheckCircle } from "react-icons/fi";
@@ -85,7 +86,7 @@ export default function Register() {
             <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4 text-white">
               Join Awards
             </h1>
-            <p className="text-gray-400 font-medium tracking-wide">Create your account for Global Icon Awards</p>
+            <p className="text-gray-400 font-medium tracking-wide">Create your account for {getAwardName()}</p>
           </div>
 
           {error && (

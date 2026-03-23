@@ -19,6 +19,7 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import { fetchPreviousEditions, fetchUpcomingAwards } from "../services/api.js";
+import { getAwardName } from "../utils/brand.js";
 
 export default function Navbar() {
   const [showPill, setShowPill] = useState(false);
@@ -124,7 +125,7 @@ export default function Navbar() {
             <div className="flex flex-col leading-tight">
               <span className="font-semibold">Admin Dashboard</span>
               <span className="text-[11px] text-gray-300">
-                Global Icon Awards – Internal Panel
+                {getAwardName()} – Internal Panel
               </span>
             </div>
           </div>
@@ -167,7 +168,7 @@ export default function Navbar() {
                   </div>
                   <div className="flex gap-2 font-semibold whitespace-nowrap">
                     <span>Prime Time Research Media Pvt. Ltd. </span>
-                    <span className="opacity-70">Global Icon Awards</span>
+                    <span className="opacity-70">{getAwardName()}</span>
                   </div>
                 </div>
                 {/* RIGHT : LOGIN */}
@@ -238,11 +239,11 @@ export default function Navbar() {
               className="h-8 w-auto object-contain flex-shrink-0"
             />
             <div className="flex flex-col min-w-0">
-               <span className="text-[10px] xs:text-[12px] font-bold text-white truncate leading-tight">
+              <span className="text-[10px] xs:text-[12px] font-bold text-white truncate leading-tight">
                 Prime Time Research Media
               </span>
               <span className="text-[9px] text-[#d4af37] font-black uppercase tracking-tighter truncate">
-                Global Icon Awards
+                {getAwardName()}
               </span>
             </div>
           </div>

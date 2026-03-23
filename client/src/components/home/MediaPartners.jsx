@@ -1,3 +1,5 @@
+import { getAwardName } from "../../utils/brand.js";
+
 export default function MediaPartners({ mediaPartners, SECTION_BG }) {
   return (
     <section
@@ -21,7 +23,7 @@ export default function MediaPartners({ mediaPartners, SECTION_BG }) {
           <p className="mt-2 text-sm xs:text-base sm:text-lg md:text-xl text-[#faecc6] max-w-xs xs:max-w-lg sm:max-w-2xl mx-auto leading-snug font-semibold drop-shadow">
             <span className="italic text-[#ffd966] font-display text-base sm:text-lg md:text-2xl">“</span>
             <span className="font-serif">
-              A strong network of media partners has helped amplify the <span className="text-[#ffd966] font-semibold">Global Icon Awards</span> across India and internationally.
+              A strong network of media partners has helped amplify the <span className="text-[#ffd966] font-semibold">{getAwardName()}</span> across India and internationally.
             </span>
             <span className="italic text-[#ffd966] font-display text-base sm:text-lg md:text-2xl">”</span>
           </p>

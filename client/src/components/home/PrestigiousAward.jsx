@@ -1,4 +1,5 @@
 import React from 'react';
+import { getAwardName } from "../../utils/brand.js";
 
 const PrestigiousAward = ({ SECTION_BG }) => {
   const sections = [
@@ -49,11 +50,11 @@ const PrestigiousAward = ({ SECTION_BG }) => {
             Prime Time Research Media
           </span>
           <h2 className="text-2xl md:text-5xl font-extrabold tracking-tight text-white inline-block">
-            India's Most{" "}
+            Most{" "}
             <span className="bg-gradient-to-r from-[#d4af37] via-[#f1d46b] to-[#b6932f] bg-clip-text text-transparent">
               Prestigious
             </span>{" "}
-            Awards
+            {getAwardName()}
           </h2>
           <div className="flex items-center justify-center gap-3 md:gap-4 mt-6">
             <div className="h-[1px] w-8 md:w-12 bg-gradient-to-r from-transparent to-[#d4af37]"></div>

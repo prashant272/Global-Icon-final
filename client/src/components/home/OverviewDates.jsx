@@ -1,4 +1,8 @@
+import { getAwardName } from "../../utils/brand.js";
+
 export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
+  const awardName = getAwardName();
+
   return (
     <section className={`relative py-12 lg:py-16 overflow-hidden ${SECTION_BG} border-b border-[#d4af37]/20`}>
       {/* Gradient Glow Background */}
@@ -25,7 +29,7 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
               <h2 className="text-lg sm:text-xl lg:text-3xl font-black mb-6 leading-none flex items-center gap-3 whitespace-nowrap">
                 <span className="text-[#d4af37] italic opacity-80">Overview of</span>
                 <span className="bg-gradient-to-r from-white to-[#d4af37] bg-clip-text text-transparent uppercase tracking-wider">
-                  Business Excellence Awards
+                  {awardName}
                 </span>
               </h2>
               <div className="w-24 h-1.5 bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#c5b471] rounded-full shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
@@ -64,7 +68,7 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                     
                     <div className="text-center sm:text-left">
                       <h3 className="text-3xl lg:text-5xl font-black text-white leading-tight mb-3">
-                        Business <span className="text-[#d4af37]">Excellence</span> Awards, 2026
+                        {awardName}, 2026
                       </h3>
                       <div className="flex items-center justify-center sm:justify-start gap-3">
                         <span className="h-px w-10 bg-[#d4af37]"></span>
@@ -84,7 +88,7 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                       "These events honour individuals and organizations who have shown outstanding performance, dedication, and commitment in their respective fields."
                     </p>
                     <p>
-                      The <span className="text-white font-bold border-b-2 border-[#d4af37]/40 pb-1">Business Excellence Awards, 2026</span> is one of the prestigious initiatives that brings together industry leaders, entrepreneurs, and professionals on a single platform to celebrate success, reputation, and quality service.
+                      The <span className="text-white font-bold border-b-2 border-[#d4af37]/40 pb-1">{awardName}, 2026</span> is one of the prestigious initiatives that brings together industry leaders, entrepreneurs, and professionals on a single platform to celebrate success, reputation, and quality service.
                     </p>
                   </div>
 

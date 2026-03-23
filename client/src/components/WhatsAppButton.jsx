@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { getAwardName } from "../utils/brand.js";
 
 export default function WhatsAppButton() {
     const location = useLocation();
@@ -43,7 +44,7 @@ export default function WhatsAppButton() {
                 .join(" ");
             return `Hello, I'm interested in the ${displayName}.`;
         }
-        return "Hello, I'm interested in the Global Icon Awards.";
+        return `Hello, I'm interested in the ${getAwardName()}.`;
     };
 
     const whatsappNumber = "+91 9810 91 0686";

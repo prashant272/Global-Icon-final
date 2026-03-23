@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getAwardName } from "../../utils/brand.js";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, FreeMode } from "swiper/modules";
 
@@ -9,7 +10,7 @@ const reels = [
   },
   {
     id: "uQVIrUzUtPY",
-    title: "Global Icon Awards | Ceremony Moments",
+    title: `${getAwardName()} | Ceremony Moments`,
   },
   { 
     id: "wQyIGMZnkQg",
@@ -22,7 +23,7 @@ const reels = [
 
   {
     id: "T64_Km02LSw",
-    title: "Global Icon Excellence Awards | Highlights",
+    title: `${getAwardName()} | Highlights`,
   },
 ];
 
@@ -149,7 +150,7 @@ export default function ReelsSection({ SECTION_BG }) {
           }}
           className="!overflow-visible"
         >
-          {reels.map((reel, idx) => (
+          {[...reels, ...reels].map((reel, idx) => (
             <SwiperSlide key={idx} className="!w-auto">
               <ReelCard reel={reel} />
             </SwiperSlide>
