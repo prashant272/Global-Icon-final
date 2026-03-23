@@ -51,6 +51,11 @@ router.post("/", authenticate, requireAdmin, handleUpload, async (req, res) => {
             data.guestImages = [...data.guestImages, ...newGuests];
         }
 
+        // Handle cardImage
+        if (req.files?.cardImage?.length) {
+            data.cardImage = req.files.cardImage[0].location;
+        }
+
         console.log("POST Body Keys:", Object.keys(req.body));
         console.log("POST Files Keys:", Object.keys(req.files || {}));
         
@@ -99,6 +104,11 @@ router.put("/:id", authenticate, requireAdmin, handleUpload, async (req, res) =>
         if (req.files?.guestImages?.length) {
             const newGuests = req.files.guestImages.map((f) => f.location);
             existing.guestImages = [...(existing.guestImages || []), ...newGuests];
+        }
+
+        // Update cardImage
+        if (req.files?.cardImage?.length) {
+            existing.cardImage = req.files.cardImage[0].location;
         }
 
         console.log("PUT Body Keys:", Object.keys(req.body));

@@ -78,7 +78,7 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                   {/* Description Paragraphs with Better Spacing */}
                   <div className="space-y-8 text-[#f5f3f0]/90 leading-relaxed text-lg lg:text-xl font-medium">
                     <p>
-                      <span className="text-[#ffd966] font-bold">Prime Time Research Media</span> has conducted multiple national and international awards and business summits in different countries such as <span className="bg-[#d4af37]/10 px-3 py-1 rounded-lg text-[#f1d46b] border border-[#d4af37]/20 font-bold">India, USA, Dubai, and UK</span> to recognize excellence in business, leadership, innovation, and professional achievements.
+                      <span className="text-[#ffd966] font-bold">Prime Time Research Media</span> has conducted multiple national and international awards and business summits in different countries such as <span className="bg-[#d4af37]/10 px-3 py-1 rounded-lg text-[#f1d46b] border border-[#d4af37]/20 font-bold">India, USA, Dubai and UK</span> to recognize excellence in business, leadership, innovation, and professional achievements.
                     </p>
                     <p className="border-l-4 border-[#d4af37]/30 pl-8 italic text-[#e6dfcc] text-xl lg:text-2xl leading-snug">
                       "These events honour individuals and organizations who have shown outstanding performance, dedication, and commitment in their respective fields."

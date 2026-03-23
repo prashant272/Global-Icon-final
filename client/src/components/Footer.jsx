@@ -26,7 +26,7 @@ export default function Footer() {
       ></div>
 
       {/* Main Footer Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16 md:py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16 md:py-10">
         <div className="
           grid 
           grid-cols-1 
@@ -347,7 +347,7 @@ export default function Footer() {
                 color: "transparent",
               }}
             >
-              Prime Impact IT Solutions
+              Prime Impact Solutions
             </span>
           </a>
         </div>

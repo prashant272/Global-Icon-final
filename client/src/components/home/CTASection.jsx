@@ -6,7 +6,7 @@ export default function CTASection({ handleNominateClick, sectionRefs, PRIMARY_B
         <div className="absolute bottom-0 right-1/4 w-64 sm:w-80 h-64 sm:h-80 bg-[#c62828]/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
       <div
-        ref={(el) => (sectionRefs.current[21] = el)}
+        ref={(el) => (sectionRefs.current[30] = el)}
         className="relative z-10 opacity-0 transform translate-y-8 transition-all duration-700 max-w-2xl md:max-w-4xl mx-auto px-4 sm:px-6"
       >
         <h2 className="text-xl xs:text-3xl md:text-5xl font-extrabold font-heading mb-4 md:mb-6 bg-gradient-to-r from-white via-[#d4af37] to-white bg-clip-text text-transparent">

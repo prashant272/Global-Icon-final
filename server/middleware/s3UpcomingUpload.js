@@ -33,4 +33,5 @@ export const uploadUpcomingFiles = upload.fields([
     { name: "banners", maxCount: 10 },
     { name: "guestImages", maxCount: 20 },
     { name: "winnerImages", maxCount: 20 },
+    { name: "cardImage", maxCount: 1 },
 ]);

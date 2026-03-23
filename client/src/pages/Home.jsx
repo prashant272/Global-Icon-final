@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -17,6 +17,7 @@ import Categories from "../components/home/Categories.jsx";
 import PreviousAwardees from "../components/home/PreviousAwardees.jsx";
 import PrestigiousAward from "../components/home/PrestigiousAward.jsx";
 import ReelsSection from "../components/home/ReelsSection.jsx";
+import { fetchUpcomingAwards } from "../services/api";
 
 // Centralized brand background
 const PRIMARY_BG = "bg-[#0a0503]";
@@ -28,11 +29,25 @@ export default function Home() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
   const sectionRefs = useRef([]);
+  const [dynamicUpcomingAwards, setDynamicUpcomingAwards] = useState([]);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.9;
     }
+  }, []);
+
+  useEffect(() => {
+    fetchUpcomingAwards()
+      .then((data) => {
+        // Map backend awards to match the static prop structure
+        const mapped = data.map((award) => ({
+          ...award,
+          banner: award.cardImage || (award.banners && award.banners.length > 0 ? award.banners[0] : "/images/hero-default.jpg")
+        }));
+        setDynamicUpcomingAwards(mapped);
+      })
+      .catch((err) => console.error("Error fetching upcoming awards:", err));
   }, []);
 
   useEffect(() => {
@@ -118,6 +133,14 @@ export default function Home() {
     { name: "Mr. Brad Hogg", designation: "Former Australian Cricketer" },
     { name: "Dr. Najma A. Heptulla", designation: "Former Governor, Manipur" },
     { name: "Shri Anand Kumar", designation: "Founder & Director, Super 30" },
+    { name: "Rita Bahuguna Joshi", designation: "Former Union Minister" },
+    { name: "Shri Shyam Jaju", designation: "Ex National Vice President (BJP)" },
+    { name: "Ms. Lara Dutta", designation: "Indian Actress & Model" },
+    { name: "Shri Anil K. Shastri", designation: "Son of Lal Bahadur Shastri; Former Ministry of Finance, Govt. of India." },
+    { name: "Shri Sandeep Patil", designation: "Former Indian Cricketer & Chief of the BCCI Selection Committee" },
+    { name: "Brett Lee", designation: "Australian Cricketer" },
+     { name: "Shri Amar Singh", designation: "Hon’ble Member of Parliament" },
+    { name: "Ms. Arti Mehra", designation: "CEO, NABH; Former Mayor, Municipal Corporation of Delhi" },
   ];
 
   // Previous Media Partners
@@ -136,53 +159,7 @@ export default function Home() {
     { logo: "../remont.jpg" },
   ];
 
-  const upcomingAwards = [
-    {
-      title: "14th Global Healthcare Awards & Summit 2026",
-      desc: "Honouring excellence, innovation, and leadership in the global healthcare industry.",
-      date: "26 April 2026",
-      location: "Dubai",
-      banner: "/healthcaredubai.png",
-      link: "https://www.globalhealthcareawards.com",
-      color: "from-[#ffecd2] to-[#fcb69f]"
-    },
-    {
-      title: "14th Global Icon Excellence Awards 2026",
-      desc: "Celebrating outstanding contributions and leadership in the education sector.",
-      date: "14 March 2026",
-      location: "New Delhi, India",
-      banner: "/educationdelhi.png",
-      link: "https://www.//https://globaleducationawards.in",
-      color: "from-[#e0c3fc] to-[#8ec5fc]"
-    },
-    {
-      title: "India Excellence Awards & Conference 2026",
-      desc: "Recognising excellence, innovation, and leadership across Indian industries.",
-      date: "14 March 2026",
-      location: "New Delhi, India",
-      banner: "/excellencedelhi.png",
-      link: "https://primetimemedia.in/india-excellence-awards-2026-summit/",
-      color: "from-[#fddb92] to-[#d1fdff]"
-    },
-    {
-      title: "Global Achievers Awards 2026",
-      desc: "Honouring global leaders and achievers across multiple industries.",
-      date: "9 June 2026",
-      location: "House of Commons, London",
-      banner: "/archiverlondon.png",
-      link: "https://www.primetimemedia.in/global-achievers-awards",
-      color: "from-[#cfd9df] to-[#e2ebf0]"
-    },
-    {
-      title: "USA Business Leadership Summit 2026",
-      desc: "A premier summit recognising visionary business leaders and entrepreneurs.",
-      date: "31 March 2026",
-      location: "Washington, DC, USA",
-      banner: "/USA.png",
-      link: "https://primetimemedia.in/united-state-program-2026/",
-      color: "from-[#fdfbfb] to-[#ebedee]"
-    }
-  ];
+
 
   const nomineeCategories = [
     { title: "Healthcare & Lifesciences", desc: "Honouring excellence in medical care, pharmaceuticals, biotechnology, and healthcare innovation.", icon: "🏥", color: "from-[#ffecd2] to-[#fcb69f]" },
@@ -287,7 +264,7 @@ export default function Home() {
       />
 
       <UpcomingAwards
-        upcomingAwards={upcomingAwards}
+        upcomingAwards={dynamicUpcomingAwards}
         HIGHLIGHT_BG={HIGHLIGHT_BG}
       />
 

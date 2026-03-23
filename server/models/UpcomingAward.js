@@ -13,6 +13,7 @@ const upcomingAwardSchema = new mongoose.Schema(
       image: { type: String, required: true }
     }],
     link: { type: String, default: "" },
+    cardImage: { type: String, default: "" },
     slug: { type: String, unique: true, sparse: true },
     isActive: { type: Boolean, default: true },
   },

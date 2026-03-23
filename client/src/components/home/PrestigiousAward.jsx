@@ -29,7 +29,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
     "Prime Time Research Media presents Invest India Summit 2026 – UK Edition, a global platform focused on investment, business growth, and international leadership. The summit connects entrepreneurs, professionals, and organizations to global markets and strategic opportunities in London, UK.",
   highlight: "Fostering Investment, Leadership, and Global Opportunities.",
   image: "/Awards/uk.png",
-  reverse: true,
+  reverse: false,
   link: "https://www.globaliconawards.in/upcoming-awards/invest-india-summit-2026---uk-edition"
 },
   ];

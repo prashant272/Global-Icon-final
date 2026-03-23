@@ -167,17 +167,18 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="mt-auto flex flex-col sm:flex-row gap-3">
+                    <div className="mt-auto flex flex-col sm:flex-row gap-4">
                       <button
                         onClick={() => handleNominateClick(event.title)}
-                        className="flex-1 relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-4 py-2.5 text-xs md:text-sm font-black uppercase tracking-wider text-[#644b0d] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 group/btn"
-                        style={{ letterSpacing: '0.065em' }}
+                        className="flex-1 relative overflow-hidden rounded-xl bg-gradient-to-br from-[#f7e1a0] via-[#d4af37] to-[#b6932f] px-6 py-3 text-xs md:text-sm font-black uppercase tracking-[0.15em] text-[#2c2208] shadow-[0_10px_30px_rgba(212,175,55,0.3)] hover:shadow-[0_20px_50px_rgba(212,175,55,0.5)] transition-all duration-500 hover:-translate-y-1 active:scale-95 group/btn border border-white/20"
                       >
-                        <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.5)_50%,rgba(255,255,255,0)_80%)] -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out" />
-                        <span className="relative z-10 flex items-center justify-center gap-1.5">
+                        {/* Shimmer Effect */}
+                        <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.6)_50%,rgba(255,255,255,0)_80%)] -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out" />
+                        
+                        <span className="relative z-10 flex items-center justify-center gap-2">
                           Nominate
-                          <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                          <svg className="w-4 h-4 transition-transform duration-500 group-hover/btn:translate-x-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                           </svg>
                         </span>
                       </button>
@@ -187,13 +188,15 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
                           href={event.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 relative overflow-hidden rounded-full border border-[#d4af37]/50 bg-white/5 backdrop-blur-sm px-4 py-2.5 text-xs md:text-sm font-black uppercase tracking-wider text-[#d4af37] shadow-md hover:bg-[#d4af37] hover:text-black transition-all duration-300 hover:scale-[1.03] active:scale-95 group/info"
-                          style={{ letterSpacing: '0.065em' }}
+                          className="flex-1 relative overflow-hidden rounded-xl border-2 border-[#d4af37]/40 bg-white/5 backdrop-blur-md px-6 py-3 text-xs md:text-sm font-black uppercase tracking-[0.15em] text-[#ffd966] shadow-xl hover:bg-[#d4af37] hover:text-[#0a0503] hover:border-[#d4af37] transition-all duration-500 hover:-translate-y-1 active:scale-95 group/info"
                         >
-                          <span className="relative z-10 flex items-center justify-center gap-1.5">
+                          {/* Inner Glow Hover */}
+                          <div className="absolute inset-0 bg-[#d4af37]/0 group-hover/info:bg-[#d4af37]/10 transition-colors duration-500" />
+                          
+                          <span className="relative z-10 flex items-center justify-center gap-2">
                             More Info
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg className="w-5 h-5 transition-transform duration-500 group-hover/info:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                           </span>
                         </a>

@@ -12,6 +12,9 @@ const emptyForm = {
   guestFiles: [],
   guestPreviews: [],
   link: "",
+  cardImage: "",
+  cardImageFile: null,
+  cardImagePreview: "",
   isActive: true,
   winners: [], // [{ name: "", file: null, preview: "" }]
 };
@@ -56,6 +59,15 @@ export default function AdminUpcomingAwardsTab() {
         guestFiles: [...(f.guestFiles || []), ...newFiles],
         guestPreviews: [...(f.guestPreviews || []), ...newPreviews],
       }));
+    } else if (name === "cardImage" && type === "file") {
+      const file = files[0];
+      if (file) {
+        setForm((f) => ({
+          ...f,
+          cardImageFile: file,
+          cardImagePreview: URL.createObjectURL(file),
+        }));
+      }
     } else {
       setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
     }
@@ -171,6 +183,9 @@ export default function AdminUpcomingAwardsTab() {
       guestFiles: [],
       guestPreviews: [],
       link: award.link || "",
+      cardImage: award.cardImage || "",
+      cardImageFile: null,
+      cardImagePreview: "",
       isActive: award.isActive !== false,
       winners: [], 
     });
@@ -197,6 +212,7 @@ export default function AdminUpcomingAwardsTab() {
       fd.append("desc", form.desc);
       fd.append("link", form.link);
       fd.append("isActive", form.isActive);
+      if (form.cardImageFile) fd.append("cardImage", form.cardImageFile);
       form.bannerFiles.forEach((f) => fd.append("banners", f));
       form.guestFiles.forEach((f) => fd.append("guestImages", f));
 
@@ -291,6 +307,37 @@ export default function AdminUpcomingAwardsTab() {
           <div className="md:col-span-2">
             <label className="text-[10px] uppercase tracking-widest text-[#d4af37] font-bold block mb-1">Website / Registration Link</label>
             <input name="link" value={form.link} onChange={handleChange} placeholder="https://..." className={inputCls} />
+          </div>
+
+          {/* Card Image (Homepage) */}
+          <div className="md:col-span-2 border-t border-[#d4af37]/10 pt-4 mt-2">
+            <label className="text-[10px] uppercase tracking-widest text-[#d4af37] font-bold block mb-2">Card Image (Specific image for Home page card)</label>
+            
+            <div className="flex items-center gap-4 mb-3">
+              {(form.cardImage || form.cardImagePreview) && (
+                <div className="relative group">
+                  <img 
+                    src={form.cardImagePreview || form.cardImage} 
+                    alt="Card Preview" 
+                    className="w-32 h-20 object-cover rounded-lg border border-[#d4af37]/40 shadow-lg" 
+                  />
+                  {form.cardImagePreview && (
+                    <span className="absolute bottom-0 left-0 right-0 text-center text-[10px] bg-green-500 text-white rounded-b-lg font-bold">New Selection</span>
+                  )}
+                </div>
+              )}
+              <div className="flex-1">
+                <input 
+                  type="file" 
+                  name="cardImage" 
+                  accept="image/*" 
+                  onChange={handleChange}
+                  className="w-full text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#d4af37]/20 file:text-[#fae36f] file:font-bold hover:file:bg-[#d4af37]/40 cursor-pointer" 
+                />
+                <p className="text-[10px] text-gray-500 mt-1">If not provided, the first Banner image will be used on the homepage.</p>
+                <p className="text-[10px] text-[#fae36f]/60 mt-0.5 font-bold italic">Recommended size: 800 x 1000 px (Portrait Aspect Ratio)</p>
+              </div>
+            </div>
           </div>
 
           {/* Description */}

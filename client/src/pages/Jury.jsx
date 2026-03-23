@@ -16,12 +16,13 @@ export default function Jury() {
     { name: "Mr. Brad Hogg", designation: "Former Australian Cricketer" },
     { name: "Dr. Najma A. Heptulla", designation: "Former Governor, Manipur" },
     { name: "Shri Anand Kumar", designation: "Founder & Director, Super 30" },
-    { name: "Shri Amar Singh", designation: "Hon’ble Member of Parliament" },
-    { name: "Ms. Arti Mehra", designation: "CEO, NABH; Former Mayor, Municipal Corporation of Delhi" },
+    { name: "Rita Bahuguna Joshi", designation: "Former Union Minister" },
+    { name: "Shri Shyam Jaju", designation: "Ex National Vice President (BJP)" },
     { name: "Ms. Lara Dutta", designation: " Indian actress, model" },
     { name: "Shri Anil K. Shastri", designation: "Son of Lal Bahadur Shastri; Former Ministry of Finance, Govt. of India." },
     { name: "Shri Sandeep Patil", designation: "Former Indian Cricketer & Chief of the BCCI Selection Committee" },
     { name: "Brett Lee", designation: "Australian Cricketer" },
+     { name: "Shri Amar Singh", designation: "Hon’ble Member of Parliament" },
     { name: "Ms. Arti Mehra", designation: "CEO, NABH; Former Mayor, Municipal Corporation of Delhi" },
   ];
 
