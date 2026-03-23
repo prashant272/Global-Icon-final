@@ -2,6 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { getAwardName } from "../../utils/brand.js";
 
 export default function Hero({ videoRef, events, handleNominateClick }) {
   return (
