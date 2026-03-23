@@ -939,7 +939,7 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <h2 className="text-3xl font-black text-white tracking-tight">Nomination Profile</h2>
-                <p className="text-[#d4af37] font-bold text-sm tracking-[0.2em] uppercase">Global Icon Awards 2026</p>
+                <p className="text-[#d4af37] font-bold text-sm tracking-[0.2em] uppercase">{viewingNomination.awardName || "Global Icon Awards"}</p>
               </div>
             </div>
 
@@ -1077,6 +1077,17 @@ export default function AdminDashboard() {
 
             <h2 className="text-2xl font-bold mb-4 text-[#ffe6a3]">Edit Nomination Details</h2>
             <div className="grid md:grid-cols-2 gap-6">
+              <div className="md:col-span-2">
+                <label className="text-xs text-[#f6e589] font-semibold">Award Name (Summit/Event)</label>
+                <input
+                  className={inputClass}
+                  value={editForm.awardName || ""}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, awardName: e.target.value })
+                  }
+                  placeholder="e.g. India Excellence Awards 2026"
+                />
+              </div>
               <div>
                 <label className="text-xs text-[#f6e589] font-semibold">Nominee Name</label>
                 <input

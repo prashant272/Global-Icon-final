@@ -85,7 +85,7 @@ export default function UpcomingAwardDetail() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.05),transparent_70%)]" />
         <div className="absolute top-0 left-0 w-full h-full opacity-30">
           {[...Array(20)].map((_, i) => (
-            <div 
+            <div
               key={i}
               className="absolute bg-[#d4af37] rounded-full blur-[1px] animate-float-gold"
               style={{
@@ -146,10 +146,10 @@ export default function UpcomingAwardDetail() {
             >
               {banners.map((url, i) => (
                 <SwiperSlide key={i} className="relative w-full h-full">
-                  <img 
-                    src={url} 
-                    alt={`${award.title} banner ${i + 1}`} 
-                    className="w-full h-full object-cover scale-105 group-hover:scale-100 transition duration-1000" 
+                  <img
+                    src={url}
+                    alt={`${award.title} banner ${i + 1}`}
+                    className="w-full h-full object-cover scale-105 group-hover:scale-100 transition duration-1000"
                   />
                   {/* Subtle Gradient for readability - matching EditionDetail style */}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60 pointer-events-none" />
@@ -158,7 +158,7 @@ export default function UpcomingAwardDetail() {
             </Swiper>
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-[#0a0503] to-[#0f0805] flex items-center justify-center">
-               <div className="bg-[#d4af37]/10 px-6 py-2 rounded-full border border-[#d4af37]/30">
+              <div className="bg-[#d4af37]/10 px-6 py-2 rounded-full border border-[#d4af37]/30">
                 <p className="text-[#ffd788] font-black tracking-widest uppercase">Global Icon Awards</p>
               </div>
             </div>
@@ -186,7 +186,7 @@ export default function UpcomingAwardDetail() {
             {/* Title Card */}
             <div className="bg-gradient-to-br from-[#0a0503]/95 to-[#0f0805]/90 backdrop-blur-md border border-[#d4af37]/25 rounded-[3rem] p-8 sm:p-14 shadow-[0_20px_80px_rgba(0,0,0,0.7)] relative overflow-hidden group flex-grow">
               <div className="absolute -top-20 -right-20 w-48 h-48 bg-[#d4af37]/10 blur-[100px] rounded-full" />
-              
+
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-heading leading-tight mb-10 bg-gradient-to-r from-[#fff8e7] via-[#ffd966] to-[#d4af37] bg-clip-text text-transparent drop-shadow-2xl">
                 {award.title}
               </h1>
@@ -233,7 +233,7 @@ export default function UpcomingAwardDetail() {
             <div className="sticky top-32 space-y-10">
               <div className="bg-gradient-to-br from-[#0a0503] to-[#0f0805] border border-[#d4af37]/40 rounded-[4rem] p-10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group shine-effect">
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
-                
+
                 <h3 className="text-xl font-black text-[#ffd966] mb-12 tracking-[0.25em] uppercase flex items-center gap-4">
                   <span className="w-3 h-3 rounded-full bg-green-500 animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.6)]" />
                   Nominations Open
@@ -270,12 +270,12 @@ export default function UpcomingAwardDetail() {
                       Register Now
                     </a>
                   )}
-                  <button onClick={() => navigate("/nominate")} className="flex items-center justify-center bg-white/5 border border-white/15 text-white font-black w-full py-6 rounded-3xl text-sm uppercase tracking-[0.15em] hover:bg-white/10 hover:border-white/30 transition-all duration-500">
+                  <button onClick={() => navigate(`/nominate?award=${encodeURIComponent(award.title)}`)} className="flex items-center justify-center bg-white/5 border border-white/15 text-white font-black w-full py-6 rounded-3xl text-sm uppercase tracking-[0.15em] hover:bg-white/10 hover:border-white/30 transition-all duration-500">
                     Self Nominate
                   </button>
                 </div>
               </div>
-              
+
               <div className="bg-black/50 border border-[#d4af37]/20 p-8 rounded-[3rem] flex items-center gap-6 shadow-2xl backdrop-blur-md">
                 <span className="text-5xl drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]">🛡️</span>
                 <p className="text-[10px] text-[#ffd966] font-black uppercase tracking-[0.25em] leading-relaxed italic">The World's Most Trusted Recognition Hub</p>
@@ -288,134 +288,134 @@ export default function UpcomingAwardDetail() {
       {/* ===== GLOBAL ESTEEMED GUESTS (Enrichment) ===== */}
       <div className="mt-12 relative z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-[#d4af37]/5 via-transparent to-transparent -z-10 blur-[100px]" />
-        <Guests 
-          guests={globalGuests} 
-          sectionRefs={sectionRefs} 
-          HIGHLIGHT_BG="bg-transparent" 
+        <Guests
+          guests={globalGuests}
+          sectionRefs={sectionRefs}
+          HIGHLIGHT_BG="bg-transparent"
         />
       </div>
 
       {/* ===== FULL WIDTH IMMERSIVE SECTIONS (Optimized Spacing) ===== */}
       <div className="space-y-16 sm:space-y-24 mt-12">
-          
-          {/* REELS & SHORTS SECTION WITH DIVIDER */}
-          <div className="relative pt-4">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af3733] to-transparent" />
-            <ReelsSection SECTION_BG="bg-transparent" />
-          </div>
 
-          {/* STORY SECTION - CINEMATIC BOX */}
-          <section className="relative overflow-hidden group py-10 px-4 sm:px-0">
-            <div className="absolute inset-0 bg-[#d4af37]/5 -z-10 rounded-[6rem] border border-[#d4af37]/20 backdrop-blur-3xl" />
-            <div className="max-w-5xl mx-auto p-10 sm:p-24 text-center">
-              <h2 className="text-4xl sm:text-5xl font-black text-[#ffd966] mb-12 uppercase tracking-tighter">The Visionary Journey</h2>
-              <div className="text-lg sm:text-2xl text-white/90 leading-relaxed space-y-8 font-bold max-w-4xl mx-auto italic drop-shadow-lg">
-                <p>"We don't just give awards. We create legends. Our story is built on the sweat and brilliance of those who dare to lead."</p>
-                <p className="text-base sm:text-lg font-black text-[#d4af37] not-italic uppercase tracking-[0.3em] pt-8">— Prime Time Research Media</p>
+        {/* REELS & SHORTS SECTION WITH DIVIDER */}
+        <div className="relative pt-4">
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af3733] to-transparent" />
+          <ReelsSection SECTION_BG="bg-transparent" />
+        </div>
+
+        {/* STORY SECTION - CINEMATIC BOX */}
+        <section className="relative overflow-hidden group py-10 px-4 sm:px-0">
+          <div className="absolute inset-0 bg-[#d4af37]/5 -z-10 rounded-[6rem] border border-[#d4af37]/20 backdrop-blur-3xl" />
+          <div className="max-w-5xl mx-auto p-10 sm:p-24 text-center">
+            <h2 className="text-4xl sm:text-5xl font-black text-[#ffd966] mb-12 uppercase tracking-tighter">The Visionary Journey</h2>
+            <div className="text-lg sm:text-2xl text-white/90 leading-relaxed space-y-8 font-bold max-w-4xl mx-auto italic drop-shadow-lg">
+              <p>"We don't just give awards. We create legends. Our story is built on the sweat and brilliance of those who dare to lead."</p>
+              <p className="text-base sm:text-lg font-black text-[#d4af37] not-italic uppercase tracking-[0.3em] pt-8">— Prime Time Research Media</p>
+            </div>
+          </div>
+        </section>
+
+        {/* PREVIOUS WINNERS - SQUARE IMPACT GRID (Original if exists) */}
+        {award.previousWinners?.length > 0 && (
+          <div className="relative">
+            <div className="flex flex-col items-center mb-24 text-center px-4">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-widest">Excellence Registry</h2>
+              <div className="flex items-center gap-6">
+                <div className="h-px w-12 sm:w-20 bg-[#d4af37]" />
+                <p className="text-xs font-black text-[#ffd966] uppercase tracking-[0.5em]">The Legacy Continues</p>
+                <div className="h-px w-12 sm:w-20 bg-[#d4af37]" />
               </div>
             </div>
-          </section>
 
-          {/* PREVIOUS WINNERS - SQUARE IMPACT GRID (Original if exists) */}
-          {award.previousWinners?.length > 0 && (
-            <div className="relative">
-               <div className="flex flex-col items-center mb-24 text-center px-4">
-                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 uppercase tracking-widest">Excellence Registry</h2>
-                <div className="flex items-center gap-6">
-                  <div className="h-px w-12 sm:w-20 bg-[#d4af37]" />
-                  <p className="text-xs font-black text-[#ffd966] uppercase tracking-[0.5em]">The Legacy Continues</p>
-                  <div className="h-px w-12 sm:w-20 bg-[#d4af37]" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                {award.previousWinners.map((w, i) => (
-                  <div key={w._id} className="group relative bg-[#0a0503] rounded-[4rem] overflow-hidden border border-white/5 hover:border-[#d4af37]/40 transition-all duration-[1.2s] hover:-translate-y-4 hover:shadow-[0_40px_80px_rgba(0,0,0,0.8)]">
-                    <div className="aspect-square overflow-hidden">
-                      <img src={w.image} alt={w.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[2s]" />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8">
-                      {w.name && (
-                        <div className="bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 transform translate-y-6 group-hover:translate-y-0 transition-all duration-700 shadow-3xl">
-                          <p className="text-[9px] text-[#ffd966] font-black uppercase tracking-[0.4em] mb-2 text-center opacity-80">Hall of Fame</p>
-                          <h4 className="text-white text-lg font-black text-center truncate tracking-tight">{w.name}</h4>
-                        </div>
-                      )}
-                    </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+              {award.previousWinners.map((w, i) => (
+                <div key={w._id} className="group relative bg-[#0a0503] rounded-[4rem] overflow-hidden border border-white/5 hover:border-[#d4af37]/40 transition-all duration-[1.2s] hover:-translate-y-4 hover:shadow-[0_40px_80px_rgba(0,0,0,0.8)]">
+                  <div className="aspect-square overflow-hidden">
+                    <img src={w.image} alt={w.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[2s]" />
                   </div>
-                ))}
-              </div>
-
-              {/* SECTION CTA */}
-              <div className="mt-20 flex justify-center">
-                <button 
-                  onClick={() => navigate("/nominate")}
-                  className="group relative px-12 py-5 bg-gradient-to-r from-[#d4af37] to-[#ffd966] rounded-full overflow-hidden shadow-[0_10px_40px_rgba(212,175,55,0.3)] transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_rgba(212,175,55,0.4)]"
-                >
-                  <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  <span className="relative z-10 text-black font-black text-[10px] uppercase tracking-[0.3em]">Become the Next Winner &mdash; Nominate Now</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* GLOBAL PREVIOUS AWARDEES (Brand Showcase) */}
-          <div className="relative pt-8 pb-12">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af3733] to-transparent" />
-            <PreviousAwardees />
-          </div>
-
-          {/* STATS STRIP */}
-          <section className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { label: "1,500+", sub: "Official Entries" },
-              { label: "60+", sub: "Unique Sectors" },
-              { label: "15+", sub: "Legacy Years" },
-              { label: "100%", sub: "Pure Transparency" }
-            ].map((item, i) => (
-              <div key={i} className="bg-[#0a0503] p-12 rounded-[3.5rem] border border-[#d4af37]/10 flex flex-col justify-center text-center group hover:bg-[#d4af37]/5 hover:border-[#d4af37]/30 transition-all duration-700">
-                <div className="text-4xl text-[#ffd966] font-black mb-4 group-hover:scale-110 transition-transform">{item.label}</div>
-                <div className="text-[9px] font-black text-[#d4af3780] uppercase tracking-[0.4em]">{item.sub}</div>
-              </div>
-            ))}
-          </section>
-
-          {/* SELECTION PROCESS - CINEMATIC STEPPER */}
-          <section className="bg-gradient-to-br from-[#0a0503] via-[#0f0805] to-[#040404] p-8 sm:p-16 lg:p-20 rounded-[4rem] border border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#d4af37]/10 blur-[150px] rounded-full animate-pulse" />
-            <h2 className="text-4xl sm:text-6xl font-black text-center mb-28 tracking-tighter leading-none relative z-10 transition-colors uppercase">
-              How Legends <span className="text-[#ffd966]">Are Born</span>
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 sm:gap-24 relative z-10">
-              {[
-                { title: "Filtering", desc: "We scan thousands of applications for real impact." },
-                { title: "Verification", desc: "Documents and ground work are checked by experts." },
-                { title: "Interview", desc: "Top names are called for a deep one-on-one session." },
-                { title: "Final Veto", desc: "The VVIP jury selects the absolute global icons." }
-              ].map((step, i) => (
-                <div key={i} className="relative group/step">
-                  <div className="text-[10rem] font-black text-[#d4af37]/5 group-hover/step:text-[#d4af37]/15 transition-all duration-1000 absolute -top-24 -left-8 select-none leading-none">0{i+1}</div>
-                  <div className="relative z-10 pt-10">
-                    <h4 className="text-2xl font-black text-[#ffd966] mb-5 uppercase tracking-tighter leading-none">{step.title}</h4>
-                    <div className="w-10 h-1 bg-[#d4af37] mb-5 group-hover/step:w-16 transition-all duration-700" />
-                    <p className="text-[10px] text-white/50 font-black leading-relaxed uppercase tracking-widest">{step.desc}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent flex flex-col justify-end p-8">
+                    {w.name && (
+                      <div className="bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-6 transform translate-y-6 group-hover:translate-y-0 transition-all duration-700 shadow-3xl">
+                        <p className="text-[9px] text-[#ffd966] font-black uppercase tracking-[0.4em] mb-2 text-center opacity-80">Hall of Fame</p>
+                        <h4 className="text-white text-lg font-black text-center truncate tracking-tight">{w.name}</h4>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
-          </section>
 
-          {/* FINAL CTA - MOBILE REPLICA */}
-          <div className="lg:hidden pb-20">
-            <div className="bg-gradient-to-br from-[#0a0503] to-[#0f0805] border border-[#d4af37]/40 rounded-[4rem] p-14 text-center shadow-[0_20px_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
-              <h3 className="text-3xl font-black text-white mb-8 tracking-tighter uppercase leading-none">Become a <span className="text-[#ffd966]">Global Icon</span></h3>
-              <p className="text-[#d4af3780] text-xs mb-12 font-black uppercase tracking-[0.2em]">Join the prestigious winner's circle.</p>
-              <div className="flex flex-col gap-5">
-                {award.link && (
-                  <a href={award.link} target="_blank" rel="noopener noreferrer" className="bg-[#d4af37] text-black font-black py-6 rounded-3xl text-xs uppercase tracking-[0.2em] shadow-2xl">Register Now</a>
-                )}
-                <button onClick={() => navigate("/nominate")} className="bg-white/5 border border-white/20 text-white font-black py-6 rounded-3xl text-xs uppercase tracking-[0.2em]">Contact Us</button>
+            {/* SECTION CTA */}
+            <div className="mt-20 flex justify-center">
+              <button
+                onClick={() => navigate(`/nominate?award=${encodeURIComponent(award.title)}`)}
+                className="group relative px-12 py-5 bg-gradient-to-r from-[#d4af37] to-[#ffd966] rounded-full overflow-hidden shadow-[0_10px_40px_rgba(212,175,55,0.3)] transition-all duration-500 hover:scale-105 hover:shadow-[0_20px_60px_rgba(212,175,55,0.4)]"
+              >
+                <div className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                <span className="relative z-10 text-black font-black text-[10px] uppercase tracking-[0.3em]">Become the Next Winner &mdash; Nominate Now</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* GLOBAL PREVIOUS AWARDEES (Brand Showcase) */}
+        <div className="relative pt-8 pb-12">
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4af3733] to-transparent" />
+          <PreviousAwardees />
+        </div>
+
+        {/* STATS STRIP */}
+        <section className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {[
+            { label: "1,500+", sub: "Official Entries" },
+            { label: "60+", sub: "Unique Sectors" },
+            { label: "15+", sub: "Legacy Years" },
+            { label: "100%", sub: "Pure Transparency" }
+          ].map((item, i) => (
+            <div key={i} className="bg-[#0a0503] p-12 rounded-[3.5rem] border border-[#d4af37]/10 flex flex-col justify-center text-center group hover:bg-[#d4af37]/5 hover:border-[#d4af37]/30 transition-all duration-700">
+              <div className="text-4xl text-[#ffd966] font-black mb-4 group-hover:scale-110 transition-transform">{item.label}</div>
+              <div className="text-[9px] font-black text-[#d4af3780] uppercase tracking-[0.4em]">{item.sub}</div>
+            </div>
+          ))}
+        </section>
+
+        {/* SELECTION PROCESS - CINEMATIC STEPPER */}
+        <section className="bg-gradient-to-br from-[#0a0503] via-[#0f0805] to-[#040404] p-8 sm:p-16 lg:p-20 rounded-[4rem] border border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.9)] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#d4af37]/10 blur-[150px] rounded-full animate-pulse" />
+          <h2 className="text-4xl sm:text-6xl font-black text-center mb-28 tracking-tighter leading-none relative z-10 transition-colors uppercase">
+            How Legends <span className="text-[#ffd966]">Are Born</span>
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 sm:gap-24 relative z-10">
+            {[
+              { title: "Filtering", desc: "We scan thousands of applications for real impact." },
+              { title: "Verification", desc: "Documents and ground work are checked by experts." },
+              { title: "Interview", desc: "Top names are called for a deep one-on-one session." },
+              { title: "Final Veto", desc: "The VVIP jury selects the absolute global icons." }
+            ].map((step, i) => (
+              <div key={i} className="relative group/step">
+                <div className="text-[10rem] font-black text-[#d4af37]/5 group-hover/step:text-[#d4af37]/15 transition-all duration-1000 absolute -top-24 -left-8 select-none leading-none">0{i + 1}</div>
+                <div className="relative z-10 pt-10">
+                  <h4 className="text-2xl font-black text-[#ffd966] mb-5 uppercase tracking-tighter leading-none">{step.title}</h4>
+                  <div className="w-10 h-1 bg-[#d4af37] mb-5 group-hover/step:w-16 transition-all duration-700" />
+                  <p className="text-[10px] text-white/50 font-black leading-relaxed uppercase tracking-widest">{step.desc}</p>
+                </div>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FINAL CTA - MOBILE REPLICA */}
+        <div className="lg:hidden pb-20">
+          <div className="bg-gradient-to-br from-[#0a0503] to-[#0f0805] border border-[#d4af37]/40 rounded-[4rem] p-14 text-center shadow-[0_20px_80px_rgba(0,0,0,0.8)] relative overflow-hidden">
+            <h3 className="text-3xl font-black text-white mb-8 tracking-tighter uppercase leading-none">Become a <span className="text-[#ffd966]">Global Icon</span></h3>
+            <p className="text-[#d4af3780] text-xs mb-12 font-black uppercase tracking-[0.2em]">Join the prestigious winner's circle.</p>
+            <div className="flex flex-col gap-5">
+              {award.link && (
+                <a href={award.link} target="_blank" rel="noopener noreferrer" className="bg-[#d4af37] text-black font-black py-6 rounded-3xl text-xs uppercase tracking-[0.2em] shadow-2xl">Register Now</a>
+              )}
+              <button onClick={() => navigate("/nominate")} className="bg-white/5 border border-white/20 text-white font-black py-6 rounded-3xl text-xs uppercase tracking-[0.2em]">Contact Us</button>
+            </div>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ const reels = [
     id: "uQVIrUzUtPY",
     title: "Global Icon Awards | Ceremony Moments",
   },
-  {
+  { 
     id: "wQyIGMZnkQg",
     title: "Business & Leadership Summit | Award Reel",
   },

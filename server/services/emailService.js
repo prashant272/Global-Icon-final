@@ -57,7 +57,7 @@ export const sendOTP = async (email, otp) => {
  * If `password` is provided, an account-credentials section is included.
  * Otherwise, only the nomination confirmation is sent.
  */
-export const sendNominationConfirmation = async (email, name, password = null) => {
+export const sendNominationConfirmation = async (email, name, awardName = "Global Icon Awards", password = null) => {
   const currentTransporter = getTransporter();
 
   const credentialsSection = password ? `
@@ -80,14 +80,14 @@ export const sendNominationConfirmation = async (email, name, password = null) =
   ` : "";
 
   const mailOptions = {
-    from: `"Global Icon Awards" <${process.env.BREVO_FROM_EMAIL}>`,
+    from: `"${awardName}" <${process.env.BREVO_FROM_EMAIL}>`,
     to: email,
-    subject: "Nomination Received - Global Icon Awards",
+    subject: `Nomination Received - ${awardName}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #d4af37; border-radius: 10px; background-color: #ffffff;">
         <h2 style="color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px;">Submission Successful!</h2>
         <p>Dear <strong>${name}</strong>,</p>
-        <p>Your nomination has been successfully received. Our team will connect with you after reviewing the profile.</p>
+        <p>Your nomination for <strong>${awardName}</strong> has been successfully received. Our team will connect with you after reviewing the profile.</p>
 
         ${credentialsSection}
 
@@ -98,7 +98,7 @@ export const sendNominationConfirmation = async (email, name, password = null) =
           <p style="margin-bottom: 0;"><strong>Sponsorship:</strong> 📞 +91 9810 91 0686</p>
         </div>
 
-        <p>Regards,<br><strong>Global Icon Awards Team</strong></p>
+        <p>Regards,<br><strong>${awardName} Team</strong></p>
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
         <p style="font-size: 12px; color: #777; text-align: center;">
           &copy; 2026 Prime Time Research Media Pvt. Ltd. All rights reserved.

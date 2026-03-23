@@ -114,7 +114,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
 
               <div className="pt-3 md:pt-4 flex flex-wrap gap-3 md:gap-4 items-center">
                 <a
-                  href="/nominate"
+                  href={`/nominate?award=${encodeURIComponent(sec.title)}`}
                   className="inline-flex items-center gap-2 px-4 md:px-6 py-2.5 md:py-3.5 rounded-xl bg-[#d4af37] hover:bg-[#f1d46b] text-black font-black text-xs md:text-sm uppercase tracking-widest shadow-lg transition-all duration-300 hover:-translate-y-1 active:scale-95"
                 >
                   Nominate Now

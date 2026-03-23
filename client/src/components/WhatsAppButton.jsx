@@ -1,9 +1,41 @@
+import { useLocation } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 
 export default function WhatsAppButton() {
+    const location = useLocation();
+    
+    const getDynamicMessage = () => {
+        const hostname = window.location.hostname;
+        const path = location.pathname;
+
+        // 1. Check Subdomain (e.g., healthcare.globaliconawards.in)
+        const parts = hostname.split('.');
+        if (parts.length > 2) {
+            const subdomain = parts[0];
+            // Ignore www and common local development hosts
+            if (subdomain !== 'www' && subdomain !== 'localhost' && !subdomain.includes('127-0-0-1')) {
+                const displayName = subdomain
+                    .split("-")
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ");
+                return `Hello, I'm interested in the ${displayName}.`;
+            }
+        }
+
+        // 2. Check Path (Upcoming Awards or Editions)
+        if (path.includes("/upcoming-awards/") || path.includes("/editions/")) {
+            const slug = path.split("/").filter(Boolean).pop();
+            const displayName = slug
+                .split("-")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ");
+            return `Hello, I'm interested in the ${displayName}.`;
+        }
+        return "Hello, I'm interested in the Global Icon Awards.";
+    };
+
     const whatsappNumber = "+91 9810 91 0686";
-    const message = "Hello, I'm interested in the Global Icon Awards.";
-    const encodedMessage = encodeURIComponent(message);
+    const encodedMessage = encodeURIComponent(getDynamicMessage());
     const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodedMessage}`;
 
     return (

@@ -122,7 +122,12 @@ router.post("/", optionalAuthenticate, upload.single("pdf"), async (req, res) =>
     const confirmationName = userForEmail.name;
 
     // Send single combined email (includes credentials section if auto-created)
-    sendNominationConfirmation(confirmationEmail, confirmationName, autoCreated ? passwordPlain : null).catch(err =>
+    sendNominationConfirmation(
+      confirmationEmail,
+      confirmationName,
+      nomination.awardName || "Global Icon Awards",
+      autoCreated ? passwordPlain : null
+    ).catch(err =>
       console.error("Async confirmation email error:", err)
     );
 

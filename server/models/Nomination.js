@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const nominationSchema = new mongoose.Schema(
   {
+    awardName: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     participationType: {
       type: String,
       required: true,

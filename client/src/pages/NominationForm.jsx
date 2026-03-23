@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FiArrowLeft, FiX, FiRefreshCcw } from "react-icons/fi";
 import { Crown } from "lucide-react";
 import { createNomination, fetchNominationById, updateUserNomination } from "../services/api.js";
@@ -1578,10 +1578,25 @@ const initialForm = {
 
 export default function NominationForm() {
   const { id } = useParams();
+  const location = useLocation();
   const { token, user: authUser } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState(initialForm);
+  const queryParams = new URLSearchParams(location.search);
+  const awardFromQuery = queryParams.get("award");
+
+  const awardsList = useMemo(() => {
+    const list = [...AVAILABLE_AWARDS];
+    if (awardFromQuery && !list.includes(awardFromQuery)) {
+      list.unshift(awardFromQuery);
+    }
+    return list;
+  }, [awardFromQuery]);
+
+  const [form, setForm] = useState({
+    ...initialForm,
+    awardName: awardFromQuery || AVAILABLE_AWARDS[0]
+  });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -1902,7 +1917,7 @@ export default function NominationForm() {
                   onChange={handleChange}
                   className="w-full bg-[#0a0503] border-2 border-[#d4af37]/30 rounded-2xl px-6 py-4 text-white text-lg font-bold outline-none transition-all duration-300 focus:border-[#ffb400] focus:ring-4 focus:ring-[#ffb400]/10 appearance-none cursor-pointer shadow-2xl"
                 >
-                  {AVAILABLE_AWARDS.map((award) => (
+                  {awardsList.map((award) => (
                     <option key={award} value={award} className="bg-black text-white">
                       {award}
                     </option>

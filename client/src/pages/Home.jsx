@@ -103,8 +103,8 @@ export default function Home() {
 
   // Guest Data
   const guests = [
-    { name: "Virender Sehwag", designation: "Indian Cricket Commentator & Former Cricketer" },
-    { name: "Sunil Manohar Gavaskar", designation: "Indian Cricket Commentator & Former Cricketer" },
+    { name: "Shri Virender Sehwag", designation: "Indian Cricket Commentator & Former Cricketer" },
+    { name: "Shri Sunil Gavaskar", designation: "Indian Cricket Commentator & Former Cricketer" },
     { name: "Shri Ashwini Kumar Choubey", designation: "Guest of Honour & Former Union Minister" },
     { name: "Dr. Yoganand Shashtri", designation: "Former Reader, Shaheed Bhagat Singh College, Delhi" },
     { name: "Shri G. V. L. Narsimha Rao", designation: "National Spokesperson, BJP" },
