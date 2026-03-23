@@ -30,9 +30,11 @@ app.use(cors({
     "https://globaleducationawards.in",
     "https://api.globaleducationawards.in",
     "https://business-leadership.primetimemedia.in",
-    "https://investmentindia.primetimemedia.in",
+    "https://investment-india.primetimemedia.in",
     "https://www.globaliconawards.in",
     "https://globaliconawards.in",
+    "https://global-icon.primetimemedia.in",
+    "https://india-excellence.primetimemedia.in",
     "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
