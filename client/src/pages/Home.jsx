@@ -58,8 +58,12 @@ export default function Home() {
     };
   }, []);
 
-  const handleNominateClick = () => {
-    navigate("/nominate");
+  const handleNominateClick = (awardName) => {
+    if (typeof awardName === "string") {
+      navigate(`/nominate?award=${encodeURIComponent(awardName)}`);
+    } else {
+      navigate("/nominate");
+    }
   };
 
   // Event Data

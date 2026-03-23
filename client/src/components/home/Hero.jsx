@@ -169,7 +169,7 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
                     {/* Nominate Button */}
                     <div className="mt-auto">
                       <button
-                        onClick={handleNominateClick}
+                        onClick={() => handleNominateClick(event.title)}
                         className="w-full relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-6 py-2.5 text-sm md:text-base font-black uppercase tracking-wider text-[#644b0d] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 group/btn"
                         style={{ letterSpacing: '0.065em' }}
                       >
