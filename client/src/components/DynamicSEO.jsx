@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getAwardName } from "../utils/brand";
 
@@ -9,130 +9,117 @@ const DynamicSEO = () => {
   const location = useLocation();
   const awardName = getAwardName();
 
+  const [customSEO, setCustomSEO] = useState(null);
+
   useEffect(() => {
-    // 1. Determine the path-specific title
+    const handleSEOUpdate = (e) => {
+      setCustomSEO(e.detail);
+    };
+    window.addEventListener("updateSEO", handleSEOUpdate);
+    return () => {
+      window.removeEventListener("updateSEO", handleSEOUpdate);
+      setCustomSEO(null); // Reset on unmount/route change
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
     let pageTitle = "";
+    let pageDesc = "";
+    let pageKeywords = [];
     const path = location.pathname;
 
-    if (path === "/") {
-      pageTitle = "Home";
-    } else if (path.startsWith("/categories")) {
-      pageTitle = "Award Categories";
-    } else if (path.startsWith("/nominate")) {
-      pageTitle = "Nomination Form";
-    } else if (path.startsWith("/jury")) {
-      pageTitle = "Jury Members";
-    } else if (path.startsWith("/guidelines")) {
-      pageTitle = "Entry Guidelines";
-    } else if (path.startsWith("/judging")) {
-      pageTitle = "Judging Process";
-    } else if (path.startsWith("/contact")) {
-      pageTitle = "Contact Us";
-    } else if (path.startsWith("/media")) {
-      pageTitle = "Media & Gallery";
-    } else if (path.startsWith("/faq")) {
-      pageTitle = "Frequently Asked Questions";
-    } else if (path.startsWith("/editions")) {
-      pageTitle = "Previous Edition";
-    } else if (path.startsWith("/upcoming-awards")) {
-      pageTitle = "Award Details";
-    } else if (path.startsWith("/login")) {
-      pageTitle = "Login";
-    } else if (path.startsWith("/register")) {
-      pageTitle = "Register";
-    } else if (path.startsWith("/dashboard")) {
-      pageTitle = "User Dashboard";
-    } else if (path.startsWith("/success")) {
-      pageTitle = "Success";
+    // 1. Determine the path-specific title and description
+    if (customSEO) {
+      pageTitle = customSEO.title || "";
+      pageDesc = customSEO.description || "";
+      pageKeywords = customSEO.keywords || [];
     } else {
-      pageTitle = "Celebrating Excellence";
+      if (path === "/") {
+        pageTitle = "Home";
+        pageDesc = `🏆 Official Website: Nominate now for ${awardName} 2026. Join India's most prestigious platform recognizing global leaders and elite organizations in Education, Healthcare, and Business.`;
+      } else if (path.startsWith("/categories")) {
+        pageTitle = "Award Categories";
+        pageDesc = `Explore 50+ prestigious award categories for ${awardName}. From Educational Excellence and Healthcare Innovation to Corporate Leadership and Entrepreneurship.`;
+      } else if (path.startsWith("/nominate")) {
+        pageTitle = "Nominate Now";
+        pageDesc = `Apply for the ${awardName} 2026. Submit your nomination today to secure your place among the industry legends and visionaries.`;
+      } else if (path.startsWith("/jury")) {
+        pageTitle = "Board of Experts & Jury";
+        pageDesc = `Meet the eminent board of experts and distinguished jury members presiding over the selection for ${awardName}.`;
+      } else if (path.startsWith("/guidelines")) {
+        pageTitle = "Official Guidelines";
+        pageDesc = `Detailed eligibility criteria and entry guidelines for the ${awardName}. Ensure your nomination meets the highest standards of excellence.`;
+      } else if (path.startsWith("/judging")) {
+        pageTitle = "Strict Selection Process";
+        pageDesc = `Discover our rigorous 4-step evaluation architecture: Nomination, Audit, Review, and Jury Finalization. Pure transparency in every award.`;
+      } else if (path.startsWith("/contact")) {
+        pageTitle = "Contact & Sponsorship";
+        pageDesc = `Connect with the Prime Time Research Media team for institutional nominations, corporate sponsorships, and partnership opportunities.`;
+      } else if (path.startsWith("/media")) {
+        pageTitle = "Hall of Fame & Gallery";
+        pageDesc = `Watch highlights, news coverage, and victory moments from the ${awardName} ceremonies and global summits.`;
+      } else if (path.startsWith("/faq")) {
+        pageTitle = "FAQs & Support";
+        pageDesc = `Get instant answers to questions about the nomination process, selection timelines, and category eligibility for ${awardName}.`;
+      } else if (path.startsWith("/editions")) {
+        pageTitle = "Previous Edition";
+        pageDesc = `Archive of previous editions of ${awardName}. Celebrating past winners and institutional excellence.`;
+      } else if (path.startsWith("/upcoming-awards")) {
+        pageTitle = "Upcoming Awards";
+        pageDesc = `Details of upcoming summits and ceremonies for ${awardName}. Stay updated with the latest event schedule.`;
+      } else {
+        pageTitle = "Excellence Awards";
+        pageDesc = `Celebrating absolute excellence with ${awardName} – India's most prestigious recognition platform.`;
+      }
     }
 
     // 2. Set the document title
-    const fullTitle = `${pageTitle} | ${awardName} - Prime Time Research Media`;
+    const fullTitle = pageTitle 
+      ? `${pageTitle} | ${awardName}` 
+      : `${awardName} - Prime Time Research Media`;
     document.title = fullTitle;
 
-    // 3. Construct Exhaustive Keywords (Better for SEO/Ranking)
+    // 3. Construct Keywords
     const baseKeywords = [
       awardName,
-      awardName.toLowerCase(),
       "Prime Time Research Media",
       "Excellence Awards 2026",
       "Leadership Awards",
       "Business Awards India",
-      "Educational Excellence Awards",
-      "Healthcare Excellence Awards",
-      "Top Real Estate Awards",
       "Global Business Summit",
       "Indian Icon Awards",
-      "International Achievement Awards",
-      "Corporate Leadership Excellence",
-      "Best Schools Awards",
-      "Top Hospital Awards",
-      "Entrepreneurship Awards",
-      window.location.hostname,
-      window.location.hostname.replace("www.", ""),
-      "Prime Time Awards",
-      "Nominate Now for Awards",
-      // Location Based
-      "Awards in Delhi",
-      "Awards in Mumbai",
-      "Awards in Dubai",
-      "Awards in London",
-      "Awards in Washington DC",
-      "International Business Awards",
-      "Global Leadership Summit",
-      // Specific requests
-      "Invest India Summit 2026",
-      "USA Business and Leadership Summit",
-      "UK Business Awards",
-      "India Excellence Awards",
-      "Global Education Excellence Awards",
-      "Global Icon Excellence Awards"
+      ...pageKeywords
     ];
 
-    // Add domain-specific keywords
-    if (awardName.includes("Education")) {
-      baseKeywords.push("Best College Awards", "Education Summit 2026", "Academic Excellence", "Teaching Awards", "Top University Awards India", "Education Innovation Awards");
-    } else if (awardName.includes("Icon")) {
-      baseKeywords.push("Global Icon Awards", "Indian Icon Awards", "Celebrity Awards", "Lifestyle Awards", "Fashion Awards", "Entertainment Excellence");
-    } else if (awardName.includes("Invest") || awardName.includes("Business") || awardName.includes("Leadership")) {
-      baseKeywords.push("Investment Summit", "Business Leadership", "Startup Awards", "MSME Awards", "Corporate Strategy Awards", "B2B Awards India");
-    } else if (awardName.includes("India Excellence")) {
-      baseKeywords.push("India Excellence Awards 2026", "National Business Awards", "Indian Leadership Awards");
-    }
-
     // 4. Update meta tags
-    updateMetaTag("description", `Join ${awardName} by Prime Time Research Media. Celebrating absolute excellence in Healthcare, Education, Business, Real Estate, and more. ${pageTitle} for the 2026 edition.`);
-    updateMetaTag("keywords", baseKeywords.join(", "));
+    updateMetaTag("description", pageDesc || `Join ${awardName} by Prime Time Research Media. Celebrating excellence in Healthcare, Education, and Business.`);
+    updateMetaTag("keywords", [...new Set(baseKeywords)].join(", "));
     
     // Open Graph & Twitter
     updateMetaProperty("og:title", fullTitle);
-    updateMetaProperty("og:description", `Nominate now for ${awardName}. Recognizing global leaders and elite organizations.`);
+    updateMetaProperty("og:description", pageDesc);
     updateMetaProperty("og:url", window.location.href);
     updateMetaProperty("og:site_name", awardName);
+    updateMetaTag("twitter:title", fullTitle);
+    updateMetaTag("twitter:description", pageDesc);
 
     // 5. Inject JSON-LD Schema
-    updateJSONLD({
+    const schema = {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": customSEO?.schemaType || "Organization",
       "name": awardName,
-      "alternateName": [awardName, "Prime Time Research Media Awards"],
       "url": window.location.origin,
       "logo": `${window.location.origin}/logo.png`,
-      "description": `Recognizing excellence and innovation through the prestigious ${awardName} by Prime Time Research Media.`,
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+91-9810882769",
-        "contactType": "Nominations"
-      },
-      "sameAs": [
-        "https://www.facebook.com/PrimeTimeResearchMedia",
-        "https://www.linkedin.com/company/prime-time-research-media-pvt-ltd"
-      ]
-    });
+      "description": pageDesc,
+    };
 
-  }, [location, awardName]);
+    if (customSEO?.schemaData) {
+      Object.assign(schema, customSEO.schemaData);
+    }
+
+    updateJSONLD(schema);
+
+  }, [location, awardName, customSEO]);
 
   return null; // This component doesn't render anything
 };

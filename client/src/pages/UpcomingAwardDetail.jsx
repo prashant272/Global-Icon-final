@@ -72,6 +72,25 @@ export default function UpcomingAwardDetail() {
       window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { 
         detail: `Hello, I'm interested in the ${award.title}.` 
       }));
+
+      // Update SEO
+      window.dispatchEvent(new CustomEvent("updateSEO", {
+        detail: {
+          title: award.title,
+          description: award.desc || `Join the prestigious ${award.title} by ${getAwardName()}. Nominate now for global recognition in excellence and leadership.`,
+          keywords: [award.title, "Upcoming Awards", "Nomination 2026", award.location || ""],
+          schemaType: "Event",
+          schemaData: {
+            "name": award.title,
+            "description": award.desc,
+            "startDate": award.date,
+            "location": {
+              "@type": "Place",
+              "name": award.location || "India"
+            }
+          }
+        }
+      }));
     }
     return () => {
       window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { detail: null }));

@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { getAwardName } from "../utils/brand";
 import { Mail, Phone, Globe, MapPin, Facebook, Instagram, Youtube, Linkedin, MessageCircle } from "lucide-react";
 
 const socialLinks = [
@@ -9,6 +11,16 @@ const socialLinks = [
 ];
 
 export default function Contact() {
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("updateSEO", {
+      detail: {
+        title: "Contact & Support",
+        description: `Get in touch with the team at ${getAwardName()} for nominations, partnerships, and sponsorships. We are here to help you achieve excellence.`,
+        keywords: ["Contact Us", "Sponsorship Inquiries", "Nomination Help", "Prime Time Research Media"],
+      }
+    }));
+  }, []);
+
   const phones = [
     {
       tel: "+911169268754",

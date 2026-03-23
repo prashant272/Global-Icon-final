@@ -1544,6 +1544,16 @@ export default function Categories() {
   const [activeSector, setActiveSector] = useState("Healthcare");
   const [expandedCategory, setExpandedCategory] = useState(null);
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("updateSEO", {
+      detail: {
+        title: `${activeSector} Award Categories`,
+        description: `Explore all award categories for ${activeSector} at the ${getAwardName()}. Nominate now for excellence in ${activeSector.toLowerCase()} and related fields.`,
+        keywords: [activeSector, "Award Categories", getAwardName(), "Nomination 2026"],
+      }
+    }));
+  }, [activeSector]);
+
   const sectors = Object.keys(fieldMap);
 
   return (

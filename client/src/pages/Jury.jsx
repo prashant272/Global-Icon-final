@@ -40,6 +40,15 @@ export default function Jury() {
       ?.querySelectorAll(".jury-card")
       .forEach((el) => observer.observe(el));
 
+    // Update SEO
+    window.dispatchEvent(new CustomEvent("updateSEO", {
+      detail: {
+        title: "Esteemed Jury & Guest Speakers",
+        description: `Meet the distinguished jury members and eminent guest speakers of ${getAwardName()}. Celebrating excellence with global icons.`,
+        keywords: ["Jury Members", "Guest Speakers", "Excellence Awards", "Virender Sehwag", "Sunil Gavaskar"],
+      }
+    }));
+
     return () => observer.disconnect();
   }, []);
 

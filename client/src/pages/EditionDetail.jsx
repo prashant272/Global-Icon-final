@@ -188,6 +188,24 @@ export default function EditionDetail() {
       window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { 
         detail: `Hello, I'm interested in the ${title} Edition of ${getAwardName()}.` 
       }));
+
+      // Update SEO
+      window.dispatchEvent(new CustomEvent("updateSEO", {
+        detail: {
+          title: `${title} Edition`,
+          description: `Celebrating absolute excellence at the ${title} ${getAwardName()}. Organized by Prime Time Research Media in ${edition.locations?.join(", ") || "India"}. View highlights, gallery, and winners.`,
+          keywords: [derivedYear, title, "Excellence Awards", ...(edition.locations || [])],
+          schemaType: "Event",
+          schemaData: {
+            "name": `${title} ${getAwardName()}`,
+            "startDate": derivedYear,
+            "location": {
+              "@type": "Place",
+              "name": edition.locations?.join(", ") || "India"
+            }
+          }
+        }
+      }));
     }
     return () => {
       window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { detail: null }));

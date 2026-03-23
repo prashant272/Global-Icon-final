@@ -1,6 +1,17 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getAwardName } from "../utils/brand";
 
 export default function Media() {
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("updateSEO", {
+      detail: {
+        title: "Media Coverage & Gallery",
+        description: `Explore the high-quality media coverage, event highlights, and press releases of ${getAwardName()}. See the excellence in action.`,
+        keywords: ["Media Gallery", "Press Release", "Award Event Highlights", "Global Icon News"],
+      }
+    }));
+  }, []);
   return (
     <section className="bg-[#0a0503] min-h-screen py-20 px-4 text-white relative overflow-hidden">
       {/* Subtle floating premium golden orbs */}

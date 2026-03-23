@@ -10,6 +10,9 @@ import previousEditionRoutes from "./routes/previousEditionRoutes.js";
 import upcomingAwardRoutes from "./routes/upcomingAwardRoutes.js";
 import passport from "./config/passport.js";
 
+import PreviousEdition from "./models/PreviousEdition.js";
+import UpcomingAward from "./models/UpcomingAward.js";
+
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -107,12 +110,12 @@ Sitemap: ${protocol}://${host}/sitemap.xml
 });
 
 // Dynamic Sitemap.xml
-app.get("/sitemap.xml", (req, res) => {
+app.get("/sitemap.xml", async (req, res) => {
   const host = req.hostname;
   const protocol = req.protocol;
   const baseUrl = `${protocol}://${host}`;
 
-  const pages = [
+  const staticPages = [
     "",
     "/categories",
     "/nominate",
@@ -125,21 +128,37 @@ app.get("/sitemap.xml", (req, res) => {
     "/terms"
   ];
 
-  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  try {
+    // Fetch dynamic pages
+    const [editions, awards] = await Promise.all([
+      PreviousEdition.find({}, "slug year"),
+      UpcomingAward.find({ isActive: true }, "slug")
+    ]);
 
-  pages.forEach(page => {
-    xml += '  <url>\n';
-    xml += `    <loc>${baseUrl}${page}</loc>\n`;
-    xml += '    <changefreq>weekly</changefreq>\n';
-    xml += '    <priority>' + (page === "" ? "1.0" : "0.8") + '</priority>\n';
-    xml += '  </url>\n';
-  });
+    const editionPages = editions.map(e => `/editions/${e.slug || e.year}`);
+    const awardPages = awards.map(a => `/upcoming-awards/${a.slug}`);
 
-  xml += '</urlset>';
-  
-  res.type("application/xml");
-  res.send(xml);
+    const allPages = [...staticPages, ...editionPages, ...awardPages];
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+    allPages.forEach(page => {
+      xml += '  <url>\n';
+      xml += `    <loc>${baseUrl}${page}</loc>\n`;
+      xml += '    <changefreq>weekly</changefreq>\n';
+      xml += '    <priority>' + (page === "" ? "1.0" : "0.8") + '</priority>\n';
+      xml += '  </url>\n';
+    });
+
+    xml += '</urlset>';
+    
+    res.type("application/xml");
+    res.send(xml);
+  } catch (error) {
+    console.error("Sitemap generation error:", error);
+    res.status(500).send("Error generating sitemap");
+  }
 });
 
 /**
