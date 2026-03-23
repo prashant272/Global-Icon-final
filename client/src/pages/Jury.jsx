@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { getAwardName } from "../utils/brand.js";
 
 // Note to maintainers: 
 // - Custom hex colors like #d4af37, #ffeec3, etc. might not be in Tailwind's safelist, which can cause dev build warnings (yellow lines).

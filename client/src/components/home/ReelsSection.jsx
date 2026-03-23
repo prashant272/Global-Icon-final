@@ -150,7 +150,7 @@ export default function ReelsSection({ SECTION_BG }) {
           }}
           className="!overflow-visible"
         >
-          {[...reels, ...reels].map((reel, idx) => (
+          {[...reels, ...reels, ...reels, ...reels].map((reel, idx) => (
             <SwiperSlide key={idx} className="!w-auto">
               <ReelCard reel={reel} />
             </SwiperSlide>

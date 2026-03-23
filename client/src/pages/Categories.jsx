@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { getAwardName } from "../utils/brand.js";
 import { ChevronDown, Trophy, Star, Award, Zap, Building, GraduationCap, Plane, Factory, Sparkles, Cpu, Wallet, Leaf, Shield, Clapperboard } from "lucide-react";
 
 const fieldMap = {
