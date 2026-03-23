@@ -116,10 +116,9 @@ router.post("/", optionalAuthenticate, upload.single("pdf"), async (req, res) =>
       doc.pdfUrl = await getSignedPdfUrl(doc.pdfUrl);
     }
 
-    // Determine name and email for confirmation
-    const userForEmail = await User.findById(userId);
-    const confirmationEmail = userForEmail.email;
-    const confirmationName = userForEmail.name;
+    // Determine name and email for confirmation from the form payload
+    const confirmationEmail = (payload.contactEmail || payload.email || req.user?.email || "").toLowerCase();
+    const confirmationName = payload.contactName || payload.nomineeName || req.user?.name || "User";
 
     // Send single combined email (includes credentials section if auto-created)
     sendNominationConfirmation(
