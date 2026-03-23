@@ -181,6 +181,18 @@ export default function EditionDetail() {
     fetchData();
   }, [slug, derivedYear, isCovidYear]);
 
+  useEffect(() => {
+    const title = edition?.title || derivedYear;
+    if (title) {
+      window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { 
+        detail: `Hello, I'm interested in the ${title} Edition.` 
+      }));
+    }
+    return () => {
+      window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { detail: null }));
+    };
+  }, [edition, derivedYear]);
+
   if (!edition) {
     return (
       <div className="min-h-screen bg-[#0a0503] flex items-center justify-center p-6 text-white text-center">

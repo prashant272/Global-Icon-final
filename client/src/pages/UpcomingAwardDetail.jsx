@@ -63,6 +63,17 @@ export default function UpcomingAwardDetail() {
     };
   }, [award]);
 
+  useEffect(() => {
+    if (award?.title) {
+      window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { 
+        detail: `Hello, I'm interested in the ${award.title}.` 
+      }));
+    }
+    return () => {
+      window.dispatchEvent(new CustomEvent("updateWhatsAppMessage", { detail: null }));
+    };
+  }, [award]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0503] flex items-center justify-center">

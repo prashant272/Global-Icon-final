@@ -1,10 +1,22 @@
 import { useLocation } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
 export default function WhatsAppButton() {
     const location = useLocation();
+    const [customMessage, setCustomMessage] = useState(null);
+
+    useEffect(() => {
+        const handleUpdate = (e) => {
+            setCustomMessage(e.detail);
+        };
+        window.addEventListener("updateWhatsAppMessage", handleUpdate);
+        return () => window.removeEventListener("updateWhatsAppMessage", handleUpdate);
+    }, []);
     
     const getDynamicMessage = () => {
+        if (customMessage) return customMessage;
+
         const hostname = window.location.hostname;
         const path = location.pathname;
 

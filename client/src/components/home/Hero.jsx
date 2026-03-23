@@ -166,21 +166,38 @@ export default function Hero({ videoRef, events, handleNominateClick }) {
                       </div>
                     </div>
 
-                    {/* Nominate Button */}
-                    <div className="mt-auto">
+                    {/* Action Buttons */}
+                    <div className="mt-auto flex flex-col sm:flex-row gap-3">
                       <button
                         onClick={() => handleNominateClick(event.title)}
-                        className="w-full relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-6 py-2.5 text-sm md:text-base font-black uppercase tracking-wider text-[#644b0d] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 group/btn"
+                        className="flex-1 relative overflow-hidden rounded-full bg-gradient-to-r from-[#ffeec3] via-[#d4af37] to-[#a28533] px-4 py-2.5 text-xs md:text-sm font-black uppercase tracking-wider text-[#644b0d] shadow-md hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95 group/btn"
                         style={{ letterSpacing: '0.065em' }}
                       >
                         <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0)_20%,rgba(255,255,255,0.5)_50%,rgba(255,255,255,0)_80%)] -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 ease-in-out" />
-                        <span className="relative z-10 flex items-center justify-center gap-2">
-                          Nominate Now
-                          <svg className="w-5 h-5 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span className="relative z-10 flex items-center justify-center gap-1.5">
+                          Nominate
+                          <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                           </svg>
                         </span>
                       </button>
+
+                      {event.link && (
+                        <a
+                          href={event.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 relative overflow-hidden rounded-full border border-[#d4af37]/50 bg-white/5 backdrop-blur-sm px-4 py-2.5 text-xs md:text-sm font-black uppercase tracking-wider text-[#d4af37] shadow-md hover:bg-[#d4af37] hover:text-black transition-all duration-300 hover:scale-[1.03] active:scale-95 group/info"
+                          style={{ letterSpacing: '0.065em' }}
+                        >
+                          <span className="relative z-10 flex items-center justify-center gap-1.5">
+                            More Info
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </SwiperSlide>
