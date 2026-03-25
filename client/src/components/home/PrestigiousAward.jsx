@@ -11,7 +11,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
   highlight: "Honouring Excellence, Innovation & Leadership.",
   image: "/Awards/excellence.jpeg",
   reverse: false,
-  link: "https://www.globaliconawards.in/upcoming-awards/india-excellence-awards-2026/"
+  link: "https://india-excellence.primetimemedia.in/upcoming-awards/india-excellence-awards-2026/"
 },
     {
     title: "USA Business & Leadership Summit 2026",
@@ -21,7 +21,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
     highlight: "Honouring Leadership, Innovation & Global Growth.",
     image: "/Awards/usa.png",
     reverse: true,
-    link: "https://www.globaliconawards.in/upcoming-awards/usa-business-leadership-summit"
+    link: "https://business-leadership.primetimemedia.in/upcoming-awards/usa-business-leadership-summit"
   },
 {
   title: "Invest India Summit 2026",
@@ -31,7 +31,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
   highlight: "Fostering Investment, Leadership, and Global Opportunities.",
   image: "/Awards/uk.png",
   reverse: false,
-  link: "https://www.globaliconawards.in/upcoming-awards/invest-india-summit-2026---uk-edition"
+  link: "https://investment-india.primetimemedia.in/upcoming-awards/invest-india-summit-2026---uk-edition"
 },
   ];
 
