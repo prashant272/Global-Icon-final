@@ -21,7 +21,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
     highlight: "Honouring Leadership, Innovation & Global Growth.",
     image: "/Awards/usa.png",
     reverse: true,
-    link: "https://business-leadership.primetimemedia.in/upcoming-awards/usa-business-leadership-summit"
+    link: "https://business-leadership.primetimemedia.in//upcoming-awards/usa-business-leadership-summit"
   },
 {
   title: "Invest India Summit 2026",

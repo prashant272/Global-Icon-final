@@ -90,7 +90,7 @@ export default function Home() {
       date: "30 June 2026",
       place: "USA",
       time: "TBA",
-      link: "https://business-leadership.primetimemedia.in//upcoming-awards/usa-business-leadership-summit"
+      link: "https://business-leadership.primetimemedia.in//upcoming-awards/usa-business-leadership-summit/"
     },
     // {
     //   title: "Business and Leadership Summit 2026– Dubai Edition",
@@ -105,7 +105,7 @@ export default function Home() {
       date: "7 May 2026",
       place: "UK",
       time: "TBA",
-      link: "https://investmentindia.primetimemedia.in/upcoming-awards/invest-india-summit-2026---uk-edition"
+      link: "https://investment-india.primetimemedia.in/upcoming-awards/invest-india-summit-2026---uk-edition/"
     },
     // {
     //   title: "Global Icon Awards – New Delhi Edition 2026",
@@ -120,7 +120,7 @@ export default function Home() {
       date: "17 May 2026",
       place: "Mumbai",
       time: "TBA",
-      link: "https://www.globaliconawards.in/upcoming-awards/india-excellence-awards-2026/"
+      link: "https://business-leadership.primetimemedia.in/upcoming-awards/india-excellence-awards-2026/"
     },
   ];
 
