@@ -2019,6 +2019,7 @@ export default function NominationForm() {
                           {Object.keys(fieldMap).map((f) => (
                             <option key={f} value={f} className="bg-[#3a1418]">{f}</option>
                           ))}
+                          <option value="Others" className="bg-[#3a1418]">Others</option>
                         </select>
                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-[#d4af37] transition-colors">
                           <div className="border-l border-white/10 pl-3">
@@ -2033,24 +2034,38 @@ export default function NominationForm() {
                         Primary Category *
                       </label>
                       <div className="relative group">
-                        <select
-                          name="category"
-                          ref={el => inputRef.current.category = el}
-                          value={form.category}
-                          onChange={handleChange}
-                          disabled={!form.field}
-                          className={getSelectClass("category")}
-                        >
-                          <option value="" className="bg-[#3a1418]">Select Category</option>
-                          {Object.keys(availableCategories).map((c) => (
-                            <option key={c} value={c} className="bg-[#3a1418]">{c}</option>
-                          ))}
-                        </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-[#d4af37] transition-colors">
-                          <div className="border-l border-white/10 pl-3">
-                            <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-                          </div>
-                        </div>
+                        {form.field === "Others" ? (
+                          <input
+                            type="text"
+                            name="category"
+                            ref={el => inputRef.current.category = el}
+                            value={form.category}
+                            onChange={handleChange}
+                            placeholder="Enter Category"
+                            className={getInputClass("category")}
+                          />
+                        ) : (
+                          <>
+                            <select
+                              name="category"
+                              ref={el => inputRef.current.category = el}
+                              value={form.category}
+                              onChange={handleChange}
+                              disabled={!form.field}
+                              className={getSelectClass("category")}
+                            >
+                              <option value="" className="bg-[#3a1418]">Select Category</option>
+                              {Object.keys(availableCategories).map((c) => (
+                                <option key={c} value={c} className="bg-[#3a1418]">{c}</option>
+                              ))}
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-[#d4af37] transition-colors">
+                              <div className="border-l border-white/10 pl-3">
+                                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -2059,33 +2074,47 @@ export default function NominationForm() {
                         Award Subcategory *
                       </label>
                       <div className="relative group">
-                        <select
-                          name="subCategory"
-                          ref={el => inputRef.current.subCategory = el}
-                          value={form.subCategory}
-                          onChange={handleChange}
-                          disabled={!form.category}
-                          className={getSelectClass("subCategory")}
-                        >
-                          <option value="" className="bg-[#3a1418]">Select Subcategory</option>
-                          {Object.entries(groupedSubCategories).map(([group, list]) => (
-                            <optgroup key={group} label={group} className="bg-black text-[#d4af37] font-bold">
-                              {list.map((item) => (
-                                <option key={item} value={item} className="bg-[#3a1418] text-white font-normal">
-                                  {item}
-                                </option>
+                        {form.field === "Others" ? (
+                          <input
+                            type="text"
+                            name="subCategory"
+                            ref={el => inputRef.current.subCategory = el}
+                            value={form.subCategory}
+                            onChange={handleChange}
+                            placeholder="Enter Subcategory"
+                            className={getInputClass("subCategory")}
+                          />
+                        ) : (
+                          <>
+                            <select
+                              name="subCategory"
+                              ref={el => inputRef.current.subCategory = el}
+                              value={form.subCategory}
+                              onChange={handleChange}
+                              disabled={!form.category}
+                              className={getSelectClass("subCategory")}
+                            >
+                              <option value="" className="bg-[#3a1418]">Select Subcategory</option>
+                              {Object.entries(groupedSubCategories).map(([group, list]) => (
+                                <optgroup key={group} label={group} className="bg-black text-[#d4af37] font-bold">
+                                  {list.map((item) => (
+                                    <option key={item} value={item} className="bg-[#3a1418] text-white font-normal">
+                                      {item}
+                                    </option>
+                                  ))}
+                                </optgroup>
                               ))}
-                            </optgroup>
-                          ))}
-                          {form.category && (
-                            <option value="Other" className="bg-[#3a1418] text-[#d4af37] font-bold italic">Other Category...</option>
-                          )}
-                        </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-[#d4af37] transition-colors">
-                          <div className="border-l border-white/10 pl-3">
-                            <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-                          </div>
-                        </div>
+                              {form.category && (
+                                <option value="Other" className="bg-[#3a1418] text-[#d4af37] font-bold italic">Other Category...</option>
+                              )}
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-[#d4af37] transition-colors">
+                              <div className="border-l border-white/10 pl-3">
+                                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
