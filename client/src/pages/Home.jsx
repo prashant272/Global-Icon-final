@@ -117,8 +117,8 @@ export default function Home() {
     {
       title: "India Excellence Awards & Conference 2026",
       desc: "Recognising excellence, innovation, and outstanding achievements in business, leadership, and professional sectors.",
-      date: "17 May 2026",
-      place: "Mumbai",
+      date: "22 May 2026",
+      place: "Hyderabad",
       time: "TBA",
       link: "https://business-leadership.primetimemedia.in/upcoming-awards/india-excellence-awards-2026/"
     },
