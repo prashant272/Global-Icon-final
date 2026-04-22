@@ -15,6 +15,8 @@ import UpcomingAward from "./models/UpcomingAward.js";
 
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
+import { getAwardDetails, injectSEO } from "./utils/seo.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -174,6 +176,41 @@ app.use("/api/admin", adminRoutes);
 app.use("/admin", adminRoutes);
 app.use("/api/previous-editions", previousEditionRoutes);
 app.use("/api/upcoming-awards", upcomingAwardRoutes);
+
+/**
+ * =========================
+ * FRONTEND & DYNAMIC SEO
+ * =========================
+ */
+
+// Serve static assets (CSS, JS, Images) from the build folder
+// index: false prevents Express from serving index.html automatically
+app.use(express.static(path.join(__dirname, "../client/dist"), { index: false }));
+
+// Catch-all middleware to serve the dynamic index.html for all frontend routes
+app.use(async (req, res, next) => {
+  // Skip API routes and static files that were already handled
+  if (req.path.startsWith("/api") || req.path.startsWith("/auth") || req.path.startsWith("/uploads")) {
+    return next();
+  }
+
+  const indexPath = path.join(__dirname, "../client/dist/index.html");
+  
+  try {
+    if (!fs.existsSync(indexPath)) {
+      return res.status(404).send("Frontend build not found. Please run 'npm run build' in the client directory.");
+    }
+
+    let content = await fs.promises.readFile(indexPath, "utf-8");
+    const seoDetails = getAwardDetails(req.hostname);
+    const modifiedHtml = injectSEO(content, seoDetails);
+    
+    res.send(modifiedHtml);
+  } catch (err) {
+    console.error("SEO Injection Error:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 /**
  * =========================

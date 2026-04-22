@@ -88,6 +88,16 @@ const DynamicSEO = () => {
       "Business Awards India",
       "Global Business Summit",
       "Indian Icon Awards",
+      "International Achievement Awards",
+      "Corporate Leadership Excellence",
+      "Invest India Summit 2026",
+      "USA Business Awards",
+      "UK Awards",
+      "Dubai Excellence Awards",
+      "Delhi Business Awards",
+      "Mumbai Excellence summit",
+      "Washington DC Leadership Summit",
+      "London Business Summit",
       ...pageKeywords
     ];
 
@@ -102,8 +112,11 @@ const DynamicSEO = () => {
     updateMetaProperty("og:site_name", awardName);
     updateMetaTag("twitter:title", fullTitle);
     updateMetaTag("twitter:description", pageDesc);
+    
+    // 5. Update Canonical Link
+    updateCanonical(window.location.origin + location.pathname);
 
-    // 5. Inject JSON-LD Schema
+    // 6. Inject JSON-LD Schema
     const schema = {
       "@context": "https://schema.org",
       "@type": customSEO?.schemaType || "Organization",
@@ -161,6 +174,19 @@ function updateMetaProperty(property, content) {
     document.head.appendChild(meta);
   }
   meta.setAttribute("content", content);
+}
+
+/**
+ * Helper to update canonical link
+ */
+function updateCanonical(url) {
+  let link = document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
+    document.head.appendChild(link);
+  }
+  link.setAttribute("href", url);
 }
 
 export default DynamicSEO;
