@@ -1533,6 +1533,7 @@ const fieldMap = {
 
 const AVAILABLE_AWARDS = [
   getAwardName(),
+  "Global Icon Award 2026 - Pattaya Edition",
   "India Excellence Awards & Conference 2026",
   "Invest India Summit 2026",
   "Business and Leadership Summit 2026",
@@ -1940,7 +1941,7 @@ export default function NominationForm() {
               </label>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
                 {[
-                  { id: "nominated as award", prefix: "Nominated as", highlight: "Awarded", primary: true },
+                  { id: "nominated as award", prefix: "Nominated as", highlight: "Award", primary: true },
                   { id: "attend as speaker", prefix: "Attend as", highlight: "Speaker", primary: false },
                   { id: "attend as exhibitor", prefix: "Attend as", highlight: "Exhibitor", primary: false },
                   { id: "attend as sponsor", prefix: "Attend as", highlight: "Sponsor", primary: false },
@@ -2324,7 +2325,7 @@ export default function NominationForm() {
               </div>
 
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                {["Hyderabad", "USA", "London"].map((loc) => (
+                {["Hyderabad", "USA", "London", "Pattaya, Thailand"].map((loc) => (
                   <label
                     key={loc}
                     className={`flex items-center justify-center p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer text-center

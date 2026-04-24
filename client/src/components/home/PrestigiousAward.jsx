@@ -3,14 +3,25 @@ import { getAwardName } from "../../utils/brand.js";
 
 const PrestigiousAward = ({ SECTION_BG }) => {
   const sections = [
- {
-  title: "India Excellence Awards & Conference 2026",
+    {
+      title: "Global Icon Award 2026",
+      subtitle: "Pattaya Edition",
+      description:
+        "Prime Time Research Media is proud to present the Global Icon Award 2026 – Pattaya Edition, an elite international stage dedicated to honouring visionary leaders and trailblazing organisations. This prestigious event, scheduled for 28 June 2026, celebrates the pinnacle of excellence and innovation across global industries. Set against the vibrant backdrop of Pattaya, this edition features an exclusive on-stage live podcast, providing a unique platform for global icons to share their inspiring journeys and redefine the future of leadership.",
+      highlight: "Celebrating Excellence, Inspiring the World.",
+      image: "/Awards/pattaya.png", // Assuming an image will be added or I should use a placeholder
+      reverse: false,
+      link: "https://global-icon.primetimemedia.in/upcoming-awards/global-icon-award-2026-pattaya-edition",
+      stats: ["13+ Years of Experience", "On Stage Live Podcast", "100+ Awards"]
+    },
+    {
+      title: "India Excellence Awards & Conference 2026",
   subtitle: "Hyderabad Edition",
   description:
     "Prime Time Research Media presents the India Excellence Awards & Conference 2026, a prestigious platform honouring outstanding entrepreneurs, professionals, and organizations for their excellence, innovation, and leadership across various industries. The event will be held in Hyderabad on 22 May 2026 with distinguished guests and award winners from across India.",
   highlight: "Honouring Excellence, Innovation & Leadership.",
   image: "/Awards/excellence.jpeg",
-  reverse: false,
+  reverse: true,
   link: "https://india-excellence.primetimemedia.in/upcoming-awards/india-excellence-awards-2026/"
 },
     {
@@ -20,7 +31,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
       "Prime Time Research Media presents the USA Business & Leadership Summit 2026, a prestigious international platform honouring entrepreneurs, professionals, and organizations creating global impact through leadership, innovation, and growth. The summit brings together distinguished personalities at Capitol Hill, Washington DC.",
     highlight: "Honouring Leadership, Innovation & Global Growth.",
     image: "/Awards/usa.png",
-    reverse: true,
+    reverse: false,
     link: "https://business-leadership.primetimemedia.in//upcoming-awards/usa-business-leadership-summit"
   },
 {
@@ -30,7 +41,7 @@ const PrestigiousAward = ({ SECTION_BG }) => {
     "Prime Time Research Media presents Invest India Summit 2026 – UK Edition, a global platform focused on investment, business growth, and international leadership. The summit connects entrepreneurs, professionals, and organizations to global markets and strategic opportunities in London, UK.",
   highlight: "Fostering Investment, Leadership, and Global Opportunities.",
   image: "/Awards/uk.png",
-  reverse: false,
+  reverse: true,
   link: "https://investment-india.primetimemedia.in/upcoming-awards/invest-india-summit-2026---uk-edition"
 },
   ];
@@ -142,6 +153,12 @@ const PrestigiousAward = ({ SECTION_BG }) => {
                   <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#d4af37] animate-pulse"></span>
                   Innovation Hub
                 </div>
+                {sec.stats && sec.stats.map((stat, sIdx) => (
+                  <div key={sIdx} className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/20 text-[10px] md:text-xs font-bold text-[#d4af37] uppercase tracking-wider">
+                    <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#d4af37] animate-pulse"></span>
+                    {stat}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

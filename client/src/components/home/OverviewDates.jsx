@@ -135,6 +135,16 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
             <div className="space-y-6 lg:pl-8">
               {[
                 {
+                  title: "Global Icon Award 2026 - Pattaya Edition",
+                  date: "28 June 2026",
+                  icon: (
+                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
+                      <span className="text-2xl">🇹🇭</span>
+                    </span>
+                  ),
+                  border: "from-[#d4af37] to-[#ead481]",
+                },
+                {
                   title: "India Excellence Awards & Conference 2026",
                   date: "22 May 2026",
                   icon: (

@@ -85,6 +85,14 @@ export default function Home() {
   // Event Data
   const events = [
     {
+      title: "Global Icon Award 2026 - Pattaya Edition",
+      desc: "Celebrating Excellence, Inspiring the World",
+      date: "28 June 2026",
+      place: "Pattaya city",
+      time: "TBA",
+      link: "https://global-icon.primetimemedia.in/upcoming-awards/global-icon-award-2026-pattaya-edition"
+    },
+    {
       title: "Business and Leadership Summit 2026– USA Edition",
       desc: "A premier summit recognising visionary business leaders and entrepreneurs.",
       date: "30 June 2026",
