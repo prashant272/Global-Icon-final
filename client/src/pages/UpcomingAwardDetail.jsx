@@ -301,11 +301,11 @@ export default function UpcomingAwardDetail() {
                 <div className="space-y-5">
                   {award.link && (
                     <a href={award.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center bg-gradient-to-br from-[#ffeec3] via-[#d4af37] to-[#8a6e2a] text-black font-black w-full py-6 rounded-3xl text-sm uppercase tracking-[0.15em] shadow-[0_20px_40px_rgba(212,175,-55,0.3)] hover:scale-[1.03] transition-all duration-500 hover:shadow-[0_25px_50px_rgba(212,175,55,0.4)]">
-                      View More
+                      View Details
                     </a>
                   )}
                   <button onClick={() => navigate(`/nominate?award=${encodeURIComponent(award.title)}`)} className="flex items-center justify-center bg-white/5 border border-white/15 text-white font-black w-full py-6 rounded-3xl text-sm uppercase tracking-[0.15em] hover:bg-white/10 hover:border-white/30 transition-all duration-500">
-                    Self Nominate
+                    Nominate Now
                   </button>
                 </div>
               </div>
