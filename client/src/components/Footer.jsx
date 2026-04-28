@@ -243,7 +243,7 @@ export default function Footer() {
                 <div className="flex items-center gap-2">
                   <span className="inline-block w-5 text-[#d4af37]">☎️</span>
                   <a href="tel:+911169268754" className="hover:text-[#d4af37] transition-all text-sm font-semibold">
-                    +91 11-69268754
+                    +91 011-41084222
                   </a>
                 </div>
               </div>
