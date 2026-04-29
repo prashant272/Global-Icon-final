@@ -161,3 +161,8 @@ export function updateUpcomingAward(id, payload, token) {
 export function deleteUpcomingAward(id, token) {
   return request(`/api/upcoming-awards/${id}`, { method: "DELETE", token });
 }
+
+/* ---------------- Leads (admin) ---------------- */
+export function fetchLeads(token) {
+  return request("/api/leads", { method: "GET", token });
+}

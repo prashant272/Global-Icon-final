@@ -8,6 +8,7 @@ import nominationRoutes from "./routes/nominationRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import previousEditionRoutes from "./routes/previousEditionRoutes.js";
 import upcomingAwardRoutes from "./routes/upcomingAwardRoutes.js";
+import leadRoutes from "./routes/leadRoutes.js";
 import passport from "./config/passport.js";
 
 import PreviousEdition from "./models/PreviousEdition.js";
@@ -176,6 +177,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/admin", adminRoutes);
 app.use("/api/previous-editions", previousEditionRoutes);
 app.use("/api/upcoming-awards", upcomingAwardRoutes);
+app.use("/api/leads", leadRoutes);
 
 /**
  * =========================

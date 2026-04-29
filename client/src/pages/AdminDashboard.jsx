@@ -4,9 +4,10 @@ import {
   updateNominationStatus,
   updateNomination,
   deleteNomination,
+  fetchLeads,
 } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
-import { ShieldCheck, Edit2, Trash2, Eye, Crown, BarChart3 } from "lucide-react";
+import { ShieldCheck, Edit2, Trash2, Eye, Crown, BarChart3, Users2, MessageSquare } from "lucide-react";
 import { getAwardName } from "../utils/brand.js";
 
 import AdminEditionsTab from "../components/AdminEditionsTab.jsx";
@@ -144,15 +145,20 @@ export default function AdminDashboard() {
   const [editForm, setEditForm] = useState({});
 
   const [activeTab, setActiveTab] = useState("nominations");
+  const [leads, setLeads] = useState([]);
 
   /* ------------------ Load Data ------------------ */
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await fetchAdminNominations(token);
-        setNominations(data);
+        const [nominationsData, leadsData] = await Promise.all([
+          fetchAdminNominations(token),
+          fetchLeads(token)
+        ]);
+        setNominations(nominationsData);
+        setLeads(leadsData);
       } catch (err) {
-        setError(err.message || "Failed to load nominations");
+        setError(err.message || "Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
@@ -543,6 +549,64 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const renderLeadsTable = () => (
+    <div className="overflow-x-auto max-h-[90vh] border border-[#eaca5f80] rounded-2xl bg-gradient-to-tr from-[#23201aee] via-[#2b2313cf] to-[#10161aee] shadow-xl shadow-[#d4af3722] backdrop-blur relative">
+      <table className="min-w-[1000px] w-full text-xs border-separate border-spacing-0">
+        <thead className="sticky top-0 z-40">
+          <tr className="bg-gradient-to-r from-[#231e09] to-[#2e2612] text-[#f2eab6] border-0">
+            <th className="px-4 py-3 text-left bg-inherit">Name</th>
+            <th className="px-4 py-3 text-left">Mobile</th>
+            <th className="px-4 py-3 text-left">Purpose</th>
+            <th className="px-4 py-3 text-left">Verified</th>
+            <th className="px-4 py-3 text-left">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leads.map((l, idx) => (
+            <tr
+              key={l._id}
+              className={`transition border-t border-[#eaca5f22] h-[60px] ${idx % 2 === 0
+                ? "bg-gradient-to-r from-[#14100a]/60 to-[#2a271ed9]"
+                : "bg-gradient-to-r from-[#211c12be] to-[#35341be6]"
+                }`}
+            >
+              <td className="px-4 py-4 font-bold text-[#ffb400]">
+                {l.name}
+              </td>
+              <td className="px-4 py-4 font-semibold text-[#a4fbd2] font-mono">
+                {l.mobile}
+              </td>
+              <td className="px-4 py-4 font-semibold text-blue-300">
+                {l.purpose}
+              </td>
+              <td className="px-4 py-4">
+                {l.isVerified ? (
+                  <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    Verified
+                  </span>
+                ) : (
+                  <span className="bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
+                    Pending
+                  </span>
+                )}
+              </td>
+              <td className="px-4 py-4 text-gray-400">
+                {new Date(l.createdAt).toLocaleString()}
+              </td>
+            </tr>
+          ))}
+          {leads.length === 0 && (
+            <tr>
+              <td colSpan="5" className="px-4 py-10 text-center text-gray-500 italic">
+                No leads captured yet
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+
   const renderUsersTab = () => {
     const byUser = new Map();
     nominations.forEach((n) => {
@@ -799,6 +863,7 @@ export default function AdminDashboard() {
                 { id: "nominations", label: "Nominations", icon: "🏆" },
                 { id: "editions", label: "Previous Editions", icon: "🖼️" },
                 { id: "upcoming", label: "Upcoming Awards", icon: "⭐" },
+                { id: "popup-leads", label: "Popup Leads", icon: "📱" },
                 { id: "status", label: "Status & Payment", icon: "💸" },
                 { id: "analytics", label: "Daily Analytics", icon: "📊" },
                 { id: "users", label: "Registered Users", icon: "👤" },
@@ -915,6 +980,7 @@ export default function AdminDashboard() {
             {activeTab === "upcoming" && <AdminUpcomingAwardsTab />}
             {activeTab === "status" && renderStatusTab()}
             {activeTab === "analytics" && renderAnalyticsTab()}
+            {activeTab === "popup-leads" && renderLeadsTable()}
             {activeTab === "users" && renderUsersTab()}
             {activeTab === "admins" && renderAdminsTab()}
           </div>

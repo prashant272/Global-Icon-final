@@ -27,12 +27,14 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
 import { Toaster } from "react-hot-toast";
 import DynamicSEO from "./components/DynamicSEO.jsx";
+import LeadCapturePopup from "./components/LeadCapturePopup.jsx";
 
 export default function App() {
   const location = useLocation();
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0503]">
+      <LeadCapturePopup />
       <DynamicSEO />
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
