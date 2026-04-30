@@ -34,7 +34,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0503]">
-      <LeadCapturePopup />
+      {!location.pathname.startsWith("/admin") && <LeadCapturePopup />}
       <DynamicSEO />
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />

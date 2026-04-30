@@ -20,11 +20,40 @@ export default function LeadCapturePopup() {
     otp: "",
   });
 
+  // Cookie Helpers
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
+  };
+
+  const setCookie = (name, value, days) => {
+    let expires = "";
+    if (days) {
+      const date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+      expires = "; expires=" + date.toUTCString();
+    }
+
+    const hostname = window.location.hostname;
+    let domainAttr = "";
+    if (hostname !== "localhost" && !/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
+      const parts = hostname.split(".");
+      if (parts.length >= 2) {
+        const rootDomain = parts.slice(-2).join(".");
+        domainAttr = `; domain=.${rootDomain}`;
+      }
+    }
+
+    document.cookie = `${name}=${value || ""}${expires}; path=/${domainAttr}`;
+  };
+
   const otpSentRef = useRef(false);
 
   // Check verification on mount
   useEffect(() => {
-    const verified = localStorage.getItem("lead_verified") === "true";
+    const verified = getCookie("lead_verified") === "true";
     if (verified) {
       setIsVerified(true);
     }
@@ -123,7 +152,7 @@ export default function LeadCapturePopup() {
       if (response.ok) {
         toast.success("Verification Successful!", { icon: "✅" });
         setIsVerified(true);
-        localStorage.setItem("lead_verified", "true");
+        setCookie("lead_verified", "true", 30); // 30 days = 1 month
         setTimeout(() => setIsOpen(false), 2000);
       } else {
         const data = await response.json();
