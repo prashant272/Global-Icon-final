@@ -10,6 +10,7 @@ import previousEditionRoutes from "./routes/previousEditionRoutes.js";
 import upcomingAwardRoutes from "./routes/upcomingAwardRoutes.js";
 import leadRoutes from "./routes/leadRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
+import externalRoutes from "./routes/externalRoutes.js";
 import passport from "./config/passport.js";
 
 import PreviousEdition from "./models/PreviousEdition.js";
@@ -41,12 +42,15 @@ app.use(cors({
     "https://investment-india.primetimemedia.in",
     "https://www.globaliconawards.in",
     "https://globaliconawards.in",
+    "https://api.globaliconawards.in",
+    "https://www.api.globaliconawards.in",
     "https://global-icon.primetimemedia.in",
     "https://india-excellence.primetimemedia.in",
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-api-key"],
   credentials: true
 }));
 
@@ -180,6 +184,7 @@ app.use("/api/previous-editions", previousEditionRoutes);
 app.use("/api/upcoming-awards", upcomingAwardRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/external", externalRoutes);
 
 /**
  * =========================

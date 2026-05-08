@@ -132,5 +132,33 @@ router.delete("/nominations/:id", authenticate, requireAdmin, async (req, res) =
   }
 });
 
+/**
+ * Settings Routes (Admin)
+ */
+import GlobalSetting from "../models/GlobalSetting.js";
+
+router.get("/settings", authenticate, requireAdmin, async (req, res) => {
+  try {
+    const settings = await GlobalSetting.find({});
+    res.json(settings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post("/settings", authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { key, value } = req.body;
+    const setting = await GlobalSetting.findOneAndUpdate(
+      { key },
+      { value },
+      { upsert: true, new: true }
+    );
+    res.json(setting);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;
 

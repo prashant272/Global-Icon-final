@@ -170,3 +170,12 @@ export function fetchLeads(token) {
 export function fetchAnalytics(token) {
   return request("/api/analytics/stats", { method: "GET", token });
 }
+
+/* ---------------- Settings (admin) ---------------- */
+export function fetchSettings(token) {
+  return request("/api/admin/settings", { method: "GET", token });
+}
+
+export function updateSetting(payload, token) {
+  return request("/api/admin/settings", { method: "POST", body: payload, token });
+}

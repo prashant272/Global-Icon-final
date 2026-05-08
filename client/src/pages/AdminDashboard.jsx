@@ -6,10 +6,28 @@ import {
   deleteNomination,
   fetchLeads,
   fetchAnalytics,
+  fetchSettings,
+  updateSetting,
+  getBaseUrl
 } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
-import { ShieldCheck, Edit2, Trash2, Eye, Crown, BarChart3, Users2, MessageSquare } from "lucide-react";
+import { 
+  Eye, 
+  Crown, 
+  BarChart3, 
+  Users2, 
+  MessageSquare, 
+  Settings, 
+  RefreshCw, 
+  Copy, 
+  Key,
+  X,
+  ShieldCheck,
+  Edit2,
+  Trash2
+} from "lucide-react";
 import { getAwardName } from "../utils/brand.js";
+import { toast } from "react-hot-toast";
 
 import AdminEditionsTab from "../components/AdminEditionsTab.jsx";
 import AdminUpcomingAwardsTab from "../components/AdminUpcomingAwardsTab.jsx";
@@ -156,20 +174,25 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("nominations");
   const [leads, setLeads] = useState([]);
   const [analytics, setAnalytics] = useState({ summary: {}, dailyStats: [], recentActivity: [] });
+  const [settings, setSettings] = useState([]);
+  const [testResponse, setTestResponse] = useState(null);
+  const [testing, setTesting] = useState(false);
 
   /* ------------------ Load Data ------------------ */
   const load = async () => {
     setLoading(true);
     setError("");
     try {
-      const [nominationsData, leadsData, analyticsData] = await Promise.all([
+      const [nominationsData, leadsData, analyticsData, settingsData] = await Promise.all([
         fetchAdminNominations(token),
         fetchLeads(token),
-        fetchAnalytics(token)
+        fetchAnalytics(token),
+        fetchSettings(token)
       ]);
       setNominations(Array.isArray(nominationsData) ? nominationsData : []);
       setLeads(Array.isArray(leadsData) ? leadsData : []);
       setAnalytics(analyticsData || { summary: {}, dailyStats: [], recentActivity: [] });
+      setSettings(Array.isArray(settingsData) ? settingsData : []);
     } catch (err) {
       setError(err.message || "Failed to load dashboard data");
     } finally {
@@ -769,6 +792,146 @@ export default function AdminDashboard() {
     </div>
   );
 
+  const renderSettingsTab = () => {
+    const crmKey = settings.find(s => s.key === "external_crm_api_key")?.value || "";
+
+    const handleGenerateKey = async () => {
+      const newKey = "PTRM_" + Math.random().toString(36).substring(2, 15).toUpperCase() + Math.random().toString(36).substring(2, 15).toUpperCase();
+      try {
+        setLoading(true);
+        const updated = await updateSetting({ key: "external_crm_api_key", value: newKey }, token);
+        setSettings(prev => {
+          const filtered = prev.filter(s => s.key !== "external_crm_api_key");
+          return [...filtered, updated];
+        });
+        toast.success("New CRM API Key generated!");
+      } catch (err) {
+        toast.error("Failed to update setting");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const handleTestConnection = async (type = "nominations") => {
+      try {
+        setTesting(true);
+        const baseUrl = getBaseUrl();
+        const endpoint = type === "leads" ? "/api/external/leads" : "/api/external/nominations";
+        const res = await fetch(`${baseUrl}${endpoint}`, {
+          headers: { "x-api-key": crmKey }
+        });
+        const data = await res.json();
+        setTestResponse(data);
+        if (res.ok) toast.success(`${type === "leads" ? "Leads" : "Nominations"} API Successful!`);
+        else toast.error(data.message || "Connection Failed");
+      } catch (err) {
+        toast.error("Network Error");
+      } finally {
+        setTesting(false);
+      }
+    };
+
+    return (
+      <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="bg-gradient-to-tr from-[#1a160a] to-[#2b2313] border border-[#d4af37]/30 rounded-3xl p-8 shadow-2xl backdrop-blur-md">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-12 h-12 rounded-2xl bg-[#d4af37]/20 flex items-center justify-center text-[#d4af37]">
+              <Key size={24} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-black text-white uppercase tracking-tighter">External CRM Integration</h2>
+              <p className="text-sm text-gray-400 mt-1">Configure how your CRM pulls data from this server.</p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-black/40 border border-white/5 p-6 rounded-2xl">
+              <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-4">External CRM API Key</label>
+              <div className="flex gap-3">
+                <div className="flex-1 bg-white/5 border border-white/10 px-4 py-3 rounded-xl font-mono text-sm text-gray-300 flex items-center justify-between">
+                  {crmKey || "No Key Generated"}
+                  {crmKey && (
+                    <button 
+                      onClick={() => { navigator.clipboard.writeText(crmKey); toast.success("Copied to clipboard!"); }}
+                      className="text-[#d4af37] hover:text-white transition-colors"
+                    >
+                      <Copy size={16} />
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleTestConnection("nominations")}
+                    disabled={!crmKey || testing}
+                    className="bg-white/10 text-white px-4 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2 hover:bg-white/20 transition-all disabled:opacity-50"
+                  >
+                    {testing ? <RefreshCw size={14} className="animate-spin" /> : "Test Nominations"}
+                  </button>
+                  <button
+                    onClick={() => handleTestConnection("leads")}
+                    disabled={!crmKey || testing}
+                    className="bg-white/10 text-white px-4 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2 hover:bg-white/20 transition-all disabled:opacity-50"
+                  >
+                    {testing ? <RefreshCw size={14} className="animate-spin" /> : "Test Leads"}
+                  </button>
+                  <button
+                    onClick={handleGenerateKey}
+                    disabled={loading}
+                    className="bg-[#d4af37] text-black px-6 py-3 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2 hover:scale-105 transition-all shadow-lg shadow-[#d4af37]/20"
+                  >
+                    <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+                    {crmKey ? "Regenerate" : "Generate"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {testResponse && (
+              <div className="bg-black/60 border border-[#d4af37]/30 rounded-2xl overflow-hidden animate-in slide-in-from-top-4 duration-300">
+                <div className="px-6 py-3 bg-[#d4af37]/10 border-b border-[#d4af37]/20 flex justify-between items-center">
+                  <span className="text-[10px] font-black text-[#d4af37] uppercase tracking-widest">Live API Response Preview</span>
+                  <button onClick={() => setTestResponse(null)} className="text-gray-500 hover:text-white"><X size={16} /></button>
+                </div>
+                <pre className="p-6 text-[10px] font-mono text-green-400 overflow-x-auto max-h-[300px] custom-scrollbar">
+                  {JSON.stringify(testResponse, null, 2)}
+                </pre>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/5">
+                <h4 className="font-bold text-white mb-2">How to use:</h4>
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  Provide this URL and API Key to your CRM developer. Your CRM should make a <strong>GET</strong> request with the header <strong>x-api-key</strong>.
+                </p>
+                <div className="mt-4 space-y-2">
+                  <div className="bg-black/30 p-3 rounded-lg border border-white/5">
+                    <p className="text-[9px] text-[#d4af37] font-black uppercase mb-1">Nominations Endpoint</p>
+                    <code className="text-[10px] text-gray-300 break-all">{getBaseUrl()}/api/external/nominations</code>
+                  </div>
+                  <div className="bg-black/30 p-3 rounded-lg border border-white/5">
+                    <p className="text-[9px] text-[#d4af37] font-black uppercase mb-1">Popup Leads Endpoint</p>
+                    <code className="text-[10px] text-gray-300 break-all">{getBaseUrl()}/api/external/leads</code>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-[#d4af37]/5 p-6 rounded-2xl border border-[#d4af37]/10 flex flex-col justify-center">
+                <div className="flex items-center gap-3 text-[#d4af37] mb-3">
+                  <ShieldCheck size={20} />
+                  <span className="font-bold uppercase tracking-widest text-xs">Security Note</span>
+                </div>
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  Regenerating the key will immediately block access for any CRM using the old key. Only share this key with trusted developers.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderUsersTab = () => {
     const byUser = new Map();
     nominations.forEach((n) => {
@@ -1030,7 +1193,8 @@ export default function AdminDashboard() {
                 { id: "status", label: "Status & Payment", icon: "💸" },
                 { id: "analytics", label: "Daily Analytics", icon: "📊" },
                 { id: "users", label: "Registered Users", icon: "👤" },
-                { id: "admins", label: "Admin Settings", icon: "🛡️" },
+                { id: "settings", label: "Global Settings", icon: "⚙️" },
+                { id: "admins", label: "Admin Help", icon: "🛡️" },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -1145,6 +1309,7 @@ export default function AdminDashboard() {
             {activeTab === "analytics" && renderAnalyticsTab()}
             {activeTab === "popup-leads" && renderLeadsTable()}
             {activeTab === "visitor-activity" && renderVisitorActivityTable()}
+            {activeTab === "settings" && renderSettingsTab()}
             {activeTab === "users" && renderUsersTab()}
             {activeTab === "admins" && renderAdminsTab()}
           </div>
