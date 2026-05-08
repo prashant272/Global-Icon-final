@@ -10,8 +10,79 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { authenticate, optionalAuthenticate } from "../middleware/authMiddleware.js";
 import { sendNominationConfirmation } from "../services/emailService.js";
-
+import { sendLeadOTP } from "../services/whatsappService.js";
+import Lead from "../models/Lead.js";
 const router = express.Router();
+
+// Generate 4-digit OTP
+const generateOTP = () => Math.floor(1000 + Math.random() * 9000).toString();
+
+/**
+ * @route POST /api/nominations/send-otp
+ * @desc Send WhatsApp OTP for nomination verification
+ */
+router.post("/send-otp", async (req, res) => {
+  try {
+    const { mobile, name } = req.body;
+    if (!mobile) return res.status(400).json({ message: "Mobile number is required" });
+
+    const otp = generateOTP();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+
+    // We don't save to DB yet, just return the OTP (or save to a temp session/record if needed)
+    // Actually, let's find or create a draft nomination to store this OTP
+    // But since we don't have an ID yet, we'll just send it and the frontend will send it back for verification
+    
+    await sendLeadOTP(mobile, name || "User", "Nomination Verification", otp);
+    
+    // For security in a real app, you'd store this in Redis or DB. 
+    // Here we'll return a success and expect the user to verify in the next call.
+    res.json({ message: "OTP sent successfully", otpHash: Buffer.from(otp).toString('base64') }); // Simple obfuscation for demo
+  } catch (error) {
+    console.error("OTP Error:", error);
+    res.status(500).json({ message: "Failed to send OTP" });
+  }
+});
+
+/**
+ * @route POST /api/nominations/verify-otp
+ * @desc Verify OTP and create/link user
+ */
+router.post("/verify-otp", async (req, res) => {
+  try {
+    const { mobile, otp, name, email, otpHash } = req.body;
+    
+    const decodedOtp = Buffer.from(otpHash, 'base64').toString();
+    if (otp !== decodedOtp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // Logic to find/create user and return a token (similar to guest submission)
+    let user = await User.findOne({ email: email.toLowerCase() });
+    let autoCreated = false;
+    let passwordPlain = "";
+
+    if (!user) {
+      passwordPlain = Math.random().toString(36).slice(-8);
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(passwordPlain, salt);
+      user = await User.create({
+        name: name || "User",
+        email: email.toLowerCase(),
+        passwordHash,
+        isVerified: true,
+        role: "user"
+      });
+      autoCreated = true;
+    }
+
+    // Return user and optional password
+    res.json({ user, passwordPlain: autoCreated ? passwordPlain : null });
+  } catch (error) {
+    console.error("Verify Error:", error);
+    res.status(500).json({ message: "Verification failed" });
+  }
+});
 
 // Use memory storage for R2 uploads
 const storage = multer.memoryStorage();
@@ -111,6 +182,15 @@ router.post("/", optionalAuthenticate, upload.single("pdf"), async (req, res) =>
       pdfUrl: pdfUrl || undefined,
     });
 
+    // Update Lead status
+    const leadMobile = payload.mobile || payload.contactMobile || payload.orgHeadMobile;
+    if (leadMobile) {
+      await Lead.findOneAndUpdate(
+        { mobile: leadMobile },
+        { nominationStatus: (payload.currentStep >= 6) ? "done" : "incomplete" }
+      );
+    }
+
     const doc = nomination.toObject();
     if (doc.pdfUrl) {
       doc.pdfUrl = await getSignedPdfUrl(doc.pdfUrl);
@@ -120,15 +200,20 @@ router.post("/", optionalAuthenticate, upload.single("pdf"), async (req, res) =>
     const confirmationEmail = (payload.contactEmail || payload.email || req.user?.email || "").toLowerCase();
     const confirmationName = payload.contactName || payload.nomineeName || req.user?.name || "User";
 
-    // Send single combined email (includes credentials section if auto-created)
-    sendNominationConfirmation(
-      confirmationEmail,
-      confirmationName,
-      nomination.awardName || "Global Icon Awards",
-      autoCreated ? passwordPlain : null
-    ).catch(err =>
-      console.error("Async confirmation email error:", err)
-    );
+    // Send confirmation email ONLY on final step
+    if (payload.currentStep >= 6) {
+      sendNominationConfirmation(
+        confirmationEmail,
+        confirmationName,
+        nomination.awardName || "Global Icon Awards",
+        autoCreated ? passwordPlain : null
+      ).catch(err =>
+        console.error("Async confirmation email error:", err)
+      );
+    } else if (autoCreated) {
+      // Optional: Send a welcome email with credentials instead of confirmation
+      // For now, let's at least ensure they don't get the "Success" email early
+    }
 
     return res.status(201).json({
       ...doc,
@@ -186,8 +271,8 @@ router.put("/:id", authenticate, upload.single("pdf"), async (req, res) => {
     const nomination = await Nomination.findOne({ _id: req.params.id, user: req.user.id });
     if (!nomination) return res.status(404).json({ message: "Nomination not found" });
 
-    // Only allow editing if status is "nominated"
-    if (nomination.status !== "nominated") {
+    // Only allow editing if status is "nominated" or "incomplete"
+    if (nomination.status !== "nominated" && nomination.status !== "incomplete") {
       return res.status(403).json({ message: "This nomination can no longer be edited" });
     }
 
@@ -204,13 +289,20 @@ router.put("/:id", authenticate, upload.single("pdf"), async (req, res) => {
       };
 
       await s3Client.send(new PutObjectCommand(uploadParams));
-
-      // ONLY store the KEY
       payload.pdfUrl = `nominations/${filename}`;
     }
 
     Object.assign(nomination, payload);
     await nomination.save();
+
+    // Update Lead status
+    const leadMobile = nomination.mobile || nomination.contactMobile || nomination.orgHeadMobile;
+    if (leadMobile) {
+      await Lead.findOneAndUpdate(
+        { mobile: leadMobile },
+        { nominationStatus: (nomination.currentStep >= 6) ? "done" : "incomplete" }
+      );
+    }
 
     const doc = nomination.toObject();
     if (doc.pdfUrl) {

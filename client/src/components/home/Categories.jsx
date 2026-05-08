@@ -46,7 +46,7 @@ export default function Categories({ nomineeCategories, HIGHLIGHT_BG }) {
             modules={[Autoplay, Pagination]}
             spaceBetween={30}
             slidesPerView={1}
-            loop={true}
+            loop={nomineeCategories.length > 3}
             speed={1500}
             autoplay={{
               delay: 2500,

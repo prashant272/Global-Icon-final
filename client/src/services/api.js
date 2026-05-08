@@ -166,3 +166,7 @@ export function deleteUpcomingAward(id, token) {
 export function fetchLeads(token) {
   return request("/api/leads", { method: "GET", token });
 }
+
+export function fetchAnalytics(token) {
+  return request("/api/analytics/stats", { method: "GET", token });
+}

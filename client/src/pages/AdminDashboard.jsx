@@ -5,6 +5,7 @@ import {
   updateNomination,
   deleteNomination,
   fetchLeads,
+  fetchAnalytics,
 } from "../services/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ShieldCheck, Edit2, Trash2, Eye, Crown, BarChart3, Users2, MessageSquare } from "lucide-react";
@@ -18,6 +19,7 @@ const goldGrad =
   "linear-gradient(90deg,#e9d781 0%,#dac24a 29.69%,#fee19a 70%,#bc9830 100%)";
 
 const STATUS_OPTIONS = [
+  { value: "incomplete", label: "Incomplete / Draft" },
   { value: "nominated", label: "Nomination Received" },
   { value: "evaluation", label: "Under Evaluation" },
   { value: "in_progress", label: "In Progress (Shortlisted for user)" },
@@ -88,13 +90,19 @@ function DetailItem({ label, value, badge, isLink, isEmail, isWarning }) {
 }
 
 /* ------------------ Status Badge ------------------ */
-function StatusBadge({ status }) {
-  const normalized = status || "nominated";
-  const adminLabel =
-    STATUS_OPTIONS.find((s) => s.value === normalized)?.label ||
-    "Nomination Received";
+function StatusBadge({ status, currentStep }) {
+  let normalized = status || "nominated";
+  if (currentStep && currentStep < 6 && normalized === "nominated") {
+    normalized = "incomplete";
+  }
+
+  const label = normalized === "incomplete" 
+    ? `Incomplete (Step ${currentStep || 1})`
+    : STATUS_OPTIONS.find((s) => s.value === normalized)?.label || "Nomination Received";
 
   const colorClasses = {
+    incomplete:
+      "bg-gradient-to-r from-[#443a16] to-[#7a6a2a] text-yellow-100 border-yellow-500/40 shadow shadow-yellow-900/40",
     nominated:
       "bg-gradient-to-r from-[#393d63] to-[#5263a6] text-blue-50 border-blue-400/60 shadow shadow-blue-800/40",
     evaluation:
@@ -105,14 +113,14 @@ function StatusBadge({ status }) {
       "bg-gradient-to-r from-[#155449] to-[#4eecbe] text-emerald-50 border-emerald-400/70 shadow shadow-emerald-800/20",
     rejected:
       "bg-gradient-to-r from-[#512a23] to-[#a04534] text-red-50 border-red-400/60 shadow shadow-red-800/30",
-  }[normalized];
+  }[normalized] || "bg-gray-500 text-white";
 
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.3 text-[11px] font-semibold uppercase tracking-wide backdrop-blur-sm ${colorClasses}`}
+      className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide backdrop-blur-sm ${colorClasses}`}
     >
       <span className="w-1.5 h-1.5 rounded-full bg-current" />
-      {adminLabel}
+      {label}
     </span>
   );
 }
@@ -138,6 +146,7 @@ export default function AdminDashboard() {
   const [participationTypeFilter, setParticipationTypeFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("all");
   const [updatingId, setUpdatingId] = useState(null);
+  const [visitorFilter, setVisitorFilter] = useState(null);
 
   const [editingNomination, setEditingNomination] = useState(null);
   const [viewingNomination, setViewingNomination] = useState(null);
@@ -146,32 +155,58 @@ export default function AdminDashboard() {
 
   const [activeTab, setActiveTab] = useState("nominations");
   const [leads, setLeads] = useState([]);
+  const [analytics, setAnalytics] = useState({ summary: {}, dailyStats: [], recentActivity: [] });
 
   /* ------------------ Load Data ------------------ */
+  const load = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const [nominationsData, leadsData, analyticsData] = await Promise.all([
+        fetchAdminNominations(token),
+        fetchLeads(token),
+        fetchAnalytics(token)
+      ]);
+      setNominations(Array.isArray(nominationsData) ? nominationsData : []);
+      setLeads(Array.isArray(leadsData) ? leadsData : []);
+      setAnalytics(analyticsData || { summary: {}, dailyStats: [], recentActivity: [] });
+    } catch (err) {
+      setError(err.message || "Failed to load dashboard data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const [nominationsData, leadsData] = await Promise.all([
-          fetchAdminNominations(token),
-          fetchLeads(token)
-        ]);
-        setNominations(nominationsData);
-        setLeads(leadsData);
-      } catch (err) {
-        setError(err.message || "Failed to load dashboard data");
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    if (token) load();
   }, [token]);
+
+  useEffect(() => {
+    if (activeTab === "visitor-activity" && token) {
+      const reloadStats = async () => {
+        try {
+          const data = await fetchAnalytics(token);
+          setAnalytics(data);
+        } catch (err) {
+          console.error("Failed to reload analytics:", err);
+        }
+      };
+      reloadStats();
+    }
+  }, [activeTab, token]);
 
   /* ------------------ Filter ------------------ */
   useEffect(() => {
     let filtered = [...nominations];
 
     if (statusFilter !== "all") {
-      filtered = filtered.filter((n) => (n.status || "nominated") === statusFilter);
+      filtered = filtered.filter((n) => {
+        let normalized = n.status || "nominated";
+        if (n.currentStep && n.currentStep < 6 && normalized === "nominated") {
+          normalized = "incomplete";
+        }
+        return normalized === statusFilter;
+      });
     }
 
     if (fieldFilter !== "all") {
@@ -230,6 +265,14 @@ export default function AdminDashboard() {
     // Sort by date descending
     return Object.values(statsMap).sort((a, b) => b.rawDate - a.rawDate);
   }, [nominations]);
+
+  const leadsSummary = useMemo(() => {
+    return {
+      total: leads.length,
+      done: leads.filter((l) => l.nominationStatus === "done").length,
+      pending: leads.filter((l) => l.nominationStatus === "pending").length,
+    };
+  }, [leads]);
 
   /* ------------------ Status Change ------------------ */
   const handleStatusChange = async (id, status) => {
@@ -301,8 +344,8 @@ export default function AdminDashboard() {
             <th className="px-4 py-3 text-left">Field</th>
             <th className="px-4 py-3 text-left">Category</th>
             <th className="px-4 py-3 text-left">Mobile</th>
-            <th className="px-4 py-3 text-left">Nominee</th>
             <th className="px-4 py-3 text-left">Status</th>
+            <th className="px-4 py-3 text-left">Nominee</th>
             <th className="px-4 py-3 text-left">Payment</th>
             <th className="px-4 py-3 text-left">Amount</th>
             <th className="px-4 py-3 text-left">Org Head</th>
@@ -361,18 +404,12 @@ export default function AdminDashboard() {
                   )}
                 </div>
               </td>
-              <td className="px-4 py-4">
-                <div className="font-semibold text-lg text-[#d4af37]">{n.nomineeName}</div>
-                <div className="text-gray-300 text-[11px] font-mono">
-                  {n.organization}
-                </div>
-              </td>
-              <td className="px-4 py-4">
-                <StatusBadge status={n.status} />
+              <td className="px-4 py-4 min-w-[120px]">
+                <StatusBadge status={n.status} currentStep={n.currentStep} />
                 <select
                   value={n.status || "nominated"}
                   onChange={(e) => handleStatusChange(n._id, e.target.value)}
-                  className="mt-1 w-full rounded bg-[#282313]/60 border border-[#fae36f80] px-1 py-1 text-[11px] text-[#d4af37]"
+                  className="mt-1 w-full rounded bg-[#282313]/60 border border-[#fae36f80] px-1 py-1 text-[10px] text-[#d4af37]"
                 >
                   {STATUS_OPTIONS.map((s) => (
                     <option key={s.value} value={s.value}>
@@ -380,6 +417,12 @@ export default function AdminDashboard() {
                     </option>
                   ))}
                 </select>
+              </td>
+              <td className="px-4 py-4 min-w-[150px]">
+                <div className="font-semibold text-lg text-[#d4af37]">{n.nomineeName || "Draft"}</div>
+                <div className="text-gray-300 text-[11px] font-mono">
+                  {n.organization}
+                </div>
               </td>
               <td className="px-4 py-4">
                 <select
@@ -558,6 +601,7 @@ export default function AdminDashboard() {
             <th className="px-4 py-3 text-left">Mobile</th>
             <th className="px-4 py-3 text-left">Purpose</th>
             <th className="px-4 py-3 text-left">Verified</th>
+            <th className="px-4 py-3 text-left">Nomination</th>
             <th className="px-4 py-3 text-left">Date</th>
           </tr>
         </thead>
@@ -570,8 +614,21 @@ export default function AdminDashboard() {
                 : "bg-gradient-to-r from-[#211c12be] to-[#35341be6]"
                 }`}
             >
-              <td className="px-4 py-4 font-bold text-[#ffb400]">
-                {l.name}
+              <td className="px-4 py-4">
+                <button
+                  onClick={() => {
+                    if (l.visitorId) {
+                      setVisitorFilter(l.visitorId);
+                      setActiveTab("visitor-activity");
+                    } else {
+                      toast.error("No visitor activity ID for this lead");
+                    }
+                  }}
+                  className="font-bold text-[#ffb400] hover:text-white transition-colors text-left flex items-center gap-2 group"
+                >
+                  {l.name}
+                  {l.visitorId && <Eye size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />}
+                </button>
               </td>
               <td className="px-4 py-4 font-semibold text-[#a4fbd2] font-mono">
                 {l.mobile}
@@ -590,6 +647,24 @@ export default function AdminDashboard() {
                   </span>
                 )}
               </td>
+              <td className="px-4 py-4">
+                {l.nominationStatus === "done" ? (
+                  <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 w-fit">
+                    <div className="w-1 h-1 rounded-full bg-emerald-400" />
+                    Done
+                  </span>
+                ) : l.nominationStatus === "incomplete" ? (
+                  <span className="bg-orange-500/20 text-orange-400 border border-orange-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 w-fit">
+                    <div className="w-1 h-1 rounded-full bg-orange-400" />
+                    Incomplete
+                  </span>
+                ) : (
+                  <span className="bg-amber-500/10 text-amber-500/60 border border-amber-500/20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1 w-fit">
+                    <div className="w-1 h-1 rounded-full bg-amber-500/40" />
+                    Pending
+                  </span>
+                )}
+              </td>
               <td className="px-4 py-4 text-gray-400">
                 {new Date(l.createdAt).toLocaleString()}
               </td>
@@ -604,6 +679,93 @@ export default function AdminDashboard() {
           )}
         </tbody>
       </table>
+    </div>
+  );
+
+  const renderVisitorActivityTable = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-[#1a160a]/80 border border-[#d4af37]/30 p-6 rounded-2xl">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#d4af37]/70 mb-1">Total Page Views</p>
+          <h4 className="text-4xl font-black text-white">{analytics.summary?.totalViews || 0}</h4>
+        </div>
+        <div className="bg-[#1a160a]/80 border border-blue-500/30 p-6 rounded-2xl">
+          <p className="text-[10px] font-black uppercase tracking-widest text-blue-400/70 mb-1">Unique Visitors</p>
+          <h4 className="text-4xl font-black text-white">{analytics.summary?.totalUniqueVisitors || 0}</h4>
+        </div>
+        {visitorFilter && (
+          <div className="bg-blue-500/10 border border-blue-500/50 p-6 rounded-2xl flex flex-col justify-center">
+            <p className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-1">Filtering by Visitor</p>
+            <div className="flex items-center justify-between">
+              <code className="text-xs text-blue-200">{visitorFilter}</code>
+              <button 
+                onClick={() => setVisitorFilter(null)}
+                className="text-[10px] bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition"
+              >
+                Clear Filter
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="overflow-x-auto max-h-[70vh] border border-[#eaca5f80] rounded-2xl bg-gradient-to-tr from-[#23201aee] via-[#2b2313cf] to-[#10161aee] shadow-xl relative">
+        <table className="min-w-[1000px] w-full text-xs border-separate border-spacing-0">
+          <thead className="sticky top-0 z-40">
+            <tr className="bg-[#231e09] text-[#f2eab6]">
+              <th className="px-4 py-3 text-left">Visitor ID</th>
+              <th className="px-4 py-3 text-left">Action</th>
+              <th className="px-4 py-3 text-left">Path</th>
+              <th className="px-4 py-3 text-left">IP / User Agent</th>
+              <th className="px-4 py-3 text-left">Date & Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(visitorFilter 
+              ? analytics.recentActivity?.filter(a => a.visitorId === visitorFilter)
+              : analytics.recentActivity
+            )?.map((act, idx) => (
+              <tr
+                key={act._id}
+                className={`transition border-t border-[#eaca5f22] h-[52px] ${idx % 2 === 0
+                  ? "bg-[#14100a]/60"
+                  : "bg-[#211c12be]"
+                  }`}
+              >
+                <td className="px-4 py-3 font-mono text-[10px] text-gray-400">
+                  {act.visitorId}
+                </td>
+                <td className="px-4 py-3">
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-tight ${
+                    act.action === 'page_view' ? 'bg-blue-500/10 text-blue-400' :
+                    act.action.includes('popup') ? 'bg-yellow-500/10 text-yellow-400' :
+                    'bg-green-500/10 text-green-400'
+                  }`}>
+                    {act.action}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-[#fee5af]">
+                  {act.path}
+                </td>
+                <td className="px-4 py-3 text-[10px] text-gray-500 max-w-xs truncate" title={act.userAgent}>
+                  {act.ip} <br />
+                  {act.userAgent}
+                </td>
+                <td className="px-4 py-3 text-gray-400">
+                  {new Date(act.createdAt).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+            {(!analytics.recentActivity || analytics.recentActivity.length === 0) && (
+              <tr>
+                <td colSpan="5" className="px-4 py-10 text-center text-gray-500 italic">
+                  No activity tracked yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 
@@ -842,19 +1004,19 @@ export default function AdminDashboard() {
 
             <div className="text-[13px] text-[#e8e2c7] space-y-2 bg-[#262002]/40 p-4 rounded-xl border border-[#edd14820]">
               <div className="flex justify-between">
-                <span>Total Nominations</span>
+                <span>{activeTab === "popup-leads" ? "Total Leads" : "Total Nominations"}</span>
                 <span className="text-[#dbbe4f] font-bold">
-                  {paymentSummary.total}
+                  {activeTab === "popup-leads" ? leadsSummary.total : paymentSummary.total}
                 </span>
               </div>
               <div className="h-px bg-[#edd14830] my-1" />
               <div className="flex justify-between opacity-80">
-                <span>Completed</span>
-                <span>{paymentSummary.paid}</span>
+                <span>{activeTab === "popup-leads" ? "Nominated" : "Completed"}</span>
+                <span>{activeTab === "popup-leads" ? leadsSummary.done : paymentSummary.paid}</span>
               </div>
               <div className="flex justify-between opacity-80">
-                <span>Pending</span>
-                <span>{paymentSummary.not_paid}</span>
+                <span>{activeTab === "popup-leads" ? "Pending" : "Pending"}</span>
+                <span>{activeTab === "popup-leads" ? leadsSummary.pending : paymentSummary.not_paid}</span>
               </div>
             </div>
 
@@ -864,6 +1026,7 @@ export default function AdminDashboard() {
                 { id: "editions", label: "Previous Editions", icon: "🖼️" },
                 { id: "upcoming", label: "Upcoming Awards", icon: "⭐" },
                 { id: "popup-leads", label: "Popup Leads", icon: "📱" },
+                { id: "visitor-activity", label: "Visitor Activity", icon: "🕵️" },
                 { id: "status", label: "Status & Payment", icon: "💸" },
                 { id: "analytics", label: "Daily Analytics", icon: "📊" },
                 { id: "users", label: "Registered Users", icon: "👤" },
@@ -981,6 +1144,7 @@ export default function AdminDashboard() {
             {activeTab === "status" && renderStatusTab()}
             {activeTab === "analytics" && renderAnalyticsTab()}
             {activeTab === "popup-leads" && renderLeadsTable()}
+            {activeTab === "visitor-activity" && renderVisitorActivityTable()}
             {activeTab === "users" && renderUsersTab()}
             {activeTab === "admins" && renderAdminsTab()}
           </div>

@@ -29,12 +29,19 @@ import { Toaster } from "react-hot-toast";
 import DynamicSEO from "./components/DynamicSEO.jsx";
 import LeadCapturePopup from "./components/LeadCapturePopup.jsx";
 
+import { useEffect } from "react";
+import { trackPageView } from "./services/analytics";
+
 export default function App() {
   const location = useLocation();
 
+  useEffect(() => {
+    trackPageView();
+  }, [location.pathname]);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0503]">
-      {!location.pathname.startsWith("/admin") && <LeadCapturePopup />}
+      {!location.pathname.startsWith("/admin") && !location.pathname.startsWith("/nominate") && <LeadCapturePopup />}
       <DynamicSEO />
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />

@@ -25,6 +25,15 @@ const leadSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  visitorId: {
+    type: String,
+    trim: true
+  },
+  nominationStatus: {
+    type: String,
+    enum: ["pending", "incomplete", "done"],
+    default: "pending"
+  },
   createdAt: {
     type: Date,
     default: Date.now

@@ -1,12 +1,15 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { IoClose, IoCheckmarkCircle, IoShieldCheckmarkOutline } from "react-icons/io5";
 import { FaWhatsapp } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { getBaseUrl } from "../services/api";
+import { trackAction, getVisitorId } from "../services/analytics";
 
 const API_BASE = `${getBaseUrl()}/api/leads`;
 
 export default function LeadCapturePopup() {
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
@@ -62,28 +65,29 @@ export default function LeadCapturePopup() {
   const openPopup = useCallback(() => {
     if (!isVerified) {
       setIsOpen(true);
+      trackAction("popup_open");
     }
   }, [isVerified]);
 
-  // Trigger 1: 300ms delay on first load
+  // Trigger 1: 2000ms delay on first load
   useEffect(() => {
     if (isVerified || hasClosedManually) return;
 
     const timer = setTimeout(() => {
       openPopup();
-    }, 300);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [isVerified, hasClosedManually, openPopup]);
 
   const [isSecondTime, setIsSecondTime] = useState(false);
 
-  // Trigger 2: Scroll Trigger (300px) only AFTER it has been closed once
+  // Trigger 2: Scroll Trigger (600px) only AFTER it has been closed once
   useEffect(() => {
     if (isVerified || !hasClosedManually || isOpen) return;
 
     const handleScroll = () => {
-      if (window.scrollY > 300) {
+      if (window.scrollY > 600) {
         setIsOpen(true);
         setHasClosedManually(false); 
         setIsSecondTime(true); // Mark as second time
@@ -114,6 +118,7 @@ export default function LeadCapturePopup() {
           name: formData.name,
           mobile: mobileNumber,
           purpose: formData.purpose === "Others" ? formData.customPurpose : (formData.purpose || "Nomination Inquiry"),
+          visitorId: getVisitorId(),
         }),
       });
 
@@ -172,9 +177,13 @@ export default function LeadCapturePopup() {
     }
     setIsOpen(false);
     setHasClosedManually(true);
+    trackAction("popup_close");
   };
 
-  if (!isOpen) return null;
+  // Hide on admin and nominate routes
+  const isForbiddenRoute = location.pathname.startsWith("/admin") || location.pathname === "/nominate";
+
+  if (!isOpen || isForbiddenRoute) return null;
 
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center p-3 md:p-4 bg-black/95 backdrop-blur-xl animate-in fade-in duration-300">

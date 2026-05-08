@@ -14,8 +14,8 @@ const nominationSchema = new mongoose.Schema(
     },
     nomineeName: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
     field: {
       type: String,
@@ -23,8 +23,8 @@ const nominationSchema = new mongoose.Schema(
     },
     organization: {
       type: String,
-      required: true,
       trim: true,
+      default: "",
     },
     // New fields for non-award types
     designation: {
@@ -188,6 +188,16 @@ const nominationSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "",
+    },
+    currentStep: {
+      type: Number,
+      default: 1,
+    },
+    otp: {
+      type: String,
+    },
+    otpExpires: {
+      type: Date,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

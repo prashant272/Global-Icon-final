@@ -1,5 +1,6 @@
 import express from "express";
 import Lead from "../models/Lead.js";
+import Nomination from "../models/Nomination.js";
 import { sendLeadOTP } from "../services/whatsappService.js";
 import { authenticate, requireAdmin } from "../middleware/authMiddleware.js";
 
@@ -8,8 +9,32 @@ const router = express.Router();
 // Fetch all leads (Admin only)
 router.get("/", authenticate, requireAdmin, async (req, res) => {
   try {
-    const leads = await Lead.find().sort({ createdAt: -1 });
-    res.status(200).json(leads);
+    const [leads, nominations] = await Promise.all([
+      Lead.find().sort({ createdAt: -1 }),
+      Nomination.find({}, "mobile contactMobile orgHeadMobile")
+    ]);
+
+    // Create a set of normalized mobile numbers (last 10 digits)
+    const nominatedMobiles = new Set();
+    const normalize = (num) => (num ? num.toString().replace(/\D/g, "").slice(-10) : null);
+
+    nominations.forEach(n => {
+      const m1 = normalize(n.mobile);
+      const m2 = normalize(n.contactMobile);
+      const m3 = normalize(n.orgHeadMobile);
+      if (m1) nominatedMobiles.add(m1);
+      if (m2) nominatedMobiles.add(m2);
+      if (m3) nominatedMobiles.add(m3);
+    });
+
+    const leadsWithStatus = leads.map(l => {
+      const leadObj = l.toObject();
+      const normalizedLeadMobile = normalize(l.mobile);
+      leadObj.nominationStatus = (normalizedLeadMobile && nominatedMobiles.has(normalizedLeadMobile)) ? "done" : "pending";
+      return leadObj;
+    });
+
+    res.status(200).json(leadsWithStatus);
   } catch (error) {
     console.error("Fetch leads error:", error);
     res.status(500).json({ message: "Failed to fetch leads" });
@@ -23,7 +48,7 @@ const generateOTP = () => {
 // Submit lead and send OTP
 router.post("/submit", async (req, res) => {
   try {
-    const { name, mobile, purpose } = req.body;
+    const { name, mobile, purpose, visitorId } = req.body;
 
     if (!name || !mobile || !purpose) {
       return res.status(400).json({ message: "All fields are required" });
@@ -37,6 +62,7 @@ router.post("/submit", async (req, res) => {
     if (lead) {
       lead.name = name;
       lead.purpose = purpose;
+      if (visitorId) lead.visitorId = visitorId;
       lead.otp = otp;
       lead.otpExpires = otpExpires;
       await lead.save();
@@ -45,6 +71,7 @@ router.post("/submit", async (req, res) => {
         name,
         mobile,
         purpose,
+        visitorId,
         otp,
         otpExpires,
       });
