@@ -199,10 +199,14 @@ const nominationSchema = new mongoose.Schema(
     otpExpires: {
       type: Date,
     },
+    visitorId: {
+      type: String,
+      index: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
   },
   {

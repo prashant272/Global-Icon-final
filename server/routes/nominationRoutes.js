@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import multer from "multer";
 import path from "path";
 import { PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
@@ -8,7 +9,7 @@ import s3Client from "../config/s3.js";
 import Nomination from "../models/Nomination.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import { authenticate, optionalAuthenticate } from "../middleware/authMiddleware.js";
+import { authenticate, optionalAuthenticate, signToken } from "../middleware/authMiddleware.js";
 import { sendNominationConfirmation } from "../services/emailService.js";
 import { sendLeadOTP } from "../services/whatsappService.js";
 import Lead from "../models/Lead.js";
@@ -50,14 +51,14 @@ router.post("/send-otp", async (req, res) => {
  */
 router.post("/verify-otp", async (req, res) => {
   try {
-    const { mobile, otp, name, email, otpHash } = req.body;
+    const { mobile, otp, name, email, otpHash, nominationId } = req.body;
     
     const decodedOtp = Buffer.from(otpHash, 'base64').toString();
     if (otp !== decodedOtp) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    // Logic to find/create user and return a token (similar to guest submission)
+    // Logic to find/create user and return a token
     let user = await User.findOne({ email: email.toLowerCase() });
     let autoCreated = false;
     let passwordPlain = "";
@@ -76,8 +77,25 @@ router.post("/verify-otp", async (req, res) => {
       autoCreated = true;
     }
 
-    // Return user and optional password
-    res.json({ user, passwordPlain: autoCreated ? passwordPlain : null });
+    // Link nomination to this user if it was a guest draft
+    if (nominationId && mongoose.Types.ObjectId.isValid(nominationId)) {
+      await Nomination.findByIdAndUpdate(nominationId, { user: user._id });
+    }
+
+    // Sign token
+    const token = signToken({ id: user._id, email: user.email, role: user.role, name: user.name });
+
+    // Return user, token and optional password
+    res.json({ 
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }, 
+      passwordPlain: autoCreated ? passwordPlain : null 
+    });
   } catch (error) {
     console.error("Verify Error:", error);
     res.status(500).json({ message: "Verification failed" });
@@ -134,29 +152,31 @@ router.post("/", optionalAuthenticate, upload.single("pdf"), async (req, res) =>
     if (!userId) {
       // Determine email to use
       const emailToUse = (payload.contactEmail || payload.email || "").toLowerCase();
-      if (!emailToUse) {
-        return res.status(400).json({ message: "Email is required for nomination" });
+      
+      if (emailToUse) {
+        // Check if user already exists
+        let user = await User.findOne({ email: emailToUse });
+
+        if (!user) {
+          // Create new user
+          passwordPlain = Math.random().toString(36).slice(-8);
+          const salt = await bcrypt.genSalt(10);
+          const passwordHash = await bcrypt.hash(passwordPlain, salt);
+
+          user = await User.create({
+            name: payload.contactName || payload.nomineeName || "User",
+            email: emailToUse,
+            passwordHash: passwordHash,
+            isVerified: true,
+            role: "user"
+          });
+          autoCreated = true;
+        }
+        userId = user._id;
+      } else if (!payload.visitorId) {
+        // If no email AND no visitorId, we can't track it
+        return res.status(400).json({ message: "Email or Visitor ID is required" });
       }
-
-      // Check if user already exists
-      let user = await User.findOne({ email: emailToUse });
-
-      if (!user) {
-        // Create new user
-        passwordPlain = Math.random().toString(36).slice(-8); // Random 8-char password
-        const salt = await bcrypt.genSalt(10);
-        const passwordHash = await bcrypt.hash(passwordPlain, salt);
-
-        user = await User.create({
-          name: payload.contactName || payload.nomineeName || "User",
-          email: emailToUse,
-          passwordHash: passwordHash,
-          isVerified: true, // Auto-verify guest nomination users
-          role: "user"
-        });
-        autoCreated = true;
-      }
-      userId = user._id;
     }
 
     if (req.file) {
@@ -251,6 +271,9 @@ router.get("/my", authenticate, async (req, res) => {
 // Fetch a single nomination by ID
 router.get("/:id", authenticate, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid nomination ID" });
+    }
     const doc = await Nomination.findOne({ _id: req.params.id, user: req.user.id }).lean();
     if (!doc) return res.status(404).json({ message: "Nomination not found" });
 
@@ -268,6 +291,9 @@ router.get("/:id", authenticate, async (req, res) => {
 // Update a nomination
 router.put("/:id", authenticate, upload.single("pdf"), async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: "Invalid nomination ID" });
+    }
     const nomination = await Nomination.findOne({ _id: req.params.id, user: req.user.id });
     if (!nomination) return res.status(404).json({ message: "Nomination not found" });
 
@@ -301,6 +327,21 @@ router.put("/:id", authenticate, upload.single("pdf"), async (req, res) => {
       await Lead.findOneAndUpdate(
         { mobile: leadMobile },
         { nominationStatus: (nomination.currentStep >= 6) ? "done" : "incomplete" }
+      );
+    }
+
+    // Send confirmation email ONLY on final step
+    if (payload.currentStep >= 6) {
+      const confirmationEmail = (nomination.contactEmail || nomination.email || req.user?.email || "").toLowerCase();
+      const confirmationName = nomination.contactName || nomination.nomineeName || req.user?.name || "User";
+
+      sendNominationConfirmation(
+        confirmationEmail,
+        confirmationName,
+        nomination.awardName || "Global Icon Awards",
+        payload.password || null
+      ).catch(err =>
+        console.error("Async confirmation email error (PUT):", err)
       );
     }
 

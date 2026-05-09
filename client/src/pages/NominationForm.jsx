@@ -1582,10 +1582,20 @@ const initialForm = {
   acceptTerms: false,
 };
 
+function getOrCreateVisitorId() {
+  let vid = localStorage.getItem("primetime_visitor_id");
+  if (!vid) {
+    vid = "vid_" + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    localStorage.setItem("primetime_visitor_id", vid);
+  }
+  return vid;
+}
+
 export default function NominationForm() {
-  const { id } = useParams();
+  const { id: rawId } = useParams();
+  const id = rawId === "undefined" ? null : rawId;
   const location = useLocation();
-  const { token, user: authUser } = useAuth();
+  const { token, user: authUser, handleAuthSuccess } = useAuth();
   const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
@@ -1601,7 +1611,8 @@ export default function NominationForm() {
 
   const [form, setForm] = useState({
     ...initialForm,
-    awardName: awardFromQuery || getAwardName()
+    awardName: awardFromQuery || getAwardName(),
+    visitorId: getOrCreateVisitorId()
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -1616,6 +1627,7 @@ export default function NominationForm() {
   const [verifying, setVerifying] = useState(false);
   const [nominationId, setNominationId] = useState(id || null);
   const [resendTimer, setResendTimer] = useState(0);
+  const [autoPassword, setAutoPassword] = useState(null);
 
   const inputRef = useRef({});
   const isEditMode = !!nominationId;
@@ -1636,8 +1648,9 @@ export default function NominationForm() {
     if (isEditMode && token) {
       const load = async () => {
         try {
+          if (!nominationId) return;
           setLoading(true);
-          const data = await fetchNominationById(id, token);
+          const data = await fetchNominationById(nominationId, token);
 
           if (data.status !== "nominated") {
             setError("This nomination can no longer be edited.");
@@ -1649,7 +1662,6 @@ export default function NominationForm() {
             ...data,
             subCategory: data.subCategory || "",
             otherSubCategory: data.otherSubCategory || "",
-            acceptTerms: false,
           }));
         } catch (err) {
           setError(err.message || "Failed to load nomination data");
@@ -1660,6 +1672,18 @@ export default function NominationForm() {
       load();
     }
   }, [nominationId, token, isEditMode]);
+
+  // Pre-fill fields from auth user if available
+  useEffect(() => {
+    if (authUser) {
+      setForm(prev => ({
+        ...prev,
+        nomineeName: prev.nomineeName || authUser.name || "",
+        email: prev.email || authUser.email || "",
+        mobile: prev.mobile || authUser.mobile || ""
+      }));
+    }
+  }, [authUser]);
 
   const handleSendOTP = async () => {
     if (!form.mobile || !form.nomineeName) {
@@ -1698,16 +1722,30 @@ export default function NominationForm() {
           otp, 
           otpHash, 
           email: form.email, 
-          name: form.nomineeName 
+          name: form.nomineeName,
+          nominationId: nominationId || id
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
       
       // If user was guest, they are now "verified" and we have their data
-      // We might need to handle login here if they weren't logged in
+      // Update AuthContext to log user in
+      handleAuthSuccess(data);
+      if (data.passwordPlain) {
+        setAutoPassword(data.passwordPlain);
+      }
+      
+      // Update form state with verified user details so validation passes
+      setForm(prev => ({
+        ...prev,
+        nomineeName: prev.nomineeName || data.user.name || "",
+        email: prev.email || data.user.email || "",
+        mobile: prev.mobile || data.user.mobile || ""
+      }));
+      
       toast.success("Mobile Verified!");
-      handleStepNext();
+      handleStepNext(data.token);
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -1794,7 +1832,8 @@ export default function NominationForm() {
     }));
   };
 
-  const handleStepNext = async () => {
+  const handleStepNext = async (passedToken) => {
+    const activeToken = passedToken || token;
     // Basic validation before going to next step
     const stepFields = {
       1: form.participationType === "nominated as award" ? ["field", "category", "subCategory"] : [],
@@ -1818,29 +1857,36 @@ export default function NominationForm() {
     // Save draft on every step change
     try {
       const formData = new FormData();
+      const excludeFromDraft = ["_id", "__v", "user", "createdAt", "updatedAt", "status", "currentStep", "pdfUrl"];
       Object.keys(form).forEach(key => {
         if (key === "preferredLocation") {
+          formData.delete("preferredLocation");
           form[key].forEach(loc => formData.append("preferredLocation", loc));
-        } else if (key !== "pdf") {
-          formData.append(key, form[key]);
+        } else if (key !== "pdf" && !excludeFromDraft.includes(key)) {
+          formData.set(key, form[key]);
         }
       });
-      formData.append("currentStep", step + 1);
-      formData.append("status", "nominated");
+      formData.set("currentStep", step + 1);
+      formData.set("status", "nominated");
 
-      if (id) {
-        await updateUserNomination(id, formData, token);
+      const activeId = id || nominationId;
+      if (activeId && activeId !== "undefined") {
+        await updateUserNomination(activeId, formData, activeToken);
       } else {
         // For new nominations, first step next creates the record
-        const res = await createNomination(formData, token);
-        if (res?._id) navigate(`/nominate/${res._id}`, { replace: true });
+        const res = await createNomination(formData, activeToken);
+        if (res?._id) {
+          navigate(`/nominate/${res._id}`, { replace: true });
+          setNominationId(res._id); // Update local state as well
+        }
       }
+      
+      setStep((prev) => Math.min(prev + 1, 6));
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.error("Draft save failed", err);
+      toast.error("Failed to save progress. Please try again.");
     }
-
-    setStep((prev) => Math.min(prev + 1, 6));
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleStepBack = () => {
@@ -1928,7 +1974,8 @@ export default function NominationForm() {
         }
         
         setStep(targetStep);
-        toast.error(`Please complete Step ${targetStep}: Missing required fields`);
+        const fieldLabels = errorFields.map(f => f.replace(/([A-Z])/g, ' $1').toLowerCase());
+        toast.error(`Missing fields: ${fieldLabels.join(", ")}`);
         
         // Wait for state update then focus
         setTimeout(() => {
@@ -1946,25 +1993,28 @@ export default function NominationForm() {
 
       // Prepare FormData for file upload
       const formData = new FormData();
+      const excludeFromSubmit = ["_id", "__v", "user", "createdAt", "updatedAt", "pdfUrl"];
       Object.keys(form).forEach(key => {
         if (key === "preferredLocation") {
-          // Send array as multiple entries or JSON string as per server expectation
-          // Multer or JSON parsing? Since we use JSON.stringify in request usually, but FormData is different.
-          // Let's send it as multiple entries which is standard for FormData
+          formData.delete("preferredLocation");
           form[key].forEach(loc => formData.append("preferredLocation", loc));
         } else if (key === "pdf" && form[key]) {
-          formData.append("pdf", form[key]);
-        } else {
-          formData.append(key, form[key]);
+          formData.set("pdf", form[key]);
+        } else if (!excludeFromSubmit.includes(key)) {
+          formData.set(key, form[key]);
         }
       });
 
+      if (autoPassword) {
+        formData.set("password", autoPassword);
+      }
+
       if (isEditMode) {
-        await updateUserNomination(id, formData, token);
-        navigate(`/dashboard`);
+        await updateUserNomination(id || nominationId, formData, token);
+        navigate("/success", { state: { autoCreated: !!autoPassword, password: autoPassword } });
       } else {
         const response = await createNomination(formData, token);
-        navigate("/success", { state: { autoCreated: response?.autoCreated } });
+        navigate("/success", { state: { autoCreated: response?.autoCreated, password: response?.passwordPlain } });
       }
     } catch (err) {
       setError(err?.response?.data?.message || err.message || "Submission failed");
@@ -2061,7 +2111,7 @@ export default function NominationForm() {
 
       <div className="flex justify-end pt-8">
         <button
-          onClick={handleStepNext}
+          onClick={() => handleStepNext()}
           className="bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg"
         >
           Next Step
@@ -2104,6 +2154,7 @@ export default function NominationForm() {
           </div>
         </div>
 
+        {/* OTP Section - Shown once Get OTP is clicked */}
         {otpSent && (
           <div className="md:col-span-2 bg-black/40 p-8 rounded-3xl border border-[#d4af37]/30 animate-in zoom-in-95 duration-500 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#d4af37]/5 rounded-bl-full -mr-10 -mt-10" />
@@ -2127,7 +2178,10 @@ export default function NominationForm() {
                         const finalOtp = newOtp.join("").slice(0, 4);
                         setOtp(finalOtp);
                         // Auto focus next
-                        if (i < 3) document.getElementById(`otp-${i + 1}`).focus();
+                        if (i < 3) {
+                          const nextEl = document.getElementById(`otp-${i + 1}`);
+                          if (nextEl) nextEl.focus();
+                        }
                       } else {
                         const newOtp = otp.split("");
                         newOtp[i] = "";
@@ -2136,7 +2190,8 @@ export default function NominationForm() {
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Backspace" && !otp[i] && i > 0) {
-                        document.getElementById(`otp-${i - 1}`).focus();
+                        const prevEl = document.getElementById(`otp-${i - 1}`);
+                        if (prevEl) prevEl.focus();
                       }
                     }}
                     id={`otp-${i}`}
@@ -2228,7 +2283,7 @@ export default function NominationForm() {
 
       <div className="flex justify-between pt-8">
         <button onClick={handleStepBack} className="text-gray-500 font-bold uppercase tracking-widest hover:text-white transition-all">Back</button>
-        <button onClick={handleStepNext} className="bg-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">Next Step</button>
+        <button onClick={() => handleStepNext()} className="bg-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">Next Step</button>
       </div>
     </div>
   );
@@ -2252,6 +2307,10 @@ export default function NominationForm() {
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Mobile *</label>
             <input name="orgHeadMobile" value={form.orgHeadMobile} onChange={handleChange} className={getInputClass("orgHeadMobile")} />
           </div>
+          <div>
+            <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Email *</label>
+            <input name="orgHeadEmail" value={form.orgHeadEmail} onChange={handleChange} className={getInputClass("orgHeadEmail")} />
+          </div>
         </div>
       </div>
 
@@ -2272,12 +2331,16 @@ export default function NominationForm() {
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Mobile *</label>
             <input name="contactMobile" value={form.contactMobile} onChange={handleChange} className={getInputClass("contactMobile")} />
           </div>
+          <div>
+            <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Designation *</label>
+            <input name="contactDesignation" value={form.contactDesignation} onChange={handleChange} className={getInputClass("contactDesignation")} />
+          </div>
         </div>
       </div>
 
       <div className="flex justify-between pt-8">
         <button onClick={handleStepBack} className="text-gray-500 font-bold uppercase tracking-widest hover:text-white transition-all">Back</button>
-        <button onClick={handleStepNext} className="bg-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">Next Step</button>
+        <button onClick={() => handleStepNext()} className="bg-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">Next Step</button>
       </div>
     </div>
   );
@@ -2319,7 +2382,7 @@ export default function NominationForm() {
 
       <div className="flex justify-between pt-8">
         <button onClick={handleStepBack} className="text-gray-500 font-bold uppercase tracking-widest hover:text-white transition-all">Back</button>
-        <button onClick={handleStepNext} className="bg-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">Next Step</button>
+        <button onClick={() => handleStepNext()} className="bg-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">Next Step</button>
       </div>
     </div>
   );

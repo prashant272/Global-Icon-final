@@ -299,7 +299,7 @@ export default function Navbar() {
 
 // onClick will be used to close drawer, headerRef for scroll fix on tab switch.
 // Added showDashboard param to control visibility of "My Nominations" link
-const menuLinks = (color, onClick, headerRef, isUser, isMobile = false, editions = [], upcomingAwards = [], mobileUpcomingOpen = false, setMobileUpcomingOpen = () => {}, mobileAwardsOpen = false, setMobileAwardsOpen = () => {}) => {
+const menuLinks = (color, onClick, headerRef, isUser, isMobile = false, editions = [], upcomingAwards = [], mobileUpcomingOpen = false, setMobileUpcomingOpen = () => {}, mobileAwardsOpen = false, setMobileAwardsOpen = () => {}, showDashboard = true) => {
   // Will scroll page to just under header if in mobile and not at top
   const createNavHandler = (routeHandler) => (e) => {
     if (onClick) onClick();
