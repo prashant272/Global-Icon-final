@@ -40,6 +40,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    mobile: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+    },
   },
   {
     timestamps: true,

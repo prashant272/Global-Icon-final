@@ -79,8 +79,12 @@ export function fetchMyNominations(token) {
   return request("/api/nominations/my", { method: "GET", token });
 }
 
-export function fetchNominationById(id, token) {
-  return request(`/api/nominations/${id}`, { method: "GET", token });
+export function fetchNominationById(id, token, visitorId) {
+  let url = `/api/nominations/${id}`;
+  if (!token && visitorId) {
+    url += `?visitorId=${visitorId}`;
+  }
+  return request(url, { method: "GET", token });
 }
 
 export function updateUserNomination(id, payload, token) {

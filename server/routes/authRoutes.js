@@ -2,9 +2,11 @@ import express from "express";
 import bcrypt from "bcryptjs";
 
 import User from "../models/User.js";
+import Nomination from "../models/Nomination.js";
 import { signToken } from "../middleware/authMiddleware.js";
 
 import { sendOTP } from "../services/emailService.js";
+import { sendLeadOTP } from "../services/whatsappService.js";
 import passport from "passport";
 
 const router = express.Router();
@@ -288,6 +290,97 @@ router.post("/reset-password", async (req, res) => {
     return res.status(200).json({ message: "Password reset successful. You can now login." });
   } catch (err) {
     console.error("Reset password error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Mobile Login - Step 1: Send WhatsApp OTP
+router.post("/mobile-login", async (req, res) => {
+  try {
+    const { mobile } = req.body;
+    if (!mobile) return res.status(400).json({ message: "Mobile number is required" });
+
+    // 1. Check if user exists with this mobile
+    let user = await User.findOne({ mobile });
+    
+    // 2. If not found, check Nominations
+    if (!user) {
+      const nomination = await Nomination.findOne({ 
+        $or: [{ mobile: mobile }, { contactMobile: mobile }, { orgHeadMobile: mobile }]
+      }).sort({ createdAt: -1 });
+
+      if (nomination) {
+        // Found a nomination! Use its email to find or create a user
+        const emailToUse = (nomination.email || nomination.contactEmail || "").toLowerCase();
+        if (emailToUse) {
+          user = await User.findOne({ email: emailToUse });
+          if (!user) {
+            // Create user from nomination data
+            const salt = await bcrypt.genSalt(10);
+            const passwordHash = await bcrypt.hash(Math.random().toString(36).slice(-10), salt);
+            user = await User.create({
+              name: nomination.nomineeName || nomination.contactName || "User",
+              email: emailToUse,
+              mobile: mobile,
+              passwordHash,
+              isVerified: true
+            });
+          } else {
+            // Update existing user with mobile
+            user.mobile = mobile;
+            await user.save();
+          }
+        }
+      }
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: "No account or nomination found with this mobile number. Please register first." });
+    }
+
+    const otp = generateOTP();
+    user.otp = otp;
+    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    await sendLeadOTP(mobile, user.name, "Login Verification", otp);
+
+    return res.status(200).json({ message: "OTP sent to your WhatsApp" });
+  } catch (err) {
+    console.error("Mobile login send OTP error:", err);
+    return res.status(500).json({ message: "Failed to send OTP" });
+  }
+});
+
+// Mobile Login - Step 2: Verify OTP and Login
+router.post("/mobile-verify", async (req, res) => {
+  try {
+    const { mobile, otp } = req.body;
+    if (!mobile || !otp) return res.status(400).json({ message: "Mobile and OTP are required" });
+
+    const user = await User.findOne({ mobile });
+    if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    user.isVerified = true;
+    await user.save();
+
+    const token = signToken({ id: user._id, email: user.email, role: user.role, name: user.name });
+
+    return res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    console.error("Mobile verify error:", err);
     return res.status(500).json({ message: "Server error" });
   }
 });

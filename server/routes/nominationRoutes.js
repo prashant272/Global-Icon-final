@@ -70,11 +70,16 @@ router.post("/verify-otp", async (req, res) => {
       user = await User.create({
         name: name || "User",
         email: email.toLowerCase(),
+        mobile: mobile,
         passwordHash,
         isVerified: true,
         role: "user"
       });
       autoCreated = true;
+    } else if (!user.mobile) {
+      // Update existing user with mobile if they don't have it
+      user.mobile = mobile;
+      await user.save();
     }
 
     // Link nomination to this user if it was a guest draft
@@ -269,13 +274,23 @@ router.get("/my", authenticate, async (req, res) => {
 });
 
 // Fetch a single nomination by ID
-router.get("/:id", authenticate, async (req, res) => {
+router.get("/:id", optionalAuthenticate, async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid nomination ID" });
     }
-    const doc = await Nomination.findOne({ _id: req.params.id, user: req.user.id }).lean();
+    
+    // Find nomination
+    const doc = await Nomination.findById(req.params.id).lean();
     if (!doc) return res.status(404).json({ message: "Nomination not found" });
+
+    // Access control: must be owner (userId) or matching visitorId
+    const isOwner = req.user && String(doc.user) === String(req.user.id);
+    const isVisitor = req.headers["x-visitor-id"] === doc.visitorId || req.query.visitorId === doc.visitorId;
+
+    if (!isOwner && !isVisitor) {
+      return res.status(403).json({ message: "Access denied" });
+    }
 
     if (doc.pdfUrl) {
       doc.pdfUrl = await getSignedPdfUrl(doc.pdfUrl);
@@ -289,13 +304,22 @@ router.get("/:id", authenticate, async (req, res) => {
 });
 
 // Update a nomination
-router.put("/:id", authenticate, upload.single("pdf"), async (req, res) => {
+router.put("/:id", optionalAuthenticate, upload.single("pdf"), async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ message: "Invalid nomination ID" });
     }
-    const nomination = await Nomination.findOne({ _id: req.params.id, user: req.user.id });
+    
+    const nomination = await Nomination.findById(req.params.id);
     if (!nomination) return res.status(404).json({ message: "Nomination not found" });
+
+    // Access control
+    const isOwner = req.user && String(nomination.user) === String(req.user.id);
+    const isVisitor = (req.body.visitorId || req.headers["x-visitor-id"]) === nomination.visitorId;
+
+    if (!isOwner && !isVisitor) {
+      return res.status(403).json({ message: "Access denied to update" });
+    }
 
     // Only allow editing if status is "nominated" or "incomplete"
     if (nomination.status !== "nominated" && nomination.status !== "incomplete") {

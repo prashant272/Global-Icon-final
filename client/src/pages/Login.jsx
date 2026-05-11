@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { getAwardName } from "../utils/brand.js";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-import { FiMail, FiLock, FiArrowRight, FiShield, FiCheckCircle, FiKey } from "react-icons/fi";
+import { FiMail, FiLock, FiArrowRight, FiShield, FiCheckCircle, FiKey, FiPhone } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-import { googleLoginUrl, forgotPassword, resetPassword } from "../services/api";
+import { googleLoginUrl, forgotPassword, resetPassword, getBaseUrl } from "../services/api";
 import toast from "react-hot-toast";
 
 export default function Login() {
@@ -26,6 +26,12 @@ export default function Login() {
   const [forgotStep, setForgotStep] = useState(0); // 0: Login, 1: Email, 2: OTP & New Password
   const [newPassword, setNewPassword] = useState("");
   const [isSocialLoggingIn, setIsSocialLoggingIn] = useState(false);
+
+  // Mobile Login States
+  const [loginMethod, setLoginMethod] = useState("email"); // "email" or "mobile"
+  const [mobile, setMobile] = useState("");
+  const [mobileOtp, setMobileOtp] = useState("");
+  const [mobileOtpSent, setMobileOtpSent] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -142,7 +148,50 @@ export default function Login() {
     if (forgotStep === 1) return { title: "Reset Password", sub: "Enter your registered email" };
     if (forgotStep === 2) return { title: "Secure Account", sub: `Enter code sent to ${email}` };
     if (showOtp) return { title: "Verify Access", sub: `Enter code sent to ${email}` };
+    if (mobileOtpSent) return { title: "Verify Mobile", sub: `Enter code sent to ${mobile}` };
     return { title: "Welcome Back", sub: `${getAwardName()} 2026` };
+  };
+
+  const handleMobileLogin = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${getBaseUrl()}/api/auth/mobile-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mobile }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      setMobileOtpSent(true);
+      toast.success("OTP sent to your WhatsApp!");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleMobileVerify = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${getBaseUrl()}/api/auth/mobile-verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mobile, otp: mobileOtp }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      
+      handleAuthSuccess({ token: data.token, user: data.user });
+      toast.success("Login successful!");
+      navigate("/nominate");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const heading = getHeading();
@@ -333,64 +382,151 @@ export default function Login() {
           {/* MAIN LOGIN FORM */}
           {forgotStep === 0 && !showOtp && (
             <>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="group">
-                  <label className="block text-xs font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Email</label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-[#d4af37] transition-colors">
-                      <FiMail size={20} />
-                    </span>
-                    <input
-                      type="email"
-                      className="w-full bg-white/10 border-2 border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/50 outline-none transition-all focus:bg-white/15 focus:ring-4 focus:ring-[#d4af37]/20 focus:border-[#d4af37] text-lg font-medium"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      placeholder="name@organization.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="group">
-                  <label className="block text-xs font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Password</label>
-                  <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-[#d4af37] transition-colors">
-                      <FiLock size={20} />
-                    </span>
-                    <input
-                      type="password"
-                      className="w-full bg-white/10 border-2 border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/50 outline-none transition-all focus:bg-white/15 focus:ring-4 focus:ring-[#d4af37]/20 focus:border-[#d4af37] text-lg font-medium"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
+              {/* Login Method Toggle */}
+              {!mobileOtpSent && (
+                <div className="flex bg-white/5 p-1 rounded-2xl mb-8 border border-white/10">
                   <button
-                    type="button"
-                    onClick={() => setForgotStep(1)}
-                    className="text-xs text-[#d4af37] hover:text-[#f2d06b] transition-colors font-bold uppercase tracking-wider"
+                    onClick={() => setLoginMethod("email")}
+                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${loginMethod === "email" ? "bg-[#d4af37] text-black shadow-lg" : "text-gray-500 hover:text-white"}`}
                   >
-                    Forgot password?
+                    Email Login
+                  </button>
+                  <button
+                    onClick={() => setLoginMethod("mobile")}
+                    className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${loginMethod === "mobile" ? "bg-[#d4af37] text-black shadow-lg" : "text-gray-500 hover:text-white"}`}
+                  >
+                    Mobile OTP
                   </button>
                 </div>
+              )}
 
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full mt-4 bg-gradient-to-r from-[#d4af37] via-[#f2d06b] to-[#b8860b] text-black font-black uppercase tracking-widest py-5 rounded-2xl shadow-[0_20px_40px_rgba(212,175,55,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
-                >
-                  {submitting ? "Processing..." : (
-                    <>
-                      Enter Dashboard
-                      <FiArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                    </>
+              {loginMethod === "email" ? (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="group">
+                    <label className="block text-xs font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Email</label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-[#d4af37] transition-colors">
+                        <FiMail size={20} />
+                      </span>
+                      <input
+                        type="email"
+                        className="w-full bg-white/10 border-2 border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/50 outline-none transition-all focus:bg-white/15 focus:ring-4 focus:ring-[#d4af37]/20 focus:border-[#d4af37] text-lg font-medium"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="name@organization.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="group">
+                    <label className="block text-xs font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Password</label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-[#d4af37] transition-colors">
+                        <FiLock size={20} />
+                      </span>
+                      <input
+                        type="password"
+                        className="w-full bg-white/10 border-2 border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/50 outline-none transition-all focus:bg-white/15 focus:ring-4 focus:ring-[#d4af37]/20 focus:border-[#d4af37] text-lg font-medium"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setForgotStep(1)}
+                      className="text-xs text-[#d4af37] hover:text-[#f2d06b] transition-colors font-bold uppercase tracking-wider"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full mt-4 bg-gradient-to-r from-[#d4af37] via-[#f2d06b] to-[#b8860b] text-black font-black uppercase tracking-widest py-5 rounded-2xl shadow-[0_20px_40px_rgba(212,175,55,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
+                  >
+                    {submitting ? "Processing..." : (
+                      <>
+                        Enter Dashboard
+                        <FiArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                /* MOBILE LOGIN FORM */
+                <div className="space-y-6">
+                  {!mobileOtpSent ? (
+                    <form onSubmit={handleMobileLogin} className="space-y-5">
+                      <div className="group">
+                        <label className="block text-xs font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">WhatsApp Mobile Number</label>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 group-focus-within:text-[#d4af37] transition-colors">
+                            <FiPhone size={20} />
+                          </span>
+                          <input
+                            type="tel"
+                            className="w-full bg-white/10 border-2 border-white/20 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-white/50 outline-none transition-all focus:bg-white/15 focus:ring-4 focus:ring-[#d4af37]/20 focus:border-[#d4af37] text-lg font-medium"
+                            value={mobile}
+                            onChange={(e) => setMobile(e.target.value)}
+                            required
+                            placeholder="88734XXXXX"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={submitting || !mobile}
+                        className="w-full bg-gradient-to-r from-[#d4af37] via-[#f2d06b] to-[#b8860b] text-black font-black uppercase tracking-widest py-5 rounded-2xl shadow-[0_20px_40px_rgba(212,175,55,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 group"
+                      >
+                        {submitting ? "Sending..." : (<>Send Login OTP <FiArrowRight size={20} /></>)}
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={handleMobileVerify} className="space-y-6">
+                      <div className="group text-left">
+                        <label className="block text-[10px] font-bold text-[#d4af37] uppercase tracking-[0.2em] mb-2 ml-1">6-Digit OTP</label>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#d4af37] transition-colors">
+                            <FiShield size={18} />
+                          </span>
+                          <input
+                            type="text"
+                            maxLength="6"
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white placeholder-gray-600 outline-none transition-all focus:bg-white/10 focus:ring-2 focus:ring-[#d4af37]/30 focus:border-[#d4af37]/50 text-center tracking-[0.5em] text-2xl font-mono"
+                            value={mobileOtp}
+                            onChange={(e) => setMobileOtp(e.target.value)}
+                            required
+                            placeholder="000000"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        type="submit"
+                        disabled={submitting || mobileOtp.length < 4}
+                        className="w-full bg-gradient-to-r from-[#d4af37] via-[#f2d06b] to-[#b8860b] text-black font-black uppercase tracking-widest py-5 rounded-2xl shadow-[0_20px_40px_rgba(212,175,55,0.2)] hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                      >
+                        {submitting ? "Logging in..." : (<>Verify & Login <FiCheckCircle size={20} /></>)}
+                      </button>
+                      <div className="text-center">
+                        <button
+                          type="button"
+                          onClick={() => setMobileOtpSent(false)}
+                          className="text-gray-400 hover:text-white transition-colors text-sm"
+                        >
+                          Change Number
+                        </button>
+                      </div>
+                    </form>
                   )}
-                </button>
-              </form>
+                </div>
+              )}
 
               <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">

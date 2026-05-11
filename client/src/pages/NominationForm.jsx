@@ -1645,14 +1645,15 @@ export default function NominationForm() {
 
   // Load existing nomination if editing
   useEffect(() => {
-    if (isEditMode && token) {
+    if (isEditMode) {
       const load = async () => {
         try {
           if (!nominationId) return;
           setLoading(true);
-          const data = await fetchNominationById(nominationId, token);
+          // Append visitorId as query param if no token
+          const data = await fetchNominationById(nominationId, token, form.visitorId);
 
-          if (data.status !== "nominated") {
+          if (data.status !== "nominated" && data.status !== "incomplete") {
             setError("This nomination can no longer be edited.");
             return;
           }
@@ -1663,6 +1664,10 @@ export default function NominationForm() {
             subCategory: data.subCategory || "",
             otherSubCategory: data.otherSubCategory || "",
           }));
+          
+          if (data.currentStep) {
+            setStep(data.currentStep);
+          }
         } catch (err) {
           setError(err.message || "Failed to load nomination data");
         } finally {
@@ -1692,6 +1697,28 @@ export default function NominationForm() {
     }
     setVerifying(true);
     try {
+      // IMMEDIATE SAVE: Save current contact details as draft before sending OTP
+      const formData = new FormData();
+      formData.set("nomineeName", form.nomineeName);
+      formData.set("email", form.email);
+      formData.set("mobile", form.mobile);
+      formData.set("visitorId", form.visitorId);
+      formData.set("currentStep", 2);
+
+      const activeId = id || nominationId;
+      if (activeId) {
+        await updateUserNomination(activeId, formData, token);
+      } else {
+        // This case shouldn't happen if Step 1 is done, but safe to handle
+        formData.set("participationType", form.participationType);
+        const res = await createNomination(formData, token);
+        if (res?._id) {
+          setNominationId(res._id);
+          navigate(`/nominate/${res._id}`, { replace: true });
+        }
+      }
+
+      // Now send OTP
       const res = await fetch(`${getBaseUrl()}/api/nominations/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1702,7 +1729,7 @@ export default function NominationForm() {
       setOtpHash(data.otpHash);
       setOtpSent(true);
       setResendTimer(60); // 60 seconds timer
-      toast.success("OTP sent to your WhatsApp!");
+      toast.success("Details saved and OTP sent!");
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -1826,10 +1853,44 @@ export default function NominationForm() {
       return;
     }
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setForm((prev) => {
+      const next = { ...prev, [name]: type === "checkbox" ? checked : value };
+      // Auto-save on select or radio changes immediately
+      if (type === "radio" || e.target.tagName === "SELECT") {
+        saveDraft(next);
+      }
+      return next;
+    });
+  };
+
+  const saveDraft = async (overrideForm) => {
+    try {
+      const dataToSave = overrideForm || form;
+      const formData = new FormData();
+      const excludeFromDraft = ["_id", "__v", "user", "createdAt", "updatedAt", "status", "currentStep", "pdfUrl"];
+      
+      Object.keys(dataToSave).forEach(key => {
+        if (key === "preferredLocation") {
+          dataToSave[key].forEach(loc => formData.append("preferredLocation", loc));
+        } else if (key !== "pdf" && !excludeFromDraft.includes(key)) {
+          formData.set(key, dataToSave[key]);
+        }
+      });
+      
+      formData.set("currentStep", step);
+      formData.set("visitorId", form.visitorId);
+
+      const activeId = id || nominationId;
+      if (activeId && activeId !== "undefined") {
+        await updateUserNomination(activeId, formData, token);
+      }
+    } catch (err) {
+      console.error("Auto-save failed", err);
+    }
+  };
+
+  const handleBlur = () => {
+    saveDraft();
   };
 
   const handleStepNext = async (passedToken) => {
@@ -2077,7 +2138,7 @@ export default function NominationForm() {
           <>
             <div>
               <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Choice of Field *</label>
-              <select name="field" value={form.field} onChange={handleChange} className={getSelectClass("field")}>
+              <select name="field" value={form.field} onChange={handleChange} onBlur={handleBlur} className={getSelectClass("field")}>
                 <option value="">Select Field</option>
                 {Object.keys(fieldMap).map((f) => (<option key={f} value={f}>{f}</option>))}
               </select>
@@ -2085,7 +2146,7 @@ export default function NominationForm() {
 
             <div>
               <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Category *</label>
-              <select name="category" value={form.category} onChange={handleChange} disabled={!form.field} className={getSelectClass("category")}>
+              <select name="category" value={form.category} onChange={handleChange} onBlur={handleBlur} disabled={!form.field} className={getSelectClass("category")}>
                 <option value="">Select Category</option>
                 {Object.keys(availableCategories).map((c) => (<option key={c} value={c}>{c}</option>))}
               </select>
@@ -2096,7 +2157,7 @@ export default function NominationForm() {
         {form.participationType === "nominated as award" && (
           <div className="md:col-span-2">
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Sub-Category *</label>
-            <select name="subCategory" value={form.subCategory} onChange={handleChange} disabled={!form.category} className={getSelectClass("subCategory")}>
+            <select name="subCategory" value={form.subCategory} onChange={handleChange} onBlur={handleBlur} disabled={!form.category} className={getSelectClass("subCategory")}>
               <option value="">Select Sub-Category</option>
               {Object.keys(groupedSubCategories).map((group) => (
                 <optgroup key={group} label={group}>
@@ -2132,25 +2193,16 @@ export default function NominationForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Full Name *</label>
-          <input name="nomineeName" placeholder="Ex: Dr. Prashant Kumar" value={form.nomineeName} onChange={handleChange} className={getInputClass("nomineeName")} />
+          <input name="nomineeName" placeholder="Ex: Dr. Prashant Kumar" value={form.nomineeName} onChange={handleChange} onBlur={handleBlur} className={getInputClass("nomineeName")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Official Email *</label>
-          <input name="email" placeholder="work@domain.com" value={form.email} onChange={handleChange} className={getInputClass("email")} />
+          <input name="email" placeholder="work@domain.com" value={form.email} onChange={handleChange} onBlur={handleBlur} className={getInputClass("email")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Mobile Contact *</label>
           <div className="flex gap-2">
-            <input name="mobile" placeholder="88734XXXXX" value={form.mobile} onChange={handleChange} className={getInputClass("mobile")} disabled={otpSent} />
-            {!otpSent && (
-              <button
-                onClick={handleSendOTP}
-                disabled={verifying}
-                className="bg-[#d4af37] text-black px-4 py-2 rounded-lg font-bold text-xs uppercase hover:bg-[#ffe9a1] transition-all disabled:opacity-50 shrink-0"
-              >
-                {verifying ? "..." : "Get OTP"}
-              </button>
-            )}
+            <input name="mobile" placeholder="88734XXXXX" value={form.mobile} onChange={handleChange} onBlur={handleBlur} className={getInputClass("mobile")} disabled={otpSent} />
           </div>
         </div>
 
@@ -2201,14 +2253,6 @@ export default function NominationForm() {
               </div>
 
               <div className="flex flex-col items-center gap-4 w-full">
-                <button
-                  onClick={handleVerifyOTP}
-                  disabled={otp.length !== 4 || verifying}
-                  className="w-full max-w-sm bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black py-4 rounded-xl font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-[0_10px_20px_rgba(212,175,55,0.2)] disabled:opacity-50"
-                >
-                  {verifying ? "Verifying..." : "Verify & Continue"}
-                </button>
-
                 <div className="flex justify-between items-center w-full max-w-sm px-2">
                   <button
                     onClick={() => { setOtpSent(false); setOtp(""); }}
@@ -2238,6 +2282,23 @@ export default function NominationForm() {
 
       <div className="flex justify-between pt-8">
         <button onClick={handleStepBack} className="text-gray-500 font-bold uppercase tracking-widest hover:text-white transition-all">Back</button>
+        {!otpSent ? (
+          <button 
+            onClick={handleSendOTP} 
+            disabled={verifying || !form.mobile || !form.nomineeName}
+            className="bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg disabled:opacity-50"
+          >
+            {verifying ? "Sending..." : "Next Step"}
+          </button>
+        ) : (
+          <button 
+            onClick={handleVerifyOTP} 
+            disabled={verifying || otp.length < 4}
+            className="bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg disabled:opacity-50"
+          >
+            {verifying ? "Verifying..." : "Verify & Proceed"}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -2247,15 +2308,15 @@ export default function NominationForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Organization Name *</label>
-          <input name="organization" placeholder="Current Company / Institution" value={form.organization} onChange={handleChange} className={getInputClass("organization")} />
+          <input name="organization" placeholder="Current Company / Institution" value={form.organization} onChange={handleChange} onBlur={handleBlur} className={getInputClass("organization")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Designation *</label>
-          <input name="designation" placeholder="Job Title" value={form.designation} onChange={handleChange} className={getInputClass("designation")} />
+          <input name="designation" placeholder="Job Title" value={form.designation} onChange={handleChange} onBlur={handleBlur} className={getInputClass("designation")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Annual Turnover</label>
-          <select name="turnover" value={form.turnover} onChange={handleChange} className={getSelectClass("turnover")}>
+          <select name="turnover" value={form.turnover} onChange={handleChange} onBlur={handleBlur} className={getSelectClass("turnover")}>
             <option value="">Select Turnover</option>
             <option value="Below 1 Cr">Below 1 Cr</option>
             <option value="1 Cr - 10 Cr">1 Cr - 10 Cr</option>
@@ -2265,19 +2326,19 @@ export default function NominationForm() {
         </div>
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Portfolio / Website Link</label>
-          <input name="website" placeholder="https://example.com" value={form.website} onChange={handleChange} className={getInputClass("website")} />
+          <input name="website" placeholder="https://example.com" value={form.website} onChange={handleChange} onBlur={handleBlur} className={getInputClass("website")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Facebook Profile</label>
-          <input name="facebook" placeholder="Facebook Link" value={form.facebook} onChange={handleChange} className={getInputClass("facebook")} />
+          <input name="facebook" placeholder="Facebook Link" value={form.facebook} onChange={handleChange} onBlur={handleBlur} className={getInputClass("facebook")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Instagram Handle</label>
-          <input name="instagram" placeholder="Instagram Link" value={form.instagram} onChange={handleChange} className={getInputClass("instagram")} />
+          <input name="instagram" placeholder="Instagram Link" value={form.instagram} onChange={handleChange} onBlur={handleBlur} className={getInputClass("instagram")} />
         </div>
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">YouTube Channel</label>
-          <input name="youtube" placeholder="YouTube Link" value={form.youtube} onChange={handleChange} className={getInputClass("youtube")} />
+          <input name="youtube" placeholder="YouTube Link" value={form.youtube} onChange={handleChange} onBlur={handleBlur} className={getInputClass("youtube")} />
         </div>
       </div>
 
@@ -2297,19 +2358,19 @@ export default function NominationForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="md:col-span-2">
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Full Name *</label>
-            <input name="orgHeadName" value={form.orgHeadName} onChange={handleChange} className={getInputClass("orgHeadName")} />
+            <input name="orgHeadName" value={form.orgHeadName} onChange={handleChange} onBlur={handleBlur} className={getInputClass("orgHeadName")} />
           </div>
           <div>
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Designation *</label>
-            <input name="orgHeadDesignation" value={form.orgHeadDesignation} onChange={handleChange} className={getInputClass("orgHeadDesignation")} />
+            <input name="orgHeadDesignation" value={form.orgHeadDesignation} onChange={handleChange} onBlur={handleBlur} className={getInputClass("orgHeadDesignation")} />
           </div>
           <div>
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Mobile *</label>
-            <input name="orgHeadMobile" value={form.orgHeadMobile} onChange={handleChange} className={getInputClass("orgHeadMobile")} />
+            <input name="orgHeadMobile" value={form.orgHeadMobile} onChange={handleChange} onBlur={handleBlur} className={getInputClass("orgHeadMobile")} />
           </div>
           <div>
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Email *</label>
-            <input name="orgHeadEmail" value={form.orgHeadEmail} onChange={handleChange} className={getInputClass("orgHeadEmail")} />
+            <input name="orgHeadEmail" value={form.orgHeadEmail} onChange={handleChange} onBlur={handleBlur} className={getInputClass("orgHeadEmail")} />
           </div>
         </div>
       </div>
@@ -2321,19 +2382,19 @@ export default function NominationForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="md:col-span-2">
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Full Name *</label>
-            <input name="contactName" value={form.contactName} onChange={handleChange} className={getInputClass("contactName")} />
+            <input name="contactName" value={form.contactName} onChange={handleChange} onBlur={handleBlur} className={getInputClass("contactName")} />
           </div>
           <div>
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Email *</label>
-            <input name="contactEmail" value={form.contactEmail} onChange={handleChange} className={getInputClass("contactEmail")} />
+            <input name="contactEmail" value={form.contactEmail} onChange={handleChange} onBlur={handleBlur} className={getInputClass("contactEmail")} />
           </div>
           <div>
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Mobile *</label>
-            <input name="contactMobile" value={form.contactMobile} onChange={handleChange} className={getInputClass("contactMobile")} />
+            <input name="contactMobile" value={form.contactMobile} onChange={handleChange} onBlur={handleBlur} className={getInputClass("contactMobile")} />
           </div>
           <div>
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Designation *</label>
-            <input name="contactDesignation" value={form.contactDesignation} onChange={handleChange} className={getInputClass("contactDesignation")} />
+            <input name="contactDesignation" value={form.contactDesignation} onChange={handleChange} onBlur={handleBlur} className={getInputClass("contactDesignation")} />
           </div>
         </div>
       </div>
@@ -2350,19 +2411,19 @@ export default function NominationForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Street Address *</label>
-          <input name="street" value={form.street} onChange={handleChange} className={getInputClass("street")} />
+          <input name="street" value={form.street} onChange={handleChange} onBlur={handleBlur} className={getInputClass("street")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">City *</label>
-          <input name="city" value={form.city} onChange={handleChange} className={getInputClass("city")} />
+          <input name="city" value={form.city} onChange={handleChange} onBlur={handleBlur} className={getInputClass("city")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">State *</label>
-          <input name="state" value={form.state} onChange={handleChange} className={getInputClass("state")} />
+          <input name="state" value={form.state} onChange={handleChange} onBlur={handleBlur} className={getInputClass("state")} />
         </div>
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">ZIP / Postal Code *</label>
-          <input name="zip" value={form.zip} onChange={handleChange} className={getInputClass("zip")} />
+          <input name="zip" value={form.zip} onChange={handleChange} onBlur={handleBlur} className={getInputClass("zip")} />
         </div>
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Preferred Event Location</label>
