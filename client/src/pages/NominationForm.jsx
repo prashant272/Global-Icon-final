@@ -1877,8 +1877,12 @@ export default function NominationForm() {
         }
       });
       
-      formData.set("currentStep", step);
+      // Do NOT set currentStep here. Let handleStepNext/Back manage the step state in DB.
+      // This prevents onBlur from reverting a step if the local 'step' state is lagging.
       formData.set("visitorId", form.visitorId);
+      if (!form.status) {
+        formData.set("status", "incomplete");
+      }
 
       const activeId = id || nominationId;
       if (activeId && activeId !== "undefined") {
