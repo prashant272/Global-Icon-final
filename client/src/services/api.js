@@ -117,8 +117,16 @@ export function deleteNomination(id, token) {
 }
 
 /* ---------------- Previous Editions ---------------- */
-export function fetchPreviousEditions() {
-  return request("/api/previous-editions", { method: "GET" });
+export function fetchPreviousEditions(options = {}) {
+  let query = "";
+  if (!options.admin) {
+    const isTimecyber = typeof window !== "undefined" && (
+      window.location.hostname.includes("timecyber") || 
+      window.location.hostname.includes("cyber")
+    );
+    query = `?showOnTimecyberMedia=${isTimecyber}`;
+  }
+  return request(`/api/previous-editions${query}`, { method: "GET" });
 }
 
 export function fetchEditionByYear(year) {
@@ -146,8 +154,16 @@ export function deletePreviousEdition(id, token) {
 }
 
 /* ---------------- Upcoming Awards ---------------- */
-export function fetchUpcomingAwards() {
-  return request("/api/upcoming-awards", { method: "GET" });
+export function fetchUpcomingAwards(options = {}) {
+  let query = "";
+  if (!options.admin) {
+    const isTimecyber = typeof window !== "undefined" && (
+      window.location.hostname.includes("timecyber") || 
+      window.location.hostname.includes("cyber")
+    );
+    query = `?showOnTimecyberMedia=${isTimecyber}`;
+  }
+  return request(`/api/upcoming-awards${query}`, { method: "GET" });
 }
 
 export function fetchUpcomingAwardBySlug(slug) {

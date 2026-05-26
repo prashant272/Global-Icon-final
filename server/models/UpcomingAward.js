@@ -16,6 +16,7 @@ const upcomingAwardSchema = new mongoose.Schema(
     cardImage: { type: String, default: "" },
     slug: { type: String, unique: true, sparse: true },
     isActive: { type: Boolean, default: true },
+    showOnTimecyberMedia: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

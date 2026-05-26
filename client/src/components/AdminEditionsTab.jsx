@@ -27,6 +27,7 @@ export default function AdminEditionsTab({ token }) {
         fullDate: "",
         hero: "",
         youtubeLinks: "", // Comma-separated internally
+        showOnTimecyberMedia: false,
     });
 
     const [selectedImages, setSelectedImages] = useState([]); // File objects
@@ -41,7 +42,7 @@ export default function AdminEditionsTab({ token }) {
     const loadData = async () => {
         try {
             setLoading(true);
-            const data = await fetchPreviousEditions();
+            const data = await fetchPreviousEditions({ admin: true });
             setEditions(data);
         } catch (err) {
             setError(err.message || "Failed to load editions");
@@ -60,6 +61,7 @@ export default function AdminEditionsTab({ token }) {
             fullDate: "",
             hero: "",
             youtubeLinks: "",
+            showOnTimecyberMedia: false,
         });
         setSelectedImages([]);
         setExistingImages([]);
@@ -78,6 +80,7 @@ export default function AdminEditionsTab({ token }) {
             fullDate: edition.fullDate || "",
             hero: edition.hero || "",
             youtubeLinks: edition.youtubeLinks ? edition.youtubeLinks.join(", ") : "",
+            showOnTimecyberMedia: !!edition.showOnTimecyberMedia,
         });
         setSelectedImages([]);
         setExistingImages(edition.images || []);
@@ -120,6 +123,7 @@ export default function AdminEditionsTab({ token }) {
             payload.append("fullDate", formData.fullDate);
             payload.append("hero", formData.hero);
             payload.append("youtubeLinks", formData.youtubeLinks);
+            payload.append("showOnTimecyberMedia", formData.showOnTimecyberMedia);
 
             if (formData._id) {
                 payload.append("removeImages", JSON.stringify(imagesToRemove));
@@ -206,7 +210,12 @@ export default function AdminEditionsTab({ token }) {
                                     <div className="text-xs text-[#ffeab080] font-bold uppercase tracking-wider">{e.editionLabel || "—"}</div>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <div className="font-semibold text-[#fee5af]">{e.title}</div>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <div className="font-semibold text-[#fee5af]">{e.title}</div>
+                                        {e.showOnTimecyberMedia && (
+                                            <span className="text-[9px] bg-yellow-500/20 text-[#fae36f] border border-[#d4af37]/30 px-1.5 py-0.5 rounded font-bold uppercase">Timecyber</span>
+                                        )}
+                                    </div>
                                     <div className="text-xs text-gray-400 max-w-xs truncate" title={e.hero}>{e.hero || "—"}</div>
                                 </td>
                                 <td className="px-6 py-4">
@@ -343,6 +352,19 @@ export default function AdminEditionsTab({ token }) {
                                     value={formData.hero}
                                     onChange={(e) => setFormData({ ...formData, hero: e.target.value })}
                                 />
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    id="showOnTimecyberMedia"
+                                    className="w-4 h-4 accent-[#d4af37]"
+                                    checked={formData.showOnTimecyberMedia}
+                                    onChange={(e) => setFormData({ ...formData, showOnTimecyberMedia: e.target.checked })}
+                                />
+                                <label htmlFor="showOnTimecyberMedia" className="text-sm text-[#fae36f] font-semibold">
+                                    Show on Timecyber Media website
+                                </label>
                             </div>
 
                             <div className="border border-[#d4af37]/20 p-4 rounded-xl bg-black/20">

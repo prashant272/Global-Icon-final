@@ -16,6 +16,7 @@ const emptyForm = {
   cardImageFile: null,
   cardImagePreview: "",
   isActive: true,
+  showOnTimecyberMedia: false,
   winners: [], // [{ name: "", file: null, preview: "" }]
 };
 
@@ -33,7 +34,7 @@ export default function AdminUpcomingAwardsTab() {
 
   const load = () => {
     setLoading(true);
-    fetchUpcomingAwards()
+    fetchUpcomingAwards({ admin: true })
       .then(setAwards)
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
@@ -187,6 +188,7 @@ export default function AdminUpcomingAwardsTab() {
       cardImageFile: null,
       cardImagePreview: "",
       isActive: award.isActive !== false,
+      showOnTimecyberMedia: award.showOnTimecyberMedia === true,
       winners: [], 
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -212,6 +214,7 @@ export default function AdminUpcomingAwardsTab() {
       fd.append("desc", form.desc);
       fd.append("link", form.link);
       fd.append("isActive", form.isActive);
+      fd.append("showOnTimecyberMedia", form.showOnTimecyberMedia);
       if (form.cardImageFile) fd.append("cardImage", form.cardImageFile);
       form.bannerFiles.forEach((f) => fd.append("banners", f));
       form.guestFiles.forEach((f) => fd.append("guestImages", f));
@@ -469,10 +472,16 @@ export default function AdminUpcomingAwardsTab() {
             </div>
           </div>
 
-          {/* Active toggle */}
-          <div className="flex items-center gap-2">
-            <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} id="isActive" className="w-4 h-4 accent-[#d4af37]" />
-            <label htmlFor="isActive" className="text-sm text-[#fae36f] font-semibold">Active (show in navbar)</label>
+          {/* Active & Timecyber toggles */}
+          <div className="flex flex-wrap gap-6 items-center md:col-span-2">
+            <div className="flex items-center gap-2">
+              <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} id="isActive" className="w-4 h-4 accent-[#d4af37]" />
+              <label htmlFor="isActive" className="text-sm text-[#fae36f] font-semibold">Active (show in navbar)</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input type="checkbox" name="showOnTimecyberMedia" checked={form.showOnTimecyberMedia || false} onChange={handleChange} id="showOnTimecyberMedia" className="w-4 h-4 accent-[#d4af37]" />
+              <label htmlFor="showOnTimecyberMedia" className="text-sm text-[#fae36f] font-semibold">Show on Timecyber Media website</label>
+            </div>
           </div>
 
           {/* Buttons */}
@@ -515,6 +524,11 @@ export default function AdminUpcomingAwardsTab() {
                     <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${award.isActive ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>
                       {award.isActive ? "Active" : "Hidden"}
                     </span>
+                    {award.showOnTimecyberMedia && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full font-bold bg-yellow-500/20 text-[#fae36f] border border-[#d4af37]/30 uppercase">
+                        Timecyber
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-[#d4af37] mt-0.5">{award.date}{award.location ? ` · ${award.location}` : ""}</p>
                   {award.guestImages?.length > 0 && (

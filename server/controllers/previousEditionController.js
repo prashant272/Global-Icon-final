@@ -35,11 +35,20 @@ function generateSlug(title, year, label) {
 }
 
 /* ---------- GET /api/previous-editions ---------- */
-export async function getAll(_req, res) {
+export async function getAll(req, res) {
     try {
-        const editions = await PreviousEdition.find({})
+        const query = {};
+        if (req.query.showOnTimecyberMedia !== undefined) {
+            const onlyTimecyber = req.query.showOnTimecyberMedia === "true";
+            if (onlyTimecyber) {
+                query.showOnTimecyberMedia = true;
+            } else {
+                query.showOnTimecyberMedia = { $ne: true };
+            }
+        }
+        const editions = await PreviousEdition.find(query)
             .sort({ year: -1 })
-            .select("year title editionLabel slug locations fullDate hero coverImage images youtubeLinks")
+            .select("year title editionLabel slug locations fullDate hero coverImage images youtubeLinks showOnTimecyberMedia")
             .lean();
         return res.json(editions);
     } catch (err) {
@@ -73,7 +82,7 @@ export async function getByYear(req, res) {
 /* ---------- POST /api/previous-editions ---------- */
 export async function create(req, res) {
     try {
-        const { year, title, editionLabel, locations, fullDate, hero, youtubeLinks } = req.body;
+        const { year, title, editionLabel, locations, fullDate, hero, youtubeLinks, showOnTimecyberMedia } = req.body;
 
         if (!year) return res.status(400).json({ message: "Year is required" });
 
@@ -100,6 +109,7 @@ export async function create(req, res) {
                 : (youtubeLinks || []),
             coverImage: imageUrls[0] || "",
             images: imageUrls,
+            showOnTimecyberMedia: showOnTimecyberMedia === "true" || showOnTimecyberMedia === true,
         });
 
         const saved = await edition.save();
@@ -118,7 +128,7 @@ export async function update(req, res) {
         const edition = await PreviousEdition.findById(req.params.id);
         if (!edition) return res.status(404).json({ message: "Edition not found" });
 
-        const { year, title, editionLabel, locations, fullDate, hero, youtubeLinks, removeImages } = req.body;
+        const { year, title, editionLabel, locations, fullDate, hero, youtubeLinks, removeImages, showOnTimecyberMedia } = req.body;
 
         // Images to remove
         const toRemove = typeof removeImages === "string"
@@ -149,6 +159,9 @@ export async function update(req, res) {
         }
         if (fullDate !== undefined) edition.fullDate = fullDate;
         if (hero !== undefined) edition.hero = hero;
+        if (showOnTimecyberMedia !== undefined) {
+            edition.showOnTimecyberMedia = showOnTimecyberMedia === "true" || showOnTimecyberMedia === true;
+        }
 
         // Auto-update slug if title, year, or label changes
         if (title !== undefined || year !== undefined || editionLabel !== undefined) {

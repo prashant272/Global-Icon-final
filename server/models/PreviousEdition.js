@@ -13,6 +13,7 @@ const previousEditionSchema = new mongoose.Schema(
         youtubeLinks: { type: [String], default: [] }, // Array of YouTube video URLs
         coverImage: { type: String, default: "" },   // First image or manually set S3 URL
         images: { type: [String], default: [] },     // All S3 URLs for this edition
+        showOnTimecyberMedia: { type: Boolean, default: false },
     },
     { timestamps: true }
 );

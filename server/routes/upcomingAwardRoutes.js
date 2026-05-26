@@ -15,7 +15,16 @@ const handleUpload = (req, res, next) => {
 /* ---- Public ---- */
 router.get("/", async (req, res) => {
     try {
-        const awards = await UpcomingAward.find({ isActive: true }).sort({ createdAt: -1 });
+        const query = { isActive: true };
+        if (req.query.showOnTimecyberMedia !== undefined) {
+            const onlyTimecyber = req.query.showOnTimecyberMedia === "true";
+            if (onlyTimecyber) {
+                query.showOnTimecyberMedia = true;
+            } else {
+                query.showOnTimecyberMedia = { $ne: true };
+            }
+        }
+        const awards = await UpcomingAward.find(query).sort({ createdAt: -1 });
         res.json(awards);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -78,6 +87,11 @@ router.post("/", authenticate, requireAdmin, handleUpload, async (req, res) => {
             data.isActive = data.isActive === "true";
         }
 
+        // Parse showOnTimecyberMedia properly
+        if (typeof data.showOnTimecyberMedia === "string") {
+            data.showOnTimecyberMedia = data.showOnTimecyberMedia === "true";
+        }
+
         const award = new UpcomingAward(data);
         await award.save();
         res.status(201).json(award);
@@ -132,6 +146,11 @@ router.put("/:id", authenticate, requireAdmin, handleUpload, async (req, res) =>
 
         if (typeof data.isActive === "string") {
             data.isActive = data.isActive === "true";
+        }
+
+        // Parse showOnTimecyberMedia properly
+        if (typeof data.showOnTimecyberMedia === "string") {
+            data.showOnTimecyberMedia = data.showOnTimecyberMedia === "true";
         }
 
         // Reset slug if title changed

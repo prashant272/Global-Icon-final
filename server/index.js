@@ -46,6 +46,10 @@ app.use(cors({
     "https://www.api.globaliconawards.in",
     "https://global-icon.primetimemedia.in",
     "https://india-excellence.primetimemedia.in",
+    "https://www.internationalhealthcareaward.com",
+    "https://internationalhealthcareaward.com",
+    "https://indiabrandicon.in",
+    "https://www.indiabrandicon.in",
     "http://localhost:5173",
     "http://127.0.0.1:5173"
   ],
