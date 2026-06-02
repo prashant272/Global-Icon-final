@@ -93,42 +93,28 @@ export default function Home() {
       link: "https://global-icon.primetimemedia.in/upcoming-awards/global-icon-award-2026-pattaya-edition"
     },
     {
-      title: "Business and Leadership Summit 2026– USA Edition",
-      desc: "A premier summit recognising visionary business leaders and entrepreneurs.",
-      date: "30 June 2026",
-      place: "USA",
+      title: "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
+      desc: "Celebrating prestigious leaders, excellence, and exceptional contribution to society on an international stage.",
+      date: "2 July 2026",
+      place: "House of Commons, UK Parliament, London",
       time: "TBA",
-      link: "https://business-leadership.primetimemedia.in//upcoming-awards/usa-business-leadership-summit/"
+      link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20House%20of%20Commons%2C%20UK%20Parliament%2C%20London%20Edition"
     },
-    // {
-    //   title: "Business and Leadership Summit 2026– Dubai Edition",
-    //   desc: "Recognising excellence and innovation in global leadership.",
-    //   date: "Announcement coming soon (rescheduled due to ongoing international situation)",
-    //   place: "Dubai",
-    //   time: "TBA",
-    // },
     {
-      title: "Invest India Summit 2026 – UK Edition",
-      desc: "Fostering investment and celebrating leadership across industries.",
-      date: "7 May 2026",
-      place: "UK",
+      title: "Global Quality Awards 2026 – New Delhi Edition",
+      desc: "Honouring organizations and individuals for their commitment to quality, excellence, and operational standards.",
+      date: "12 July 2026",
+      place: "New Delhi",
       time: "TBA",
-      link: "https://investment-india.primetimemedia.in/upcoming-awards/invest-india-summit-2026---uk-edition/"
+      link: "/nominate?award=Global%20Quality%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition"
     },
-    // {
-    //   title: "Global Icon Awards – New Delhi Edition 2026",
-    //   desc: "Recognising excellence and innovation in global leadership.",
-    //   date: "26 April 2026",
-    //   place: "New Delhi",
-    //   time: "TBA",
-    // },
     {
-      title: "India Excellence Awards & Conference 2026",
-      desc: "Recognising excellence, innovation, and outstanding achievements in business, leadership, and professional sectors.",
-      date: "22 May 2026",
-      place: "Hyderabad",
+      title: "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
+      desc: "A premier global summit celebrating outstanding achievements, innovation, and leadership across industries.",
+      date: "12 October 2026",
+      place: "Washington DC, USA",
       time: "TBA",
-      link: "https://business-leadership.primetimemedia.in/upcoming-awards/india-excellence-awards-2026/"
+      link: "/nominate?award=Global%20Achievers%20Summit%20%26%20Awards%202026%20%E2%80%93%20Washington%20DC%2C%20USA%20Edition"
     },
   ];
 
@@ -148,7 +134,7 @@ export default function Home() {
     { name: "Shri Anil K. Shastri", designation: "Son of Lal Bahadur Shastri; Former Ministry of Finance, Govt. of India." },
     { name: "Shri Sandeep Patil", designation: "Former Indian Cricketer & Chief of the BCCI Selection Committee" },
     { name: "Brett Lee", designation: "Australian Cricketer" },
-     { name: "Shri Amar Singh", designation: "Hon’ble Member of Parliament" },
+    { name: "Shri Amar Singh", designation: "Hon’ble Member of Parliament" },
     { name: "Ms. Arti Mehra", designation: "CEO, NABH; Former Mayor, Municipal Corporation of Delhi" },
   ];
 

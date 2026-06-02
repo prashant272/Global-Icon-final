@@ -1535,11 +1535,10 @@ const fieldMap = {
 };
 
 const AVAILABLE_AWARDS = [
-  getAwardName(),
   "Global Icon Award 2026 - Pattaya Edition",
-  "India Excellence Awards & Conference 2026",
-  "Invest India Summit 2026",
-  "Business and Leadership Summit 2026",
+  "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
+  "Global Quality Awards 2026 – New Delhi Edition",
+  "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
 ];
 
 const initialForm = {
@@ -2432,7 +2431,7 @@ export default function NominationForm() {
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Preferred Event Location</label>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {["Hyderabad", "USA", "London", "Pattaya, Thailand"].map((loc) => (
+            {["House of Commons, UK Parliament, London", "New Delhi", "Washington DC, USA", "Pattaya, Thailand"].map((loc) => (
               <label
                 key={loc}
                 className={`p-3 rounded-xl border text-center cursor-pointer transition-all ${form.preferredLocation?.includes(loc) ? "bg-[#d4af37] text-black border-[#d4af37]" : "bg-white/5 border-white/10 text-gray-400"}`}

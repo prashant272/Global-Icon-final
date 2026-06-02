@@ -145,8 +145,18 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                   border: "from-[#d4af37] to-[#ead481]",
                 },
                 {
-                  title: "India Excellence Awards & Conference 2026",
-                  date: "22 May 2026",
+                  title: "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
+                  date: "2 July 2026",
+                  icon: (
+                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
+                      <span className="text-2xl">🇬🇧</span>
+                    </span>
+                  ),
+                  border: "from-[#d4af37] to-[#ead481]",
+                },
+                {
+                  title: "Global Quality Awards 2026 – New Delhi Edition",
+                  date: "12 July 2026",
                   icon: (
                     <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
                       <span className="text-2xl">🇮🇳</span>
@@ -155,24 +165,14 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                   border: "from-[#d4af37] to-[#ead481]",
                 },
                 {
-                  title: 'Business and Leadership Summit 2026– USA Edition',
-                  date: '30 June 2026',
+                  title: "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
+                  date: "12 October 2026",
                   icon: (
                     <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
                       <span className="text-2xl">🇺🇸</span>
                     </span>
                   ),
-                  border: 'from-[#d4af37] to-[#ead481]',
-                },
-                {
-                  title: 'Invest India Summit 2026 – UK Edition',
-                  date: '7 May 2026',
-                  icon: (
-                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
-                      <span className="text-2xl">🇬🇧</span>
-                    </span>
-                  ),
-                  border: 'from-[#d4af37] to-[#ead481]',
+                  border: "from-[#d4af37] to-[#ead481]",
                 },
               ].map((item, idx) => (
                 <div key={idx} className="relative group"

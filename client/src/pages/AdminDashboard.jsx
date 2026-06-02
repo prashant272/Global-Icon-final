@@ -76,7 +76,9 @@ const FIELD_FILTER_OPTIONS = [
 const LOCATION_FILTER_OPTIONS = [
   { value: "all", label: "All Locations" },
   { value: "New Delhi", label: "New Delhi" },
-  { value: "Dubai", label: "Dubai" },
+  { value: "Washington DC, USA", label: "Washington DC, USA" },
+  { value: "House of Commons, UK Parliament, London", label: "House of Commons, UK Parliament, London" },
+  { value: "Pattaya, Thailand", label: "Pattaya, Thailand" },
 ];
 
 /* ------------------ Detail Item Helper ------------------ */
