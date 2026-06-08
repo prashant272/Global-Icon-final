@@ -3,7 +3,7 @@ import axios from "axios";
 /**
  * Service to send WhatsApp messages using Meta API
  */
-export const sendWhatsAppTemplate = async (to, templateName, components, buttonComponents = null) => {
+export const sendWhatsAppTemplate = async (to, templateName, components, buttonComponents = null, buttonSubType = "url") => {
   try {
     const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
     const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
@@ -34,7 +34,7 @@ export const sendWhatsAppTemplate = async (to, templateName, components, buttonC
     if (buttonComponents) {
       templateData.components.push({
         type: "button",
-        sub_type: "url", // Most common for dynamic buttons in OTP templates
+        sub_type: buttonSubType,
         index: "0",
         parameters: buttonComponents,
       });
@@ -74,13 +74,17 @@ export const sendWhatsAppTemplate = async (to, templateName, components, buttonC
  * Specifically send the OTP template
  */
 export const sendLeadOTP = async (mobile, name, purpose, otp) => {
-  // Mapping variables to the template: ptrm_otp_preset
-  // Based on user description: 4 variables
-  // My assumption: Var 1: Name, Var 2: OTP, Var 3: Purpose, Var 4: Brand
+  // Mapping variables to the template: ptrm_website_auth
+  // Var 1: OTP Code
+  // Var 2: Brand/Website ("Prime Time")
+  // Var 3: Validity ("10 minutes")
+  // Var 4: Support/Verification call ("+919810910686")
+  // Var 5: Support contact ("+919810910686")
   const components = [
     { type: "text", text: otp },
     { type: "text", text: "Prime Time" },
     { type: "text", text: "10 minutes" },
+    { type: "text", text: "+919810910686" },
     { type: "text", text: "+919810910686" },
   ];
 
@@ -88,5 +92,5 @@ export const sendLeadOTP = async (mobile, name, purpose, otp) => {
     { type: "text", text: otp },
   ];
 
-  return await sendWhatsAppTemplate(mobile, "ptrm_otp", components, buttonComponents);
+  return await sendWhatsAppTemplate(mobile, "ptrm_website_auth", components, buttonComponents, "url");
 };
