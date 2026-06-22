@@ -22,6 +22,8 @@ import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminRegister from "./pages/AdminRegister.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import SuccessPage from "./pages/SuccessPage.jsx";
+import Blogs from "./pages/Blogs.jsx";
+import BlogDetail from "./pages/BlogDetail.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
@@ -61,6 +63,8 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/media" element={<Media />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/editions/:slug" element={<EditionDetail />} />
           <Route path="/upcoming-awards/:slug" element={<UpcomingAwardDetail />} />
           <Route path="/nominate/:id?" element={<NominationForm />} />

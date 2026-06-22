@@ -16,6 +16,7 @@ import {
   FaRegEdit,
   FaQuestionCircle,
   FaChevronDown,
+  FaNewspaper,
 } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import { fetchPreviousEditions, fetchUpcomingAwards } from "../services/api.js";
@@ -390,6 +391,7 @@ const menuLinks = (color, onClick, headerRef, isUser, isMobile = false, editions
       )}
 
       <NavItem to="/faq" icon={<FaQuestionCircle />} label="FAQ" color={color} onClick={createNavHandler(onClick)} />
+      <NavItem to="/blogs" icon={<FaNewspaper />} label="Blogs" color={color} onClick={createNavHandler(onClick)} />
       <NavItem to="/nominate" icon={<FaRegEdit />} label="Nominate Now" color={color} onClick={createNavHandler(onClick)} isSpecial={true} />
       {isUser && showDashboard && (
         <NavItem

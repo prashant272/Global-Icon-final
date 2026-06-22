@@ -11,6 +11,7 @@ import upcomingAwardRoutes from "./routes/upcomingAwardRoutes.js";
 import leadRoutes from "./routes/leadRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import externalRoutes from "./routes/externalRoutes.js";
+import blogRoutes from "./routes/blogRoutes.js";
 import passport from "./config/passport.js";
 
 import PreviousEdition from "./models/PreviousEdition.js";
@@ -189,6 +190,7 @@ app.use("/api/upcoming-awards", upcomingAwardRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/external", externalRoutes);
+app.use("/api/blogs", blogRoutes);
 
 /**
  * =========================

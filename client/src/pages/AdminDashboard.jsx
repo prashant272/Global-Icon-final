@@ -31,6 +31,7 @@ import { toast } from "react-hot-toast";
 
 import AdminEditionsTab from "../components/AdminEditionsTab.jsx";
 import AdminUpcomingAwardsTab from "../components/AdminUpcomingAwardsTab.jsx";
+import AdminBlogsTab from "../components/AdminBlogsTab.jsx";
 
 /* ------------------ Constants ------------------ */
 const goldGrad =
@@ -1196,6 +1197,7 @@ export default function AdminDashboard() {
                 { id: "analytics", label: "Daily Analytics", icon: "📊" },
                 { id: "users", label: "Registered Users", icon: "👤" },
                 { id: "settings", label: "Global Settings", icon: "⚙️" },
+                { id: "blogs", label: "Blogs", icon: "📝" },
                 { id: "admins", label: "Admin Help", icon: "🛡️" },
               ].map((tab) => (
                 <button
@@ -1312,6 +1314,7 @@ export default function AdminDashboard() {
             {activeTab === "popup-leads" && renderLeadsTable()}
             {activeTab === "visitor-activity" && renderVisitorActivityTable()}
             {activeTab === "settings" && renderSettingsTab()}
+            {activeTab === "blogs" && <AdminBlogsTab token={token} />}
             {activeTab === "users" && renderUsersTab()}
             {activeTab === "admins" && renderAdminsTab()}
           </div>

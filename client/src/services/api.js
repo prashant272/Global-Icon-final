@@ -199,3 +199,29 @@ export function fetchSettings(token) {
 export function updateSetting(payload, token) {
   return request("/api/admin/settings", { method: "POST", body: payload, token });
 }
+
+/* ---------------- Blogs ---------------- */
+export function fetchBlogs(options = {}) {
+  let query = "";
+  if (options.admin) {
+    query = "?admin=true";
+  }
+  return request(`/api/blogs${query}`, { method: "GET" });
+}
+
+export function fetchBlogBySlug(slug) {
+  return request(`/api/blogs/${slug}`, { method: "GET" });
+}
+
+export function createBlog(payload, token) {
+  return request("/api/blogs", { method: "POST", body: payload, token });
+}
+
+export function updateBlog(id, payload, token) {
+  return request(`/api/blogs/${id}`, { method: "PUT", body: payload, token });
+}
+
+export function deleteBlog(id, token) {
+  return request(`/api/blogs/${id}`, { method: "DELETE", token });
+}
+
