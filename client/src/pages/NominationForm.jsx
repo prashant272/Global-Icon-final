@@ -2188,9 +2188,9 @@ export default function NominationForm() {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="bg-[#d4af37]/5 border border-[#d4af37]/20 p-6 rounded-2xl mb-8">
         <p className="text-sm text-[#d4af37] flex items-center gap-2 font-bold uppercase tracking-tighter">
-          <IoShieldCheckmarkOutline size={18} /> Identity Verification
+          <IoShieldCheckmarkOutline size={18} /> Basic Details
         </p>
-        <p className="text-xs text-gray-400 mt-1">Please verify your WhatsApp number to secure your nomination progress.</p>
+        <p className="text-xs text-gray-400 mt-1">Please enter your contact details to secure your nomination progress.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -2205,103 +2205,19 @@ export default function NominationForm() {
         <div>
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Mobile Contact *</label>
           <div className="flex gap-2">
-            <input name="mobile" placeholder="88734XXXXX" value={form.mobile} onChange={handleChange} onBlur={handleBlur} className={getInputClass("mobile")} disabled={otpSent} />
+            <input name="mobile" placeholder="88734XXXXX" value={form.mobile} onChange={handleChange} onBlur={handleBlur} className={getInputClass("mobile")} />
           </div>
         </div>
-
-        {/* OTP Section - Shown once Get OTP is clicked */}
-        {otpSent && (
-          <div className="md:col-span-2 bg-black/40 p-8 rounded-3xl border border-[#d4af37]/30 animate-in zoom-in-95 duration-500 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#d4af37]/5 rounded-bl-full -mr-10 -mt-10" />
-            
-            <label className="block text-center text-[10px] font-black text-[#d4af37] uppercase tracking-[0.4em] mb-8">Enter 4-Digit WhatsApp OTP</label>
-            
-            <div className="flex flex-col items-center gap-8">
-              {/* Digit Input Boxes */}
-              <div className="flex gap-4">
-                {[0, 1, 2, 3].map((i) => (
-                  <input
-                    key={i}
-                    type="text"
-                    maxLength="1"
-                    value={otp[i] || ""}
-                    onChange={(e) => {
-                      const val = e.target.value.replace(/\D/g, "");
-                      if (val) {
-                        const newOtp = otp.split("");
-                        newOtp[i] = val;
-                        const finalOtp = newOtp.join("").slice(0, 4);
-                        setOtp(finalOtp);
-                        // Auto focus next
-                        if (i < 3) {
-                          const nextEl = document.getElementById(`otp-${i + 1}`);
-                          if (nextEl) nextEl.focus();
-                        }
-                      } else {
-                        const newOtp = otp.split("");
-                        newOtp[i] = "";
-                        setOtp(newOtp.join(""));
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Backspace" && !otp[i] && i > 0) {
-                        const prevEl = document.getElementById(`otp-${i - 1}`);
-                        if (prevEl) prevEl.focus();
-                      }
-                    }}
-                    id={`otp-${i}`}
-                    className="w-14 h-16 sm:w-16 sm:h-20 bg-white/5 border-2 border-white/10 text-[#d4af37] text-3xl font-black text-center rounded-2xl outline-none focus:border-[#d4af37] focus:bg-[#d4af37]/10 transition-all shadow-inner"
-                  />
-                ))}
-              </div>
-
-              <div className="flex flex-col items-center gap-4 w-full">
-                <div className="flex justify-between items-center w-full max-w-sm px-2">
-                  <button
-                    onClick={() => { setOtpSent(false); setOtp(""); }}
-                    className="text-gray-500 text-[9px] font-black uppercase tracking-widest hover:text-white transition-colors"
-                  >
-                    Change Number
-                  </button>
-                  
-                  {resendTimer > 0 ? (
-                    <span className="text-gray-500 text-[9px] font-black uppercase tracking-widest">
-                      Resend in <span className="text-[#d4af37]">{resendTimer}s</span>
-                    </span>
-                  ) : (
-                    <button
-                      onClick={handleSendOTP}
-                      className="text-[#d4af37] text-[9px] font-black uppercase tracking-widest hover:underline transition-all"
-                    >
-                      Resend OTP
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="flex justify-between pt-8">
         <button onClick={handleStepBack} className="text-gray-500 font-bold uppercase tracking-widest hover:text-white transition-all">Back</button>
-        {!otpSent ? (
-          <button 
-            onClick={handleSendOTP} 
-            disabled={verifying || !form.mobile || !form.nomineeName}
-            className="bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg disabled:opacity-50"
-          >
-            {verifying ? "Sending..." : "Next Step"}
-          </button>
-        ) : (
-          <button 
-            onClick={handleVerifyOTP} 
-            disabled={verifying || otp.length < 4}
-            className="bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg disabled:opacity-50"
-          >
-            {verifying ? "Verifying..." : "Verify & Proceed"}
-          </button>
-        )}
+        <button 
+          onClick={() => handleStepNext()} 
+          className="bg-gradient-to-r from-[#ffe9a1] to-[#d4af37] text-black px-10 py-4 rounded-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg"
+        >
+          Next Step
+        </button>
       </div>
     </div>
   );
