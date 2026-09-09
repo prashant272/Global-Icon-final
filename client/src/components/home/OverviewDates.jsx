@@ -135,41 +135,31 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
             <div className="space-y-6 lg:pl-8">
               {[
                 {
-                  title: "Global Icon Award 2026 - Pattaya Edition",
-                  date: "28 June 2026",
-                  icon: (
-                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
-                      <span className="text-2xl">🇹🇭</span>
-                    </span>
-                  ),
-                  border: "from-[#d4af37] to-[#ead481]",
-                },
-                {
-                  title: "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
-                  date: "2 July 2026",
-                  icon: (
-                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
-                      <span className="text-2xl">🇬🇧</span>
-                    </span>
-                  ),
-                  border: "from-[#d4af37] to-[#ead481]",
-                },
-                {
-                  title: "Global Quality Awards 2026 – New Delhi Edition",
-                  date: "12 July 2026",
-                  icon: (
-                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
-                      <span className="text-2xl">🇮🇳</span>
-                    </span>
-                  ),
-                  border: "from-[#d4af37] to-[#ead481]",
-                },
-                {
                   title: "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
                   date: "12 October 2026",
                   icon: (
                     <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
                       <span className="text-2xl">🇺🇸</span>
+                    </span>
+                  ),
+                  border: "from-[#d4af37] to-[#ead481]",
+                },
+                {
+                  title: "Global Icon Awards & Summit 2026 – Dubai Edition",
+                  date: "30 October 2026",
+                  icon: (
+                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
+                      <span className="text-2xl">🇦🇪</span>
+                    </span>
+                  ),
+                  border: "from-[#d4af37] to-[#ead481]",
+                },
+                {
+                  title: "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
+                  date: "30 October 2026",
+                  icon: (
+                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
+                      <span className="text-2xl">🇦🇪</span>
                     </span>
                   ),
                   border: "from-[#d4af37] to-[#ead481]",

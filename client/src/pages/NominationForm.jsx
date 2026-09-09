@@ -1535,10 +1535,9 @@ const fieldMap = {
 };
 
 const AVAILABLE_AWARDS = [
-  "Global Icon Award 2026 - Pattaya Edition",
-  "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
-  "Global Quality Awards 2026 – New Delhi Edition",
   "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
+  "Global Icon Awards & Summit 2026 – Dubai Edition",
+  "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
 ];
 
 const initialForm = {

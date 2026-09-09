@@ -4,39 +4,6 @@ import { getAwardName } from "../../utils/brand.js";
 const PrestigiousAward = ({ SECTION_BG }) => {
   const sections = [
     {
-      title: "Global Icon Award 2026 - Pattaya Edition",
-      subtitle: "Pattaya Edition",
-      description:
-        "Prime Time Research Media is proud to present the Global Icon Award 2026 – Pattaya Edition, an elite international stage dedicated to honouring visionary leaders and trailblazing organisations. This prestigious event, scheduled for 28 June 2026, celebrates the pinnacle of excellence and innovation across global industries. Set against the vibrant backdrop of Pattaya, this edition features an exclusive on-stage live podcast, providing a unique platform for global icons to share their inspiring journeys and redefine the future of leadership.",
-      highlight: "Celebrating Excellence, Inspiring the World.",
-      image: "/Awards/pattaya.png",
-      reverse: false,
-      link: "https://global-icon.primetimemedia.in/upcoming-awards/global-icon-award-2026-pattaya-edition",
-      stats: ["13+ Years of Experience", "On Stage Live Podcast", "100+ Awards"]
-    },
-    {
-      title: "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
-      subtitle: "London Edition",
-      description:
-        "Prime Time Research Media presents the Global Icon Awards, 2026, a prestigious international platform celebrating eminent personalities, business leaders, and organizations at the House of Commons, UK Parliament, London. Scheduled for 2 July 2026, this edition honours exceptional contributors and visionaries on a global scale.",
-      highlight: "Celebrating Prestige, Leadership & Exceptional Contributions.",
-      image: "/Awards/london.png",
-      reverse: false,
-      link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20House%20of%20Commons%2C%20UK%20Parliament%2C%20London%20Edition",
-      stats: ["House of Commons, UK Parliament", "UK Edition", "2 July 2026"]
-    },
-    {
-      title: "Global Quality Awards 2026 – New Delhi Edition",
-      subtitle: "New Delhi Edition",
-      description:
-        "The Global Quality Awards, 2026 recognizing outstanding institutions, service providers, and professionals for their unwavering commitment to quality standards, excellence, and operational performance. The event will take place on 12 July 2026 in New Delhi, hosting leaders from across the nation.",
-      highlight: "Honouring Quality, Operational Standards & Excellence.",
-      image: "/Awards/quality_delhi.jpg",
-      reverse: true,
-      link: "/nominate?award=Global%20Quality%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition",
-      stats: ["New Delhi", "Quality Standards", "12 July 2026"]
-    },
-    {
       title: "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
       subtitle: "Washington DC Edition",
       description:
@@ -46,6 +13,28 @@ const PrestigiousAward = ({ SECTION_BG }) => {
       reverse: false,
       link: "/nominate?award=Global%20Achievers%20Summit%20%26%20Awards%202026%20%E2%80%93%20Washington%20DC%2C%20USA%20Edition",
       stats: ["Washington DC, USA", "Global Achievers", "12 October 2026"]
+    },
+    {
+      title: "Global Icon Awards & Summit 2026 – Dubai Edition",
+      subtitle: "Dubai Edition",
+      description:
+        "The Global Icon Awards & Summit, 2026 is an elite international platform honoring leaders, innovators, and achievers from diverse fields who have made a global impact. Scheduled for 30 October 2026 in Dubai, it stands as a premium stage for global networking and high-level honors.",
+      highlight: "Honouring Global Icons, Innovation & Leadership.",
+      image: "/Awards/global_icon_dubai_sania.jpg",
+      reverse: true,
+      link: "/nominate?award=Global%20Icon%20Awards%20%26%20Summit%202026%20%E2%80%93%20Dubai%20Edition",
+      stats: ["Dubai, UAE", "Global Icons", "30 October 2026"]
+    },
+    {
+      title: "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
+      subtitle: "Asia Alliance Dubai",
+      description:
+        "The Asia Alliance Summit & Awards 2026 is a premium event celebrating the visionaries, leaders, and most outstanding organizations that are shaping the future of the Asian continent. Hosted in Dubai on 30 October 2026, it brings together top professionals to honor exceptional contributions across various sectors.",
+      highlight: "Honouring Asian Leadership, Innovation & Impact.",
+      image: "/Awards/asia_alliance.jpg",
+      reverse: false,
+      link: "/nominate?award=ASIA%20ALLIANCE%20SUMMIT%20%26%20AWARDS%202026%20%E2%80%93%20Dubai%20Edition",
+      stats: ["Dubai, UAE", "Asia Alliance", "30 October 2026"]
     }
   ];
 

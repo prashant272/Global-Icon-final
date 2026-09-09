@@ -85,36 +85,28 @@ export default function Home() {
   // Event Data
   const events = [
     {
-      title: "Global Icon Award 2026 - Pattaya Edition",
-      desc: "Celebrating Excellence, Inspiring the World",
-      date: "28 June 2026",
-      place: "Pattaya city",
-      time: "TBA",
-      link: "https://global-icon.primetimemedia.in/upcoming-awards/global-icon-award-2026-pattaya-edition"
-    },
-    {
-      title: "Global Icon Awards 2026 – House of Commons, UK Parliament, London Edition",
-      desc: "Celebrating prestigious leaders, excellence, and exceptional contribution to society on an international stage.",
-      date: "2 July 2026",
-      place: "House of Commons, UK Parliament, London",
-      time: "TBA",
-      link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20House%20of%20Commons%2C%20UK%20Parliament%2C%20London%20Edition"
-    },
-    {
-      title: "Global Quality Awards 2026 – New Delhi Edition",
-      desc: "Honouring organizations and individuals for their commitment to quality, excellence, and operational standards.",
-      date: "12 July 2026",
-      place: "New Delhi",
-      time: "TBA",
-      link: "/nominate?award=Global%20Quality%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition"
-    },
-    {
       title: "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
       desc: "A premier global summit celebrating outstanding achievements, innovation, and leadership across industries.",
       date: "12 October 2026",
       place: "Washington DC, USA",
       time: "TBA",
       link: "/nominate?award=Global%20Achievers%20Summit%20%26%20Awards%202026%20%E2%80%93%20Washington%20DC%2C%20USA%20Edition"
+    },
+    {
+      title: "Global Icon Awards & Summit 2026 – Dubai Edition",
+      desc: "An elite international platform honoring leaders, innovators, and achievers from diverse fields who have made a global impact.",
+      date: "30 October 2026",
+      place: "Dubai, UAE",
+      time: "TBA",
+      link: "/nominate?award=Global%20Icon%20Awards%20%26%20Summit%202026%20%E2%80%93%20Dubai%20Edition"
+    },
+    {
+      title: "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
+      desc: "Honoring visionary leaders and outstanding organizations across the Asian continent.",
+      date: "30 October 2026",
+      place: "Dubai, UAE",
+      time: "TBA",
+      link: "/nominate?award=ASIA%20ALLIANCE%20SUMMIT%20%26%20AWARDS%202026%20%E2%80%93%20Dubai%20Edition"
     },
   ];
 
