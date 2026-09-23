@@ -164,6 +164,16 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                   ),
                   border: "from-[#d4af37] to-[#ead481]",
                 },
+                {
+                  title: "Global Icon Awards 2026 – New Delhi Edition",
+                  date: "12 December 2026",
+                  icon: (
+                    <span className="block w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4af37] to-[#ead481] flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform duration-500">
+                      <span className="text-2xl">🇮🇳</span>
+                    </span>
+                  ),
+                  border: "from-[#d4af37] to-[#ead481]",
+                },
               ].map((item, idx) => (
                 <div key={idx} className="relative group"
                   style={{ animation: `fadeInRight 0.8s ease-out ${(idx + 1) * 150}ms both` }}>

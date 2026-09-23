@@ -35,6 +35,17 @@ const PrestigiousAward = ({ SECTION_BG }) => {
       reverse: false,
       link: "/nominate?award=ASIA%20ALLIANCE%20SUMMIT%20%26%20AWARDS%202026%20%E2%80%93%20Dubai%20Edition",
       stats: ["Dubai, UAE", "Asia Alliance", "30 October 2026"]
+    },
+    {
+      title: "Global Icon Awards 2026 – New Delhi Edition",
+      subtitle: "New Delhi Edition",
+      description:
+        "The Global Icon Awards 2026 – New Delhi Edition is a national platform honoring exceptional leaders, innovators, and achievers from diverse fields who have made a significant impact in India. Scheduled for 12 December 2026 in New Delhi, it stands as a premium stage for networking and high-level honors.",
+      highlight: "Honouring Prestigious Leaders, Excellence & Contribution.",
+      image: "/Awards/global_icon_delhi_gavaskar.jpg",
+      reverse: true,
+      link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition",
+      stats: ["New Delhi, India", "Global Icons", "12 December 2026"]
     }
   ];
 
@@ -74,19 +85,19 @@ const PrestigiousAward = ({ SECTION_BG }) => {
           {sections.map((sec, idx) => (
             <div
               key={idx}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center"
             >
               {/* Image side */}
               <div className={`w-full group flex flex-col ${sec.reverse ? 'lg:order-2' : 'lg:order-1'}`}>
-                <div className="relative flex-1 flex flex-col h-full">
+                <div className="relative flex-1 flex flex-col">
                   {/* Image Border/Glow */}
                   <div className="absolute -inset-1.5 md:-inset-2 bg-gradient-to-r from-[#d4af37]/25 to-transparent blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-3xl"></div>
 
-                  <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-700 bg-gradient-to-br from-[#1a110a] via-[#100a06] to-[#050302] p-0 w-full flex-1 min-h-[240px] sm:min-h-[320px] lg:h-full lg:min-h-0">
+                  <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl transition-all duration-700 bg-gradient-to-br from-[#1a110a] via-[#100a06] to-[#050302] p-0 w-full flex-1">
                     <img
                       src={sec.image}
                       alt={sec.title}
-                      className="w-full h-full object-fill transform transition-transform duration-1000 group-hover:scale-105"
+                      className="w-full h-auto object-cover transform transition-transform duration-1000 group-hover:scale-105"
                     />
                     {/* Subtle bottom overlay */}
                     <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>

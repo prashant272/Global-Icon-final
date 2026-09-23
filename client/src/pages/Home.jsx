@@ -108,6 +108,14 @@ export default function Home() {
       time: "TBA",
       link: "/nominate?award=ASIA%20ALLIANCE%20SUMMIT%20%26%20AWARDS%202026%20%E2%80%93%20Dubai%20Edition"
     },
+    {
+      title: "Global Icon Awards 2026 – New Delhi Edition",
+      desc: "Celebrating prestigious leaders, excellence, and exceptional contribution to society on a national stage.",
+      date: "12 December 2026",
+      place: "New Delhi, India",
+      time: "TBA",
+      link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition"
+    },
   ];
 
   // Guest Data
