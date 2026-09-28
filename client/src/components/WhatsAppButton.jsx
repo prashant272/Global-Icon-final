@@ -47,7 +47,7 @@ export default function WhatsAppButton() {
         return `Hello, I'm interested in the ${getAwardName()}.`;
     };
 
-    const whatsappNumber = "+91 9810 91 0686";
+    const whatsappNumber = "+91 9391 93 1989";
     const encodedMessage = encodeURIComponent(getDynamicMessage());
     const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodedMessage}`;
 
