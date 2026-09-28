@@ -7,7 +7,7 @@ const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/primetimeresearchmedia/", color: "from-pink-600 to-purple-600", bgColor: "bg-gradient-to-br from-pink-600 to-purple-600" },
   { icon: Youtube, href: "https://www.youtube.com/@primetimermedia", color: "from-red-600 to-red-500", bgColor: "bg-red-600" },
   { icon: Linkedin, href: "https://www.linkedin.com/company/primetimeresearch-media/", color: "from-blue-700 to-blue-600", bgColor: "bg-blue-700" },
-  { icon: MessageCircle, href: "https://wa.me/919391931989", color: "from-green-600 to-green-500", bgColor: "bg-green-600" },
+  { icon: MessageCircle, href: "https://wa.me/919319931989", color: "from-green-600 to-green-500", bgColor: "bg-green-600" },
 ];
 
 export default function Contact() {
