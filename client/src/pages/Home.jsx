@@ -108,15 +108,6 @@ export default function Home() {
       time: "TBA",
       link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition"
     },
-   
-    {
-      title: "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
-      desc: "Honoring visionary leaders and outstanding organizations across the Asian continent.",
-      date: " 6 December 2026",
-      place: "Dubai, UAE",
-      time: "TBA",
-      link: "/nominate?award=ASIA%20ALLIANCE%20SUMMIT%20%26%20AWARDS%202026%20%E2%80%93%20Dubai%20Edition"
-    },
   ];
 
   // Guest Data

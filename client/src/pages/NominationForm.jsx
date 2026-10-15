@@ -1545,7 +1545,6 @@ const AVAILABLE_AWARDS = [
   "Global Icon Awards 2026 – Dubai Edition",
   "Global Icon Awards 2026 – New Delhi Edition",
   "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
-  "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
 ];
 
 const initialForm = {
