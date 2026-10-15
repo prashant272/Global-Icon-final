@@ -1525,6 +1525,29 @@ const fieldMap = {
       ]
     }
   },
+  "CSR Initiative": {
+    "Education Initiatives": {
+      "Key Focus Areas": [
+        "Education Support & Scholarships",
+        "Digital Learning & Literacy",
+        "School Infrastructure Development"
+      ]
+    },
+    "Healthcare Initiatives": {
+      "Key Focus Areas": [
+        "Community Healthcare & Medical Camps",
+        "Rural Health Outreach Programs",
+        "Maternal & Child Health Support"
+      ]
+    },
+    "Environment Initiatives": {
+      "Key Focus Areas": [
+        "Environmental Sustainability & Conservation",
+        "Green Energy & Renewable Initiatives",
+        "Clean Water & Waste Management Projects"
+      ]
+    }
+  }
 };
 
 const sectorIcons = {
@@ -1539,6 +1562,7 @@ const sectorIcons = {
   "Sustainability & Environment": <Leaf className="w-5 h-5" />,
   "Public & Government Sector": <Shield className="w-5 h-5" />,
   "Media, Culture & Sports": <Clapperboard className="w-5 h-5" />,
+  "CSR Initiative": <Award className="w-5 h-5" />,
 };
 
 export default function Categories() {

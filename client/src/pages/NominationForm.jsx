@@ -1531,14 +1531,21 @@ const fieldMap = {
         "Social Impact Through Media Award"
       ]
     }
+  },
+  "CSR Initiative": {
+    "Education Initiatives": {},
+    "Healthcare Initiatives": {},
+    "Environment Initiatives": {}
   }
 };
 
 const AVAILABLE_AWARDS = [
-  "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
-  "Global Icon Awards & Summit 2026 – Dubai Edition",
-  "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
+  "Global Icon Awards 2026",
+  "Global Icon Awards 2026 – Washington, D.C., USA Edition",
+  "Global Icon Awards 2026 – Dubai Edition",
   "Global Icon Awards 2026 – New Delhi Edition",
+  "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
+  "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
 ];
 
 const initialForm = {
@@ -1805,7 +1812,7 @@ export default function NominationForm() {
         ...prev,
         field: value,
         category: "",
-        subCategory: "",
+        subCategory: value === "CSR Initiative" ? "N/A" : "",
         otherSubCategory: "",
       }));
       return;
@@ -1815,7 +1822,7 @@ export default function NominationForm() {
       setForm((prev) => ({
         ...prev,
         category: value,
-        subCategory: "",
+        subCategory: prev.field === "CSR Initiative" ? "N/A" : "",
         otherSubCategory: "",
       }));
       return;
@@ -1898,9 +1905,10 @@ export default function NominationForm() {
 
   const handleStepNext = async (passedToken) => {
     const activeToken = passedToken || token;
+    const isCSR = form.field === "CSR Initiative";
     // Basic validation before going to next step
     const stepFields = {
-      1: form.participationType === "nominated as award" ? ["field", "category", "subCategory"] : [],
+      1: form.participationType === "nominated as award" ? (isCSR ? ["field", "category"] : ["field", "category", "subCategory"]) : [],
       2: ["nomineeName", "email", "mobile"],
       3: ["organization", "designation"],
       4: ["orgHeadName", "contactName"],
@@ -1960,8 +1968,9 @@ export default function NominationForm() {
 
   const validateForm = () => {
     const errors = {};
+    const isCSR = form.field === "CSR Initiative";
     const requiredAward = [
-      "field", "category", "subCategory", "nomineeName", "organization", "turnover",
+      "field", "category", ...(isCSR ? [] : ["subCategory"]), "nomineeName", "organization", "turnover",
       "orgHeadName", "orgHeadDesignation", "orgHeadMobile", "orgHeadEmail",
       "contactName", "contactDesignation", "contactMobile", "contactEmail",
       "street", "city", "state", "zip"
@@ -1985,7 +1994,7 @@ export default function NominationForm() {
       }
     });
 
-    if (form.participationType === "nominated as award" && form.subCategory === "Other" && !form.otherSubCategory) {
+    if (form.participationType === "nominated as award" && !isCSR && form.subCategory === "Other" && !form.otherSubCategory) {
       errors.otherSubCategory = "Specify category";
     }
 
@@ -2002,9 +2011,10 @@ export default function NominationForm() {
     setError("");
 
     if (!validateForm()) {
+      const isCSR = form.field === "CSR Initiative";
       // Find which step has the first error
       const requiredSteps = [
-        { step: 1, fields: ["field", "category", "subCategory"] },
+        { step: 1, fields: isCSR ? ["field", "category"] : ["field", "category", "subCategory"] },
         { step: 2, fields: ["nomineeName", "email", "mobile"] },
         { step: 3, fields: ["organization", "designation"] },
         { step: 4, fields: ["orgHeadName", "orgHeadDesignation", "orgHeadMobile", "contactName", "contactEmail", "contactMobile"] },
@@ -2013,7 +2023,7 @@ export default function NominationForm() {
       ];
 
       const currentErrors = {};
-      const requiredAward = ["field", "category", "subCategory", "nomineeName", "organization", "turnover", "orgHeadName", "orgHeadDesignation", "orgHeadMobile", "orgHeadEmail", "contactName", "contactDesignation", "contactMobile", "contactEmail", "street", "city", "state", "zip"];
+      const requiredAward = ["field", "category", ...(isCSR ? [] : ["subCategory"]), "nomineeName", "organization", "turnover", "orgHeadName", "orgHeadDesignation", "orgHeadMobile", "orgHeadEmail", "contactName", "contactDesignation", "contactMobile", "contactEmail", "street", "city", "state", "zip"];
       const requiredOther = ["nomineeName", "organization", "designation", "mobile", "email"];
       const list = form.participationType === "nominated as award" ? requiredAward : requiredOther;
       list.forEach(f => { if (!form[f] || (typeof form[f] === "string" && form[f].trim() === "")) currentErrors[f] = true; });
@@ -2023,7 +2033,7 @@ export default function NominationForm() {
         if (form[f] && !phoneRegex.test(form[f])) currentErrors[f] = true;
       });
 
-      if (form.participationType === "nominated as award" && form.subCategory === "Other" && !form.otherSubCategory) currentErrors.otherSubCategory = true;
+      if (form.participationType === "nominated as award" && !isCSR && form.subCategory === "Other" && !form.otherSubCategory) currentErrors.otherSubCategory = true;
       if (!form.acceptTerms) currentErrors.acceptTerms = true;
 
       const errorFields = Object.keys(currentErrors);
@@ -2157,7 +2167,7 @@ export default function NominationForm() {
           </>
         )}
 
-        {form.participationType === "nominated as award" && (
+        {form.participationType === "nominated as award" && form.field !== "CSR Initiative" && (
           <div className="md:col-span-2">
             <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Sub-Category *</label>
             <select name="subCategory" value={form.subCategory} onChange={handleChange} onBlur={handleBlur} disabled={!form.category} className={getSelectClass("subCategory")}>
@@ -2347,7 +2357,7 @@ export default function NominationForm() {
         <div className="md:col-span-2">
           <label className="block text-[10px] font-black text-[#d4af37] uppercase tracking-[0.2em] mb-3 ml-1">Preferred Event Location</label>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {["House of Commons, UK Parliament, London", "New Delhi", "Washington DC, USA", "Pattaya, Thailand"].map((loc) => (
+            {["Dubai, UAE", "New Delhi", "Washington DC, USA", ].map((loc) => (
               <label
                 key={loc}
                 className={`p-3 rounded-xl border text-center cursor-pointer transition-all ${form.preferredLocation?.includes(loc) ? "bg-[#d4af37] text-black border-[#d4af37]" : "bg-white/5 border-white/10 text-gray-400"}`}
@@ -2384,10 +2394,12 @@ export default function NominationForm() {
             <p className="text-gray-500 text-[10px] uppercase font-black tracking-widest">Category</p>
             <p className="text-white font-bold text-base">{form.category || "N/A"}</p>
           </div>
-          <div className="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
-            <p className="text-gray-500 text-[10px] uppercase font-black tracking-widest">Sub-Category</p>
-            <p className="text-white font-bold text-base">{form.subCategory || "N/A"}</p>
-          </div>
+          {form.field !== "CSR Initiative" && (
+            <div className="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
+              <p className="text-gray-500 text-[10px] uppercase font-black tracking-widest">Sub-Category</p>
+              <p className="text-white font-bold text-base">{form.subCategory || "N/A"}</p>
+            </div>
+          )}
           <div className="space-y-1 bg-white/5 p-4 rounded-xl border border-white/5">
             <p className="text-gray-500 text-[10px] uppercase font-black tracking-widest">Mobile Contact</p>
             <p className="text-[#d4af37] font-bold text-base">{form.mobile || "N/A"}</p>

@@ -2,6 +2,22 @@ import { getAwardName } from "../utils/brand.js";
 
 const RAW_EDITIONS = [
   {
+    year: 2026,
+    path: "/editions/2026",
+    title: "Global Icon Awards",
+    editionLabel: "14th Edition",
+    locations: ["Washington, D.C.", "Dubai", "New Delhi"],
+    fullDate: "Nov – Dec 2026",
+    coverImage: "/images/jury4.jpeg",
+    hero: "Honouring Global Icons, Innovation & Leadership",
+    chiefGuest: {
+      name: "Distinguished Dignitaries",
+      photo: "/images/jury4.jpeg",
+      designation: "Chief Guest & Guests of Honour",
+    },
+    winners: [],
+  },
+  {
     year: 2025,
     path: "/editions/2025",
     title: "Global Icon Excellence Awards",

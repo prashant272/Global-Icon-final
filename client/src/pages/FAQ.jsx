@@ -25,7 +25,7 @@ export default function FAQ() {
         },
         {
             q: `Where and when will the awards be held?`,
-            a: `${getAwardName()} 2026 will be organised in international editions, including a New Delhi Edition (14 March 2026) and a Dubai Edition (26 April 2026). Detailed venue and schedule updates are shared on the official website.`,
+            a: `${getAwardName()} 2026 will be organised in international editions, including USA Edition (18 November 2026 | Washington, D.C.), Dubai Edition (6 December 2026 | Dubai, UAE), and New Delhi Edition (12 December 2026 | New Delhi, India). Detailed venue and schedule updates are shared on the official website.`,
         },
         {
             q: "What are the benefits of participating?",

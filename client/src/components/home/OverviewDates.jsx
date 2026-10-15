@@ -38,16 +38,16 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
             <div className="relative group">
               {/* Animated Glow Backdrop */}
               <div className="absolute -inset-1 bg-gradient-to-r from-[#d4af37]/30 via-[#f1d46b]/10 to-[#b6932f]/30 opacity-20 group-hover:opacity-40 blur-3xl transition-all duration-1000 rounded-[2rem]" />
-              
+
               <div className="relative bg-[#1a110a]/90 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-2xl overflow-hidden hover:border-[#d4af37]/40 transition-all duration-700 p-8 lg:p-12">
                 {/* SEO Paragraph - Hidden */}
                 <p className="sr-only">
                   Business Excellence Awards, recognize excellence, innovation, and leadership across Healthcare, Education, Business, Dental, and Lifestyle sectors worldwide.
                 </p>
-                
+
                 {/* Distinctive Top Accent */}
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#d4af37] via-[#f1d46b] to-transparent shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
-                
+
                 {/* Floating Geometric Decor */}
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-[#d4af37]/10 to-transparent blur-3xl rounded-full opacity-30 group-hover:opacity-50 transition-opacity" />
 
@@ -58,14 +58,14 @@ export default function OverviewDates({ handleNominateClick, SECTION_BG }) {
                       {/* Double Ring Animated Borders */}
                       <div className="absolute inset-0 bg-[#d4af37]/20 blur-xl rounded-2xl group-hover/icon:animate-pulse" />
                       <div className="absolute -inset-2 border border-[#d4af37]/10 rounded-2xl group-hover/icon:border-[#d4af37]/30 transition-colors duration-500 rotate-6" />
-                      
+
                       <div className="relative p-5 rounded-2xl bg-gradient-to-br from-[#1a110a] to-[#2a1b12] border border-[#d4af37]/30 shadow-2xl transform transition-transform group-hover/icon:scale-110 duration-500">
                         <svg className="w-10 h-10 text-[#d4af37]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                           <path d="M12 2l2.39 7.24h7.61l-6.19 4.5L16.92 22 12 17.27 7.08 22l1.11-8.26-6.19-4.5h7.61L12 2z" />
                         </svg>
                       </div>
                     </div>
-                    
+
                     <div className="text-center sm:text-left">
                       <h3 className="text-3xl lg:text-5xl font-black text-white leading-tight mb-3">
                         {awardName}, 2026

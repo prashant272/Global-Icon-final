@@ -4,26 +4,54 @@ import { getAwardName } from "../../utils/brand.js";
 const PrestigiousAward = ({ SECTION_BG }) => {
   const sections = [
     {
+      title: "Global Icon Awards 2026 & Conference",
+      subtitle: "International Edition – USA • Dubai • India",
+      description:
+        "Global Icon Awards 2026 & Conference is a premier international recognition platform organized by Prime Time Research Media Pvt Ltd, honouring visionary leaders, innovators, and achievers across three global destinations: Washington DC (USA – 18 Nov), Dubai (UAE – 6 Dec), and New Delhi (India – 12 Dec).",
+      highlight: "Icons Today for a Better Tomorrow • Celebrating Visionaries, Empowering Leaders & Driving Positive Change.",
+      image: "/Awards/global_icon_awards_2026.jpg",
+      reverse: false,
+      link: "/nominate?award=Global%20Icon%20Awards%202026",
+      stats: ["Leadership Excellence", "Innovation & Impact", "Global Recognition"],
+      destinations: [
+        {
+          flag: "🇺🇸",
+          country: "USA",
+          city: "Washington DC, USA",
+          date: "18th November 2026"
+        },
+        {
+          flag: "🇦🇪",
+          country: "DUBAI",
+          city: "Dubai, UAE",
+          date: "6th December 2026"
+        },
+        {
+          flag: "🇮🇳",
+          country: "INDIA",
+          city: "New Delhi, India",
+          date: "12th December 2026"
+        }
+      ]
+    },
+    {
       title: "Global Achievers Summit & Awards 2026 – Washington DC, USA Edition",
       subtitle: "Washington DC Edition",
       description:
         "The Global Achievers Summit & Awards, 2026 is an elite international platform honoring leaders, innovators, and achievers from diverse fields who have made a global impact. Scheduled for 12 October 2026 in Washington DC, USA, it stands as a premium stage for global networking and high-level honors.",
       highlight: "Honouring Global Achievers, Innovation & Leadership.",
       image: "/Awards/archivers.jpeg",
-      reverse: false,
-      link: "/nominate?award=Global%20Achievers%20Summit%20%26%20Awards%202026%20%E2%80%93%20Washington%20DC%2C%20USA%20Edition",
-      stats: ["Washington DC, USA", "Global Achievers", "12 October 2026"]
-    },
-    {
-      title: "Global Icon Awards & Summit 2026 – Dubai Edition",
-      subtitle: "Dubai Edition",
-      description:
-        "The Global Icon Awards & Summit, 2026 is an elite international platform honoring leaders, innovators, and achievers from diverse fields who have made a global impact. Scheduled for 30 October 2026 in Dubai, it stands as a premium stage for global networking and high-level honors.",
-      highlight: "Honouring Global Icons, Innovation & Leadership.",
-      image: "/Awards/global_icon_dubai_sania.jpg",
       reverse: true,
-      link: "/nominate?award=Global%20Icon%20Awards%20%26%20Summit%202026%20%E2%80%93%20Dubai%20Edition",
-      stats: ["Dubai, UAE", "Global Icons", "30 October 2026"]
+      link: "/nominate?award=Global%20Achievers%20Summit%20%26%20Awards%202026%20%E2%80%93%20Washington%20DC%2C%20USA%20Edition",
+      stats: ["Washington DC, USA", "Global Achievers", "12 October 2026"],
+      destinations: [
+        {
+          flag: "🇺🇸",
+          country: "USA",
+          city: "Washington DC, USA",
+          date: "12th October 2026"
+        }
+      ]
     },
     {
       title: "ASIA ALLIANCE SUMMIT & AWARDS 2026 – Dubai Edition",
@@ -34,18 +62,15 @@ const PrestigiousAward = ({ SECTION_BG }) => {
       image: "/Awards/asia_alliance.jpg",
       reverse: false,
       link: "/nominate?award=ASIA%20ALLIANCE%20SUMMIT%20%26%20AWARDS%202026%20%E2%80%93%20Dubai%20Edition",
-      stats: ["Dubai, UAE", "Asia Alliance", "30 October 2026"]
-    },
-    {
-      title: "Global Icon Awards 2026 – New Delhi Edition",
-      subtitle: "New Delhi Edition",
-      description:
-        "The Global Icon Awards 2026 – New Delhi Edition is a national platform honoring exceptional leaders, innovators, and achievers from diverse fields who have made a significant impact in India. Scheduled for 12 December 2026 in New Delhi, it stands as a premium stage for networking and high-level honors.",
-      highlight: "Honouring Prestigious Leaders, Excellence & Contribution.",
-      image: "/Awards/global_icon_delhi_gavaskar.jpg",
-      reverse: true,
-      link: "/nominate?award=Global%20Icon%20Awards%202026%20%E2%80%93%20New%20Delhi%20Edition",
-      stats: ["New Delhi, India", "Global Icons", "12 December 2026"]
+      stats: ["Dubai, UAE", "Asia Alliance", "30 October 2026"],
+      destinations: [
+        {
+          flag: "🇦🇪",
+          country: "DUBAI",
+          city: "Dubai, UAE",
+          date: "30th October 2026"
+        }
+      ]
     }
   ];
 
@@ -126,6 +151,55 @@ const PrestigiousAward = ({ SECTION_BG }) => {
                     "{sec.highlight}"
                   </p>
                 </div>
+
+                {/* Dedicated Location & Date Cards */}
+                {sec.destinations && sec.destinations.length > 0 && (
+                  <div className="space-y-2.5 pt-1">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse"></span>
+                      <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#d4af37]">
+                        {sec.destinations.length > 1 ? "Official Editions • Dates & Venues" : "Event Schedule & Venue"}
+                      </span>
+                    </div>
+
+                    <div className={`grid gap-3 ${sec.destinations.length > 1 ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2'}`}>
+                      {sec.destinations.map((dest, dIdx) => (
+                        <div
+                          key={dIdx}
+                          className="relative group/card overflow-hidden rounded-2xl bg-gradient-to-br from-[#24170e]/95 via-[#1a110a]/90 to-[#0e0805]/95 border border-[#d4af37]/35 hover:border-[#ffd966] p-3.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_25px_-5px_rgba(212,175,55,0.35)] backdrop-blur-xl flex flex-col justify-between"
+                        >
+                          {/* Gold Accent Top Bar */}
+                          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent opacity-70 group-hover/card:opacity-100 transition-opacity"></div>
+                          
+                          {/* Flag & Country Badge */}
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <span className="text-2xl filter drop-shadow">{dest.flag}</span>
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#d4af37]/20 text-[#ffd966] border border-[#d4af37]/40 shadow-sm">
+                              {dest.country}
+                            </span>
+                          </div>
+
+                          {/* City / Venue */}
+                          <div className="flex items-start gap-1.5 text-white/95 font-bold text-xs sm:text-sm leading-snug mb-2">
+                            <svg className="w-4 h-4 text-[#d4af37] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span>{dest.city}</span>
+                          </div>
+
+                          {/* Date Badge */}
+                          <div className="flex items-center gap-1.5 pt-2 border-t border-white/10 text-[#ffd966] font-extrabold text-[11px] sm:text-xs">
+                            <svg className="w-3.5 h-3.5 text-[#d4af37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" d="M8 7V3m8 4V3M3 11h18M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+                            </svg>
+                            <span className="tracking-wide">{dest.date}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="pt-2 flex flex-wrap gap-2 md:gap-3 items-center">
                   <a
