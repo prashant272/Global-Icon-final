@@ -209,6 +209,8 @@ router.get(
       "https://investmentindia.primetimemedia.in",
       "https://www.globaliconawards.in",
       "https://globaliconawards.in",
+      "https://www.globalhealthcareawards.com",
+      "https://globalhealthcareawards.com",
       "http://localhost:5173"
     ];
 

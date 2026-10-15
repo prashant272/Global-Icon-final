@@ -49,6 +49,8 @@ app.use(cors({
     "https://india-excellence.primetimemedia.in",
     "https://www.internationalhealthcareaward.com",
     "https://internationalhealthcareaward.com",
+    "https://www.globalhealthcareawards.com",
+    "https://globalhealthcareawards.com",
     "https://indiabrandicon.in",
     "https://www.indiabrandicon.in",
     "http://localhost:5173",
